@@ -106,6 +106,13 @@ This will:
 
 ## 🔧 Technical Details
 
+### GitHub Actions
+The repository includes automated CI/CD workflows that:
+- Test Python compatibility across versions 2.7-3.10
+- Validate documentation completeness
+- Run weekly security scans on dependencies
+- Generate test reports and code metrics
+
 ### Design Principles
 - **Modular**: Each component works independently for easy testing
 - **Learning-ready**: Data structures designed for future ML enhancement
