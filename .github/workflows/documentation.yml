@@ -1,0 +1,58 @@
+name: Documentation Check
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  docs-check:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Check documentation files
+      run: |
+        echo "## Documentation Status" >> $GITHUB_STEP_SUMMARY
+        echo "### Required Documentation Files" >> $GITHUB_STEP_SUMMARY
+        
+        files=("README.md" "ARCHITECTURAL_DECISIONS.md" "OUTREACH_AUTOMATION_SOLUTION_SPEC.md" "SESSION_LOG.md" "GMAIL_API_SETUP.md")
+        
+        for file in "${files[@]}"; do
+          if [ -f "$file" ]; then
+            echo "✅ $file exists" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "❌ $file missing" >> $GITHUB_STEP_SUMMARY
+          fi
+        done
+    
+    - name: Check README sections
+      run: |
+        echo "### README Sections" >> $GITHUB_STEP_SUMMARY
+        
+        sections=("Project Overview" "Architecture" "Quick Start" "Current Status" "Documentation")
+        
+        for section in "${sections[@]}"; do
+          if grep -q "$section" README.md; then
+            echo "✅ $section section found" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "⚠️ $section section might be missing" >> $GITHUB_STEP_SUMMARY
+          fi
+        done
+    
+    - name: Module completion status
+      run: |
+        echo "### Module Implementation Status" >> $GITHUB_STEP_SUMMARY
+        echo "Based on existing files:" >> $GITHUB_STEP_SUMMARY
+        
+        if [ -f "contact_processor.py" ]; then
+          echo "✅ Module 1: CSV Contact Processing" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        if [ -f "email_history_analyzer.py" ]; then
+          echo "✅ Module 2: Email History Analyzer" >> $GITHUB_STEP_SUMMARY
+        fi
+        
+        echo "🚧 Module 3-8: Pending implementation" >> $GITHUB_STEP_SUMMARY

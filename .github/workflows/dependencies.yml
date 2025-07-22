@@ -1,0 +1,43 @@
+name: Dependency Security Check
+
+on:
+  schedule:
+    - cron: '0 0 * * 0'  # Weekly on Sunday
+  push:
+    branches: [ main ]
+
+jobs:
+  security:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.9'
+    
+    - name: Create requirements file
+      run: |
+        echo "# Email Outreach Automation Dependencies" > requirements.txt
+        echo "google-auth>=2.0.0" >> requirements.txt
+        echo "google-auth-oauthlib>=0.4.0" >> requirements.txt
+        echo "google-auth-httplib2>=0.1.0" >> requirements.txt
+        echo "google-api-python-client>=2.0.0" >> requirements.txt
+    
+    - name: Check dependencies
+      run: |
+        pip install pip-audit
+        echo "## Dependency Security Report" >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
+        pip-audit -r requirements.txt >> $GITHUB_STEP_SUMMARY 2>&1 || echo "Some vulnerabilities found - check logs" >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
+      continue-on-error: true
+    
+    - name: List current dependencies
+      run: |
+        echo "### Current Dependencies" >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
+        cat requirements.txt >> $GITHUB_STEP_SUMMARY
+        echo '```' >> $GITHUB_STEP_SUMMARY
