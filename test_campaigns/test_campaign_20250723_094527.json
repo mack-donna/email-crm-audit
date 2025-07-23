@@ -1,0 +1,144 @@
+{
+  "approved_emails": [
+    {
+      "coaching_data": {
+        "can_be_improved": true, 
+        "improvement_suggestions": []
+      }, 
+      "email_content": "Hi Alice,\n\nI'm reaching out because I believe there might be an opportunity for us to help TechStartup Inc with [specific value proposition based on research].\n\n[Specific paragraph showing understanding of their business/challenges based on research findings]\n\nWould you be open to a brief conversation to explore if there's a fit? I'm happy to share some specific ideas that have worked well for similar companies in your space.\n\nBest regards,\n[Your name]", 
+      "review_status": "approved", 
+      "contact_context": {
+        "email_history": {}, 
+        "contact": {
+          "phone": null, 
+          "company": "TechStartup Inc", 
+          "title": "CTO", 
+          "name": "Alice Johnson", 
+          "email": "alice@techstartup.com"
+        }, 
+        "research": {
+          "research_timestamp": "2025-07-23T09:45:13.576083", 
+          "recent_news": [], 
+          "contact": {
+            "phone": null, 
+            "company": "TechStartup Inc", 
+            "title": "CTO", 
+            "name": "Alice Johnson", 
+            "email": "alice@techstartup.com"
+          }, 
+          "research_quality_score": 0.0, 
+          "person_research": {}, 
+          "sources_accessed": [], 
+          "industry_insights": {}, 
+          "company_research": {}
+        }
+      }, 
+      "review_timestamp": "2025-07-23T09:45:27.580384", 
+      "metadata": {
+        "generated_at": "2025-07-23T09:45:18.406349", 
+        "style": "professional_friendly", 
+        "personalization_points": [
+          "Referenced company"
+        ], 
+        "confidence_score": 0.7
+      }
+    }, 
+    {
+      "coaching_data": {
+        "can_be_improved": true, 
+        "improvement_suggestions": []
+      }, 
+      "email_content": "Hi Bob,\n\nI'm reaching out because I believe there might be an opportunity for us to help Enterprise Corp with [specific value proposition based on research].\n\n[Specific paragraph showing understanding of their business/challenges based on research findings]\n\nWould you be open to a brief conversation to explore if there's a fit? I'm happy to share some specific ideas that have worked well for similar companies in your space.\n\nBest regards,\n[Your name]", 
+      "review_status": "approved", 
+      "contact_context": {
+        "email_history": {}, 
+        "contact": {
+          "phone": null, 
+          "company": "Enterprise Corp", 
+          "title": "VP Sales", 
+          "name": "Bob Smith", 
+          "email": "bob@enterprise.com"
+        }, 
+        "research": {
+          "research_timestamp": "2025-07-23T09:45:18.406508", 
+          "recent_news": [], 
+          "contact": {
+            "phone": null, 
+            "company": "Enterprise Corp", 
+            "title": "VP Sales", 
+            "name": "Bob Smith", 
+            "email": "bob@enterprise.com"
+          }, 
+          "research_quality_score": 0.0, 
+          "person_research": {}, 
+          "sources_accessed": [], 
+          "industry_insights": {}, 
+          "company_research": {}
+        }
+      }, 
+      "review_timestamp": "2025-07-23T09:45:27.580386", 
+      "metadata": {
+        "generated_at": "2025-07-23T09:45:22.837988", 
+        "style": "professional_friendly", 
+        "personalization_points": [
+          "Referenced company"
+        ], 
+        "confidence_score": 0.7
+      }
+    }, 
+    {
+      "coaching_data": {
+        "can_be_improved": true, 
+        "improvement_suggestions": []
+      }, 
+      "email_content": "Hi Carol,\n\nI'm reaching out because I believe there might be an opportunity for us to help SmallBiz LLC with [specific value proposition based on research].\n\n[Specific paragraph showing understanding of their business/challenges based on research findings]\n\nWould you be open to a brief conversation to explore if there's a fit? I'm happy to share some specific ideas that have worked well for similar companies in your space.\n\nBest regards,\n[Your name]", 
+      "review_status": "approved", 
+      "contact_context": {
+        "email_history": {}, 
+        "contact": {
+          "phone": null, 
+          "company": "SmallBiz LLC", 
+          "title": "Owner", 
+          "name": "Carol White", 
+          "email": "carol@smallbiz.com"
+        }, 
+        "research": {
+          "research_timestamp": "2025-07-23T09:45:23.340410", 
+          "recent_news": [], 
+          "contact": {
+            "phone": null, 
+            "company": "SmallBiz LLC", 
+            "title": "Owner", 
+            "name": "Carol White", 
+            "email": "carol@smallbiz.com"
+          }, 
+          "research_quality_score": 0.0, 
+          "person_research": {}, 
+          "sources_accessed": [], 
+          "industry_insights": {}, 
+          "company_research": {}
+        }
+      }, 
+      "review_timestamp": "2025-07-23T09:45:27.580387", 
+      "metadata": {
+        "generated_at": "2025-07-23T09:45:27.580357", 
+        "style": "professional_friendly", 
+        "personalization_points": [
+          "Referenced company"
+        ], 
+        "confidence_score": 0.7
+      }
+    }
+  ], 
+  "campaign_info": {
+    "emails_approved": 3, 
+    "timestamp": "20250723_094527", 
+    "total_contacts": 3, 
+    "name": "test_campaign", 
+    "emails_generated": 3
+  }, 
+  "workflow_stats": {
+    "errors": [], 
+    "emails_approved": 3, 
+    "emails_generated": 3, 
+    "start_time": 
