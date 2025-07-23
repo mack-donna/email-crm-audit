@@ -1,0 +1,104 @@
+{
+  "generated_at": "2025-07-23T09:37:12.784027", 
+  "performance_analysis": {
+    "optimal_patterns": {
+      "best_title_levels": {
+        "vp_director": {
+          "meeting_rate": 1, 
+          "responses": 1
+        }
+      }, 
+      "optimal_research_quality": 0.8, 
+      "most_effective_personalizations": [
+        [
+          "Mentioned role", 
+          1
+        ], 
+        [
+          "Referenced company", 
+          1
+        ], 
+        [
+          "Used recipient name", 
+          1
+        ]
+      ], 
+      "average_email_length": 3, 
+      "quick_response_characteristics": {
+        "common_style": "professional_friendly", 
+        "average_length": 3
+      }
+    }, 
+    "personalization_analysis": {
+      "1": {
+        "emails_sent": 1, 
+        "success_rate": 0
+      }, 
+      "3": {
+        "emails_sent": 1, 
+        "success_rate": 1
+      }, 
+      "optimal_count": 3
+    }, 
+    "style_analysis": {
+      "professional_friendly": {
+        "response_rate": 1, 
+        "responses": 1, 
+        "sent": 1
+      }, 
+      "brief_direct": {
+        "response_rate": 0, 
+        "responses": 0, 
+        "sent": 1
+      }, 
+      "best_performing": "professional_friendly"
+    }, 
+    "summary_statistics": {
+      "total_responses": 1, 
+      "total_emails_tracked": 2, 
+      "patterns_identified": 1, 
+      "overall_response_rate": 0
+    }, 
+    "recommendations": [
+      "Use 'professional_friendly' style for highest response rate (100%)", 
+      "Include 3 personalization points for best results", 
+      "Keep emails around 3 words for optimal engagement", 
+      "Focus on vp director for highest meeting conversion rate"
+    ]
+  }, 
+  "success_patterns": [
+    {
+      "response_time_hours": 18.5, 
+      "led_to_meeting": true, 
+      "style": "professional_friendly", 
+      "email_length": 3, 
+      "personalization_count": 3, 
+      "research_quality": 0.8, 
+      "timestamp": "2025-07-23T09:37:12.781465", 
+      "personalization_types": [
+        "Used recipient name", 
+        "Referenced company", 
+        "Mentioned role"
+      ], 
+      "contact_title_level": "vp_director"
+    }
+  ], 
+  "personalization_effectiveness": {
+    "1": [
+      false
+    ], 
+    "3": [
+      true
+    ]
+  }, 
+  "style_performance": {
+    "professional_friendly": {
+      "responded": 1, 
+      "sent": 1
+    }, 
+    "brief_direct": {
+      "responded": 0, 
+      "sent": 1
+    }
+  }
+}

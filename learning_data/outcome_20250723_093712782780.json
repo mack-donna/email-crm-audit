@@ -1,0 +1,30 @@
+{
+  "email_length": 3, 
+  "personalization_points": [
+    "Used recipient name", 
+    "Referenced company", 
+    "Mentioned role"
+  ], 
+  "contact_info": {
+    "company": "TechCorp", 
+    "name": "John Smith", 
+    "title": "VP of Engineering"
+  }, 
+  "research_quality": 0.8, 
+  "timestamp": "2025-07-23T09:37:12.781465", 
+  "email_style": "professional_friendly", 
+  "outcome": {
+    "response_time_hours": 18.5, 
+    "got_response": true, 
+    "was_sent": true, 
+    "led_to_meeting": true
+  }, 
+  "email_metadata": {
+    "style": "professional_friendly", 
+    "personalization_points": [
+      "Used recipient name", 
+      "Referenced company", 
+      "Mentioned role"
+    ]
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "email_length": 3, 
+  "personalization_points": [
+    "Used recipient name"
+  ], 
+  "contact_info": {
+    "company": "StartupXYZ", 
+    "name": "Jane Doe", 
+    "title": "CEO"
+  }, 
+  "research_quality": 0.4, 
+  "timestamp": "2025-07-23T09:37:12.783096", 
+  "email_style": "brief_direct", 
+  "outcome": {
+    "got_response": false, 
+    "was_sent": true
+  }, 
+  "email_metadata": {
+    "style": "brief_direct", 
+    "personalization_points": [
+      "Used recipient name"
+    ]
+  }
+}
