@@ -188,21 +188,43 @@ The system successfully:
 
 ## 🔧 Technical Details
 
+### Security Best Practices ⚠️
+**CRITICAL:** Never commit API keys or secrets to the repository!
+
+✅ **Do:**
+- Use environment variables: `export ANTHROPIC_API_KEY='your-key'`
+- Store tokens in macOS Keychain or secure credential managers
+- Use `.gitignore` for sensitive files (`token.json`, `credentials.json`, etc.)
+- Rotate API keys regularly (every 90 days recommended)
+
+❌ **Don't:**
+- Hardcode API keys in Python files
+- Commit `token.json` or authentication files
+- Share tokens in chat or documentation
+- Use the same token across multiple projects
+
+### GitHub Authentication Issues
+If you encounter authentication problems:
+1. **Test token validity:** `curl -H "Authorization: token YOUR_TOKEN" https://api.github.com/user`
+2. **Check token scopes:** Ensure `repo` scope is enabled for private repositories
+3. **Reset credential helper:** See [GITHUB_TOKEN_UPDATE.md](GITHUB_TOKEN_UPDATE.md) for detailed troubleshooting
+
 ### GitHub Actions
 The repository includes automated CI/CD workflows that:
-- Test Python compatibility across versions 2.7-3.10
+- Test Python compatibility across versions 3.9-3.13
 - Validate documentation completeness
 - Run weekly security scans on dependencies
 - Generate test reports and code metrics
 
 ### Design Principles
+- **Security-first**: Environment variables and proper credential management
 - **Modular**: Each component works independently for easy testing
 - **Learning-ready**: Data structures designed for future ML enhancement
 - **Execution-focused**: Working system first, sophistication later
 - **Human-in-the-loop**: AI assists but humans maintain control
 
 ### Technology Stack
-- **Language**: Python (stdlib focus for compatibility)
+- **Language**: Python 3.9+ (3.13+ recommended)
 - **APIs**: Gmail API, Claude API, Klaviyo API
 - **Storage**: JSON files → SQLite (future)
 - **Logging**: Comprehensive debugging support
@@ -214,6 +236,8 @@ The repository includes automated CI/CD workflows that:
 - [Architecture Decisions](ARCHITECTURAL_DECISIONS.md) - Technical choices explained
 - [Gmail Setup Guide](GMAIL_API_SETUP.md) - Step-by-step API configuration
 - [Klaviyo Flows Specification](KLAVIYO_FLOWS_SPEC.md) - E-commerce automation flows
+- [GitHub Token Management](GITHUB_TOKEN_UPDATE.md) - Authentication troubleshooting
+- [Troubleshooting Guide](TROUBLESHOOTING.md) - Common issues and solutions
 - [Session Logs](SESSION_LOG.md) - Development history and decisions
 
 ## 🤝 Contributing

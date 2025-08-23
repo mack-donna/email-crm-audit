@@ -67,6 +67,45 @@ git pull origin main
 2. Check you copied the entire token (starts with `ghp_`)
 3. Ensure no extra spaces when pasting
 
+### Complex Authentication Issues (Lessons Learned)
+Based on real troubleshooting experience:
+
+**Problem:** Git authentication keeps failing despite valid token
+**Solution Steps:**
+1. Test token validity first:
+   ```bash
+   curl -H "Authorization: token YOUR_TOKEN" https://api.github.com/user
+   ```
+2. If token works but git doesn't, try multiple approaches:
+   ```bash
+   # Method 1: Reset credential helper
+   git config --global credential.helper ""
+   git config --global credential.helper osxkeychain
+   
+   # Method 2: Manual URL with token
+   git push https://USERNAME:TOKEN@github.com/owner/repo.git main
+   
+   # Method 3: Environment variable
+   export GITHUB_TOKEN=your_token
+   git push origin main
+   ```
+
+**Problem:** "Device not configured" errors
+**Solution:** Usually indicates credential helper issues
+```bash
+git config --global credential.helper osxkeychain
+git credential-osxkeychain erase < /dev/null
+```
+
+**Problem:** GitHub blocks push with "Repository rule violations"  
+**Solution:** Remove secrets from commit history:
+1. Find the problematic commit: `git log --oneline`
+2. Reset to before the bad commit: `git reset --soft COMMIT_HASH`
+3. Re-commit without secrets: `git commit -m "Clean commit"`
+4. Force push: `git push --force origin main`
+
+**Key Lesson:** Always use environment variables for API keys - never hardcode them in files!
+
 ### Keychain not saving?
 ```bash
 # Force keychain to save
