@@ -13,22 +13,39 @@ This tool helps business development professionals:
 
 ## ⚡ Quick Start
 
+### Installation & Setup
+```bash
+# Clone the repository
+git clone https://github.com/mack-donna/email-crm-audit.git
+cd email-crm-audit
+
+# Install dependencies (Python 3.9+ required)
+pip install -r requirements.txt
+
+# Set up API key
+export ANTHROPIC_API_KEY='your-api-key'
+
+# Configure Gmail (follow GMAIL_API_SETUP.md)
+# Download credentials.json from Google Cloud Console
+```
+
 ### Simple Usage
 ```bash
-# Interactive mode (recommended)
-python outreach_automation.py
+# Modern Python 3 entry point (recommended)
+python3 modern_outreach.py
 
-# Process a CSV file directly
-python outreach_automation.py contacts.csv
+# Original entry point (still works)
+python3 outreach_automation.py contacts.csv --campaign "Q1 Outreach"
 
-# Custom campaign
-python outreach_automation.py contacts.csv --campaign "Q1 Outreach"
+# With Gmail drafts integration
+python3 run_outreach_with_gmail.py
 ```
 
 ### Prerequisites
-1. **Python 2.7+ or 3.x**
+1. **Python 3.9+** (3.13+ recommended) - **Python 2.7 no longer supported**
 2. **API Key**: Set `ANTHROPIC_API_KEY` environment variable
-3. **Gmail Setup** (optional): Follow [Gmail API Setup Guide](GMAIL_API_SETUP.md)
+3. **Gmail Setup**: Follow [Gmail API Setup Guide](GMAIL_API_SETUP.md) for automatic drafts creation
+4. **Dependencies**: Run `pip install -r requirements.txt`
 
 ## 🏗️ Architecture
 
@@ -64,8 +81,15 @@ email-crm-audit/
 ├── learning_engine.py                     # Module 6: Pattern learning
 ├── workflow_orchestrator.py               # Module 7: Coordination
 ├── klaviyo_integration.py                 # Module 9: Klaviyo flows
+├── gmail_drafts_manager.py                # Gmail integration for drafts
+│
+├── modern_outreach.py                     # 🆕 Modern Python 3 entry point
+├── run_outreach_with_gmail.py             # Gmail integration runner
+├── test_modern_system.py                  # Python 3 modernization tests
 │
 ├── KLAVIYO_FLOWS_SPEC.md                  # Klaviyo flow specifications
+├── GITHUB_TOKEN_UPDATE.md                 # GitHub token management
+├── requirements.txt                       # 🆕 Python dependencies
 │
 └── [output directories]                   # Campaign results, logs, data
 ```
@@ -113,13 +137,25 @@ Create `config.json`:
 
 Then run: `python outreach_automation.py --config config.json contacts.csv`
 
-### Klaviyo Integration (New!)
+### Gmail Integration (New!)
+```bash
+# Full automation with Gmail drafts creation
+python3 run_outreach_with_gmail.py
+
+# Manual Gmail drafts from campaign results
+python3 gmail_drafts_manager.py "outreach_campaigns/My_Campaign.json"
+
+# Test Gmail authentication
+python3 gmail_drafts_manager.py
+```
+
+### Klaviyo Integration
 ```bash
 # Process qualified prospects from Klaviyo flows
-python klaviyo_integration.py
+python3 klaviyo_integration.py
 
 # Import Klaviyo exports into outreach system
-python outreach_automation.py klaviyo_qualified_contacts.csv \
+python3 outreach_automation.py klaviyo_qualified_contacts.csv \
   --campaign "Klaviyo Re-engagement" \
   --source klaviyo
 ```

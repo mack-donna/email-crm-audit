@@ -10,13 +10,17 @@ import logging
 import os
 from datetime import datetime
 import time
+import subprocess
+import tempfile
 try:
     # Python 3
     from urllib.request import urlopen, Request
     from urllib.error import URLError, HTTPError
+    import ssl
 except ImportError:
     # Python 2
     from urllib2 import urlopen, Request, URLError, HTTPError
+    import ssl
 
 
 class EmailGenerator:
@@ -246,7 +250,7 @@ Cheers,
         
     def _call_claude_api(self, prompt):
         """
-        Call Claude API for email generation.
+        Call Claude API for email generation using curl to avoid SSL issues.
         
         Note: Requires valid ANTHROPIC_API_KEY environment variable.
         """
@@ -255,36 +259,51 @@ Cheers,
             return None
             
         try:
-            # Claude API endpoint
-            url = "https://api.anthropic.com/v1/messages"
-            
-            # Prepare request
-            headers = {
-                'x-api-key': self.api_key,
-                'anthropic-version': '2023-06-01',
-                'content-type': 'application/json'
-            }
-            
-            data = json.dumps({
-                'model': 'claude-3-sonnet-20240229',
+            # Prepare the request data
+            data = {
+                'model': 'claude-3-5-sonnet-20241022',
                 'max_tokens': 1000,
                 'messages': [{
                     'role': 'user',
                     'content': prompt
                 }]
-            }).encode('utf-8')
+            }
             
-            req = Request(url, data=data, headers=headers)
-            response = urlopen(req, timeout=30)
+            # Write data to temp file
+            with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+                json.dump(data, f)
+                temp_file = f.name
             
-            if response.getcode() == 200:
-                result = json.loads(response.read().decode('utf-8'))
-                return result['content'][0]['text']
-            else:
-                self.logger.error("API request failed with status: {}".format(
-                    response.getcode()
-                ))
+            try:
+                # Use curl to make the API call
+                cmd = [
+                    'curl', '-X', 'POST',
+                    'https://api.anthropic.com/v1/messages',
+                    '-H', 'x-api-key: {}'.format(self.api_key),
+                    '-H', 'anthropic-version: 2023-06-01', 
+                    '-H', 'content-type: application/json',
+                    '-d', '@{}'.format(temp_file),
+                    '--silent'
+                ]
+                
+                result = subprocess.check_output(cmd)
+                response = json.loads(result.decode('utf-8'))
+                
+                if 'content' in response and len(response['content']) > 0:
+                    return response['content'][0]['text']
+                else:
+                    self.logger.error("API Error: {}".format(response))
+                    return None
+                    
+            except subprocess.CalledProcessError as e:
+                self.logger.error("Curl error: {}".format(e))
                 return None
+            finally:
+                # Clean up temp file
+                try:
+                    os.unlink(temp_file)
+                except:
+                    pass
                 
         except Exception as e:
             self.logger.error("Error calling Claude API: {}".format(str(e)))
