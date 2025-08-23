@@ -1,0 +1,26 @@
+{
+  "email_length": 72, 
+  "personalization_points": [
+    "Referenced company"
+  ], 
+  "contact_info": {
+    "company": "TechStartup Inc", 
+    "name": "Alice Johnson", 
+    "title": "CTO"
+  }, 
+  "research_quality": 0.0, 
+  "timestamp": "2025-07-23T09:45:27.582174", 
+  "email_style": "professional_friendly", 
+  "outcome": {
+    "got_response": false, 
+    "was_sent": true
+  }, 
+  "email_metadata": {
+    "generated_at": "2025-07-23T09:45:18.406349", 
+    "style": "professional_friendly", 
+    "personalization_points": [
+      "Referenced company"
+    ], 
+    "confidence_score": 0.7
+  }
+}

@@ -9,6 +9,7 @@ This tool helps business development professionals:
 - **Personalize at scale**: Generate tailored emails for 50+ contacts daily
 - **Improve response rates**: Target 15-25% response rates through intelligent personalization
 - **Learn and improve**: System gets smarter with each use through feedback capture
+- **E-commerce integration**: Convert browse/cart abandoners into customers with Klaviyo flows
 
 ## ⚡ Quick Start
 
@@ -31,7 +32,7 @@ python outreach_automation.py contacts.csv --campaign "Q1 Outreach"
 
 ## 🏗️ Architecture
 
-The system uses a modular design with 8 components:
+The system uses a modular design with 9 components:
 
 1. **CSV Contact Processing** ✅ - Import and validate Salesforce exports
 2. **Email History Analyzer** ✅ - Gmail API integration for interaction history
@@ -41,6 +42,7 @@ The system uses a modular design with 8 components:
 6. **Learning Engine** ✅ - Pattern recognition and continuous improvement
 7. **Workflow Orchestrator** ✅ - End-to-end process management
 8. **Main Integration** ✅ - Complete system with CLI interface
+9. **Klaviyo Integration** 🆕 - E-commerce flow automation and prospect qualification
 
 ## 📁 Project Structure
 
@@ -61,6 +63,9 @@ email-crm-audit/
 ├── review_interface.py                    # Module 5: Human review
 ├── learning_engine.py                     # Module 6: Pattern learning
 ├── workflow_orchestrator.py               # Module 7: Coordination
+├── klaviyo_integration.py                 # Module 9: Klaviyo flows
+│
+├── KLAVIYO_FLOWS_SPEC.md                  # Klaviyo flow specifications
 │
 └── [output directories]                   # Campaign results, logs, data
 ```
@@ -108,9 +113,20 @@ Create `config.json`:
 
 Then run: `python outreach_automation.py --config config.json contacts.csv`
 
+### Klaviyo Integration (New!)
+```bash
+# Process qualified prospects from Klaviyo flows
+python klaviyo_integration.py
+
+# Import Klaviyo exports into outreach system
+python outreach_automation.py klaviyo_qualified_contacts.csv \
+  --campaign "Klaviyo Re-engagement" \
+  --source klaviyo
+```
+
 ## 📊 Current Status
 
-### ✅ **COMPLETE** - All 8 Modules Delivered!
+### ✅ **COMPLETE** - All Core Modules + Klaviyo Integration!
 - **Phase 1**: Solution design and architecture ✅
 - **Module 1**: CSV contact processing with validation ✅
 - **Module 2**: Gmail API integration and email analysis ✅  
@@ -120,6 +136,7 @@ Then run: `python outreach_automation.py --config config.json contacts.csv`
 - **Module 6**: Learning engine ✅
 - **Module 7**: Workflow orchestrator ✅
 - **Module 8**: Full system integration ✅
+- **Module 9**: Klaviyo e-commerce flow integration 🆕
 
 ### 🎯 **Ready for Production Use**
 The system successfully:
@@ -131,6 +148,7 @@ The system successfully:
 - Learns from successful patterns
 - Coordinates end-to-end campaigns
 - Exports ready-to-send emails
+- **NEW**: Integrates with Klaviyo for e-commerce prospect qualification
 
 ## 🔧 Technical Details
 
@@ -149,15 +167,17 @@ The repository includes automated CI/CD workflows that:
 
 ### Technology Stack
 - **Language**: Python (stdlib focus for compatibility)
-- **APIs**: Gmail API, Claude API (coming soon)
+- **APIs**: Gmail API, Claude API, Klaviyo API
 - **Storage**: JSON files → SQLite (future)
 - **Logging**: Comprehensive debugging support
+- **E-commerce**: Klaviyo, Shopify metafields, HeyGen video API
 
 ## 📝 Documentation
 
 - [Solution Specification](OUTREACH_AUTOMATION_SOLUTION_SPEC.md) - Detailed system design
 - [Architecture Decisions](ARCHITECTURAL_DECISIONS.md) - Technical choices explained
 - [Gmail Setup Guide](GMAIL_API_SETUP.md) - Step-by-step API configuration
+- [Klaviyo Flows Specification](KLAVIYO_FLOWS_SPEC.md) - E-commerce automation flows
 - [Session Logs](SESSION_LOG.md) - Development history and decisions
 
 ## 🤝 Contributing
