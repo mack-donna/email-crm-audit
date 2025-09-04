@@ -29,9 +29,28 @@ export ANTHROPIC_API_KEY='your-api-key'
 # Download credentials.json from Google Cloud Console
 ```
 
-### Simple Usage
+### 🌐 Web Interface (NEW! Recommended)
 ```bash
-# Modern Python 3 entry point (recommended)
+# Start the web application
+./start_web.sh
+
+# Or manually:
+python3 web_app.py
+
+# Open in browser:
+http://localhost:5000
+```
+
+Features:
+- Drag-and-drop CSV upload
+- Visual email review and approval
+- One-click Gmail draft creation
+- Campaign history and analytics
+- Modern, responsive UI with Tailwind CSS
+
+### Command Line Usage
+```bash
+# Modern Python 3 entry point
 python3 modern_outreach.py
 
 # Original entry point (still works)

@@ -1,6 +1,10 @@
 # Email Outreach Automation System Requirements
 # Python 3.9+ required
 
+# Web Framework
+Flask>=3.0.0
+Werkzeug>=3.0.0
+
 # Core Google API libraries
 google-api-python-client>=2.170.0
 google-auth-httplib2>=0.2.0

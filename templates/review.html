@@ -1,0 +1,171 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4" x-data="reviewHandler()">
+    <h1 class="text-3xl font-bold text-gray-900 mb-8">Review Generated Emails</h1>
+
+    <!-- Campaign Info -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4 mb-6">
+        <div class="flex justify-between items-center">
+            <div>
+                <h2 class="text-lg font-medium text-gray-900">{{ campaign.campaign_name }}</h2>
+                <p class="text-sm text-gray-500">Generated {{ campaign.approved_emails|length }} emails</p>
+            </div>
+            <div class="flex space-x-2">
+                <button @click="selectAll()" class="text-sm px-3 py-1 border border-gray-300 rounded-md hover:bg-gray-50">
+                    Select All
+                </button>
+                <button @click="deselectAll()" class="text-sm px-3 py-1 border border-gray-300 rounded-md hover:bg-gray-50">
+                    Deselect All
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Email Cards -->
+    <div class="space-y-4 mb-6">
+        {% for email in campaign.approved_emails %}
+        <div class="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden" :class="{ 'ring-2 ring-indigo-500': selected.includes('{{ loop.index }}')}">
+            <div class="p-4 border-b border-gray-200 bg-gray-50">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-3">
+                        <input 
+                            type="checkbox" 
+                            :checked="selected.includes('{{ loop.index }}')"
+                            @change="toggleSelection('{{ loop.index }}')"
+                            class="h-5 w-5 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
+                        >
+                        <div>
+                            <p class="text-sm font-medium text-gray-900">
+                                {{ email.contact_context.contact.name }}
+                            </p>
+                            <p class="text-sm text-gray-500">
+                                {{ email.contact_context.contact.email }} • {{ email.contact_context.contact.company }}
+                            </p>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            Ready
+                        </span>
+                        <button 
+                            @click="editEmail('{{ loop.index }}')" 
+                            class="text-gray-400 hover:text-gray-600"
+                        >
+                            <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                        </button>
+                    </div>
+                </div>
+            </div>
+            <div class="p-4">
+                <div class="prose prose-sm max-w-none">
+                    <div class="whitespace-pre-wrap font-mono text-sm text-gray-700">{{ email.email_content }}</div>
+                </div>
+            </div>
+            <div class="px-4 py-3 bg-gray-50 text-sm text-gray-500">
+                <span class="font-medium">Style:</span> {{ email.style }} • 
+                <span class="font-medium">Score:</span> {{ email.contact_context.priority_score }}/100
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Action Bar -->
+    <div class="sticky bottom-0 bg-white border-t border-gray-200 p-4 shadow-lg">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="text-sm text-gray-500">
+                <span x-text="selected.length"></span> of {{ campaign.approved_emails|length }} emails selected
+            </div>
+            <div class="flex space-x-3">
+                <button 
+                    @click="window.location.href='/upload'"
+                    class="px-4 py-2 border border-gray-300 rounded-md text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
+                >
+                    Cancel
+                </button>
+                <button 
+                    @click="approveEmails(false)"
+                    :disabled="selected.length === 0 || approving"
+                    class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-gray-600 hover:bg-gray-700 disabled:opacity-50"
+                >
+                    <span x-show="!approving">Save for Later</span>
+                    <span x-show="approving">Saving...</span>
+                </button>
+                <button 
+                    @click="approveEmails(true)"
+                    :disabled="selected.length === 0 || approving"
+                    class="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50"
+                >
+                    <span x-show="!approving">Create Gmail Drafts</span>
+                    <span x-show="approving">Creating...</span>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+function reviewHandler() {
+    return {
+        selected: [],
+        approving: false,
+        emails: {{ campaign.approved_emails|tojson }},
+
+        toggleSelection(id) {
+            if (this.selected.includes(id)) {
+                this.selected = this.selected.filter(item => item !== id);
+            } else {
+                this.selected.push(id);
+            }
+        },
+
+        selectAll() {
+            this.selected = this.emails.map((_, index) => String(index + 1));
+        },
+
+        deselectAll() {
+            this.selected = [];
+        },
+
+        editEmail(id) {
+            // In Phase 2, we'll add inline editing
+            alert('Email editing will be available in the next update');
+        },
+
+        async approveEmails(createDrafts) {
+            if (this.selected.length === 0) {
+                alert('Please select at least one email');
+                return;
+            }
+
+            this.approving = true;
+            try {
+                const response = await fetch('/approve', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        approved_ids: this.selected,
+                        create_drafts: createDrafts
+                    })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    window.location.href = data.redirect;
+                } else {
+                    alert('Approval failed: ' + data.error);
+                }
+            } catch (error) {
+                alert('Error: ' + error.message);
+            } finally {
+                this.approving = false;
+            }
+        }
+    }
+}
+</script>
+{% endblock %}
