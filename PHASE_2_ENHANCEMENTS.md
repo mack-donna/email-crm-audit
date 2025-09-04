@@ -103,7 +103,39 @@ Apply psychological triggers to subject line generation:
 - A/B test subject line effectiveness
 - Track open rate improvements
 
-### **5. Enhanced Prompts & System Integration**
+### **5. CSV Pre-Validation & Error Reporting**
+**Status:** Not Started  
+**Priority:** High (User experience improvement)
+
+Validate CSV before processing to show users exactly what will work:
+- **Validation Checks:**
+  - Required fields present (name/email/company)
+  - Email format validation
+  - Name length and format checks
+  - Duplicate email detection
+  - Character encoding issues
+
+- **User Feedback:**
+  - Clear error messages for each invalid row
+  - Show which fields are missing/invalid
+  - Suggest corrections where possible
+  - Preview of valid vs. invalid contacts
+  - **Remove invalid records with one click**
+
+- **User Actions:**
+  - Remove individual invalid records
+  - Remove all invalid records at once
+  - Edit records inline (Phase 2b)
+  - Proceed with clean dataset
+
+**Implementation Plan:**
+- Add validation step after CSV upload
+- Create interactive validation report UI with removal options
+- Show real-time count of valid/invalid/removed records
+- Allow user to remove invalid records and proceed with clean data
+- Export validation report for offline correction
+
+### **6. Enhanced Prompts & System Integration**
 **Status:** Not Started  
 **Priority:** Medium (Supporting infrastructure)
 
@@ -115,10 +147,11 @@ Update Claude prompts to incorporate all new features:
 
 ## 🚀 Implementation Priority Order
 
-1. **Campaign Goals** - Foundation for targeting
-2. **Subject Line Psychology** - Biggest impact on open rates  
-3. **Psychology Training** - Major quality improvement
-4. **Writing Style System** - Personalization enhancement
+1. **CSV Pre-Validation** - Prevent user frustration
+2. **Campaign Goals** - Foundation for targeting
+3. **Subject Line Psychology** - Biggest impact on open rates  
+4. **Psychology Training** - Major quality improvement
+5. **Writing Style System** - Personalization enhancement
 
 ## 📊 Expected Improvements
 

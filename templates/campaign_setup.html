@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="max-w-4xl mx-auto px-4" x-data="campaignSetup()">
+    <h1 class="text-3xl font-bold text-gray-900 mb-8">Campaign Setup</h1>
+    
+    <!-- Success Message -->
+    <div class="bg-green-50 border border-green-200 rounded-lg p-4 mb-6">
+        <div class="flex items-center">
+            <svg class="h-5 w-5 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+            </svg>
+            <p class="text-sm text-green-700">
+                CSV validated successfully! Ready to generate emails for <strong>{{ contact_count }}</strong> contacts.
+            </p>
+        </div>
+    </div>
+
+    <!-- Campaign Configuration Form -->
+    <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <h2 class="text-xl font-semibold text-gray-900 mb-6">Configure Your Campaign</h2>
+        
+        <form @submit.prevent="generateEmails()">
+            <!-- Campaign Name -->
+            <div class="mb-6">
+                <label for="campaign_name" class="block text-sm font-medium text-gray-700 mb-2">
+                    Campaign Name
+                </label>
+                <input 
+                    type="text" 
+                    id="campaign_name" 
+                    x-model="campaignName"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    placeholder="e.g., Q4 2025 Outreach"
+                    required
+                >
+            </div>
+
+            <!-- Email Settings -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Email Length
+                    </label>
+                    <select x-model="emailLength" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="concise">Concise (100-150 words)</option>
+                        <option value="medium" selected>Medium (150-200 words)</option>
+                        <option value="detailed">Detailed (200-300 words)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        Tone
+                    </label>
+                    <select x-model="tone" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                        <option value="professional" selected>Professional</option>
+                        <option value="friendly">Friendly</option>
+                        <option value="executive">Executive</option>
+                        <option value="consultative">Consultative</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Message/Context -->
+            <div class="mb-6">
+                <label for="message" class="block text-sm font-medium text-gray-700 mb-2">
+                    Your Message/Context
+                </label>
+                <textarea 
+                    id="message" 
+                    x-model="message"
+                    rows="4"
+                    class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    placeholder="Brief description of what you're offering or why you're reaching out..."
+                    required
+                ></textarea>
+                <p class="text-sm text-gray-500 mt-1">
+                    This context will help Claude personalize each email appropriately.
+                </p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex justify-between items-center">
+                <button 
+                    type="button"
+                    @click="window.location.href='/validate'"
+                    class="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50"
+                >
+                    ← Back to Validation
+                </button>
+                
+                <button 
+                    type="submit"
+                    :disabled="generating"
+                    class="px-6 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center"
+                >
+                    <svg x-show="generating" class="animate-spin -ml-1 mr-3 h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                    <span x-text="generating ? 'Generating Emails...' : 'Generate Emails'"></span>
+                </button>
+            </div>
+        </form>
+    </div>
+
+    <!-- Status Display -->
+    <div x-show="status" class="mt-6 p-4 rounded-lg" :class="statusClass">
+        <p x-text="status"></p>
+    </div>
+</div>
+
+<script>
+function campaignSetup() {
+    return {
+        campaignName: 'Campaign ' + new Date().toLocaleDateString(),
+        emailLength: 'medium',
+        tone: 'professional',
+        message: '',
+        generating: false,
+        status: '',
+        statusClass: '',
+        
+        async generateEmails() {
+            this.generating = true;
+            this.status = 'Generating personalized emails...';
+            this.statusClass = 'bg-blue-50 text-blue-700 border border-blue-200';
+            
+            try {
+                const response = await fetch('/generate', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        campaign_name: this.campaignName,
+                        email_length: this.emailLength,
+                        tone: this.tone,
+                        message: this.message
+                    })
+                });
+                
+                const data = await response.json();
+                
+                if (data.success) {
+                    this.status = `Successfully generated ${data.emails_generated} emails!`;
+                    this.statusClass = 'bg-green-50 text-green-700 border border-green-200';
+                    
+                    setTimeout(() => {
+                        window.location.href = data.redirect;
+                    }, 1500);
+                } else {
+                    this.status = 'Error: ' + data.error;
+                    this.statusClass = 'bg-red-50 text-red-700 border border-red-200';
+                }
+            } catch (error) {
+                this.status = 'Error: ' + error.message;
+                this.statusClass = 'bg-red-50 text-red-700 border border-red-200';
+            } finally {
+                this.generating = false;
+            }
+        }
+    }
+}
+</script>
+{% endblock %}
