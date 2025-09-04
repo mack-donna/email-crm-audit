@@ -174,8 +174,30 @@ class WorkflowOrchestrator:
         finally:
             self.workflow_stats['end_time'] = datetime.now()
             
-        # Generate final summary
-        return self._generate_campaign_summary(campaign_name)
+        # Generate final summary  
+        summary = self._generate_campaign_summary(campaign_name)
+        
+        # Add export file if it exists
+        if 'export_file' in locals() and export_file:
+            summary['campaign_file'] = export_file
+        else:
+            # Create a temporary file with the approved emails if export failed
+            try:
+                temp_file = "outreach_campaigns/temp_{}.json".format(
+                    datetime.now().strftime("%Y%m%d_%H%M%S")
+                )
+                os.makedirs('outreach_campaigns', exist_ok=True)
+                with open(temp_file, 'w') as f:
+                    json.dump({
+                        'campaign_name': campaign_name,
+                        'approved_emails': approved_emails if 'approved_emails' in locals() else [],
+                        'timestamp': datetime.now().isoformat()
+                    }, f)
+                summary['campaign_file'] = temp_file
+            except:
+                pass
+                
+        return summary
         
     def _process_contacts(self, csv_file):
         """Process CSV file and return valid contacts."""

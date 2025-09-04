@@ -139,9 +139,12 @@ class ContactProcessor:
                 new_row[new_col] = value
                 
             # Handle case where we have first_name + last_name but no name
-            if 'first_name' in new_row and 'last_name' in new_row and 'name' not in new_row:
-                fname = new_row.get('first_name', '').strip()
-                lname = new_row.get('last_name', '').strip()
+            # Check both underscore and space versions
+            if ('first_name' in new_row or 'first name' in new_row) and \
+               ('last_name' in new_row or 'last name' in new_row) and \
+               'name' not in new_row:
+                fname = new_row.get('first_name', new_row.get('first name', '')).strip()
+                lname = new_row.get('last_name', new_row.get('last name', '')).strip()
                 new_row['name'] = (fname + ' ' + lname).strip()
                 
             standardized_rows.append(new_row)

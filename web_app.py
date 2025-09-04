@@ -38,6 +38,12 @@ def index():
     """Main dashboard"""
     return render_template('index.html')
 
+@app.route('/clear')
+def clear_session():
+    """Clear session and redirect to home"""
+    session.clear()
+    return redirect(url_for('index'))
+
 @app.route('/upload', methods=['GET', 'POST'])
 def upload_csv():
     """Handle CSV file upload"""
@@ -88,29 +94,30 @@ def generate_emails():
     
     try:
         data = request.json
-        campaign_name = data.get('campaign_name', f'Campaign_{datetime.now().strftime("%Y%m%d_%H%M%S")}')
+        # Sanitize campaign name to avoid filesystem issues
+        raw_name = data.get('campaign_name', f'Campaign_{datetime.now().strftime("%Y%m%d_%H%M%S")}')
+        campaign_name = raw_name.replace('/', '-').replace('\\', '-')
         
         # Initialize orchestrator
         orchestrator = WorkflowOrchestrator()
-        
-        # Configure campaign
-        config = {
-            'csv_file': session['csv_file'],
-            'campaign_name': campaign_name,
-            'batch_size': data.get('batch_size', 5),
-            'enable_gmail_history': data.get('use_gmail_history', True),
-            'enable_learning': True,
-            'auto_approve': False  # Always require review in web interface
-        }
         
         # Store campaign ID in session
         campaign_id = str(uuid.uuid4())
         session['campaign_id'] = campaign_id
         
-        # Run campaign (this will be async in production)
-        results = orchestrator.run_campaign(config)
+        # Set auto-approve to skip CLI review (we'll review in web UI)
+        os.environ['AUTO_APPROVE_EMAILS'] = 'true'
         
-        if results:
+        # Run campaign with correct arguments
+        results = orchestrator.run_campaign(
+            csv_file=session['csv_file'],  # Pass the file path
+            campaign_name=campaign_name
+        )
+        
+        # Clean up the environment variable
+        os.environ.pop('AUTO_APPROVE_EMAILS', None)
+        
+        if results and 'campaign_file' in results:
             # Store results for review
             session['campaign_results'] = results['campaign_file']
             
@@ -121,7 +128,13 @@ def generate_emails():
                 'redirect': url_for('review_emails')
             })
         else:
-            return jsonify({'error': 'Failed to generate emails'}), 500
+            # Check for specific error messages
+            error_msg = 'Failed to generate emails'
+            if results and 'error' in results:
+                error_msg = results['error']
+            elif not results:
+                error_msg = 'No valid contacts found in CSV. Please check that your CSV has name/email/company columns.'
+            return jsonify({'error': error_msg}), 500
             
     except Exception as e:
         print(f"Error generating emails: {e}")
@@ -160,11 +173,24 @@ def approve_emails():
         with open(campaign_file, 'r') as f:
             campaign_data = json.load(f)
         
-        # Filter approved emails
-        approved_emails = [
-            email for email in campaign_data.get('approved_emails', [])
-            if email.get('id') in approved_ids
-        ]
+        # Get all emails from campaign data and filter by approved IDs
+        all_emails = campaign_data.get('approved_emails', [])
+        
+        # If no emails in approved_emails, the IDs might be 1-based indices
+        # Convert string IDs to integers and use as indices
+        approved_emails = []
+        for id_str in approved_ids:
+            try:
+                # Try to use as 1-based index
+                index = int(id_str) - 1
+                if 0 <= index < len(all_emails):
+                    approved_emails.append(all_emails[index])
+            except (ValueError, IndexError):
+                # If that fails, try to match by email id
+                for email in all_emails:
+                    if email.get('id') == id_str:
+                        approved_emails.append(email)
+                        break
         
         # Update campaign with only approved emails
         campaign_data['approved_emails'] = approved_emails
@@ -245,7 +271,7 @@ def download_campaign(filename):
 
 if __name__ == '__main__':
     print("🚀 Email Outreach Web App")
-    print("📍 Running at http://localhost:5000")
+    print("📍 Running at http://127.0.0.1:8080")
     print("⚠️  Set ANTHROPIC_API_KEY environment variable for AI generation")
     print("📧 Ensure credentials.json exists for Gmail integration")
-    app.run(debug=True, port=5000)
+    app.run(debug=True, host='127.0.0.1', port=8080)

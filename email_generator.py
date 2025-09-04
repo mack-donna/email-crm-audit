@@ -413,6 +413,10 @@ Generate an improved version that addresses the feedback while maintaining perso
         """Identify specific personalization elements used."""
         personalization_points = []
         
+        # Handle None email_content
+        if not email_content:
+            return personalization_points
+        
         contact = contact_context.get('contact', {})
         research = contact_context.get('research', {})
         
@@ -426,15 +430,21 @@ Generate an improved version that addresses the feedback while maintaining perso
             
         # Check for research references
         if research.get('company_research', {}).get('description', ''):
-            if any(word in email_content.lower() 
-                   for word in research['company_research']['description'].lower().split()):
-                personalization_points.append('Referenced company research')
+            description = research['company_research'].get('description')
+            if description:
+                if any(word in email_content.lower() 
+                       for word in description.lower().split()):
+                    personalization_points.append('Referenced company research')
                 
         return personalization_points
         
     def _calculate_confidence(self, email_content, contact_context):
         """Calculate confidence score for the generated email."""
         score = 0.5  # Base score
+        
+        # Handle None email_content
+        if not email_content:
+            return 0.1
         
         # Increase confidence based on available context
         if contact_context.get('contact', {}).get('name', '') != 'there':
