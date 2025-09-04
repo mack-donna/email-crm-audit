@@ -1,0 +1,190 @@
+{
+  "validation_errors": [
+    {
+      "errors": [
+        "Missing required field: name", 
+        "Invalid email format: invalid.email@"
+      ], 
+      "data": {
+        "phone": "555-0456", 
+        "company": "MissingName Corp", 
+        "email": "invalid.email@", 
+        "name": "", 
+        "title": "CEO"
+      }, 
+      "row_number": 3
+    }
+  ], 
+  "processing_metadata": {
+    "processor_version": "1.0", 
+    "source_file": "sample_contacts.csv", 
+    "total_processing_time": 0.002184, 
+    "processing_date": "2025-08-22T20:26:45.315878"
+  }, 
+  "statistics": {
+    "missing_required_fields": 1, 
+    "total_rows": 4, 
+    "processing_time": 0.002184, 
+    "invalid_contacts": 1, 
+    "duplicate_emails": 0, 
+    "invalid_emails": 1, 
+    "valid_contacts": 3
+  }, 
+  "contacts": [
+    {
+      "personalization_data": {
+        "interests": [], 
+        "pain_points": [], 
+        "personalization_opportunities": [], 
+        "recent_achievements": []
+      }, 
+      "research_findings": {
+        "company_info": {}, 
+        "mutual_connections": [], 
+        "research_quality_score": 0.0, 
+        "role_details": {}, 
+        "recent_activity": []
+      }, 
+      "interaction_history": {
+        "emails_sent": [], 
+        "emails_received": [], 
+        "last_interaction_date": null, 
+        "interaction_count": 0, 
+        "relationship_warmth": "cold"
+      }, 
+      "learning_metadata": {
+        "failed_approaches": [], 
+        "user_feedback": [], 
+        "successful_elements": [], 
+        "improvement_suggestions": []
+      }, 
+      "processing_info": {
+        "optional_fields_available": [
+          "title", 
+          "phone"
+        ], 
+        "source_file": "sample_contacts.csv", 
+        "data_quality_score": 0.8, 
+        "created_date": "2025-08-22T20:26:45.317996"
+      }, 
+      "success_metrics": {
+        "meetings_booked": 0, 
+        "emails_sent": 0, 
+        "emails_opened": 0, 
+        "conversion_rate": 0.0, 
+        "emails_responded": 0
+      }, 
+      "id": "john_smith_acmecorp_com", 
+      "basic_info": {
+        "phone": "555-0123", 
+        "company": "ACME Corporation", 
+        "title": "VP Sales", 
+        "name": "John Smith", 
+        "email": "john.smith@acmecorp.com"
+      }
+    }, 
+    {
+      "personalization_data": {
+        "interests": [], 
+        "pain_points": [], 
+        "personalization_opportunities": [], 
+        "recent_achievements": []
+      }, 
+      "research_findings": {
+        "company_info": {}, 
+        "mutual_connections": [], 
+        "research_quality_score": 0.0, 
+        "role_details": {}, 
+        "recent_activity": []
+      }, 
+      "interaction_history": {
+        "emails_sent": [], 
+        "emails_received": [], 
+        "last_interaction_date": null, 
+        "interaction_count": 0, 
+        "relationship_warmth": "cold"
+      }, 
+      "learning_metadata": {
+        "failed_approaches": [], 
+        "user_feedback": [], 
+        "successful_elements": [], 
+        "improvement_suggestions": []
+      }, 
+      "processing_info": {
+        "optional_fields_available": [
+          "title"
+        ], 
+        "source_file": "sample_contacts.csv", 
+        "data_quality_score": 0.7000000000000001, 
+        "created_date": "2025-08-22T20:26:45.318026"
+      }, 
+      "success_metrics": {
+        "meetings_booked": 0, 
+        "emails_sent": 0, 
+        "emails_opened": 0, 
+        "conversion_rate": 0.0, 
+        "emails_responded": 0
+      }, 
+      "id": "jane_doe_techstart_io", 
+      "basic_info": {
+        "phone": null, 
+        "company": "TechStart Inc", 
+        "title": "Marketing Director", 
+        "name": "Jane Doe", 
+        "email": "jane.doe@techstart.io"
+      }
+    }, 
+    {
+      "personalization_data": {
+        "interests": [], 
+        "pain_points": [], 
+        "personalization_opportunities": [], 
+        "recent_achievements": []
+      }, 
+      "research_findings": {
+        "company_info": {}, 
+        "mutual_connections": [], 
+        "research_quality_score": 0.0, 
+        "role_details": {}, 
+        "recent_activity": []
+      }, 
+      "interaction_history": {
+        "emails_sent": [], 
+        "emails_received": [], 
+        "last_interaction_date": null, 
+        "interaction_count": 0, 
+        "relationship_warmth": "cold"
+      }, 
+      "learning_metadata": {
+        "failed_approaches": [], 
+        "user_feedback": [], 
+        "successful_elements": [], 
+        "improvement_suggestions": []
+      }, 
+      "processing_info": {
+        "optional_fields_available": [
+          "title", 
+          "phone"
+        ], 
+        "source_file": "sample_contacts.csv", 
+        "data_quality_score": 0.8, 
+        "created_date": "2025-08-22T20:26:45.318057"
+      }, 
+      "success_metrics": {
+        "meetings_booked": 0, 
+        "emails_sent": 0, 
+        "emails_opened": 0, 
+        "conversion_rate": 0.0, 
+        "emails_responded": 0
+      }, 
+      "id": "bob_example_com", 
+      "basic_info": {
+        "phone": "555-0789", 
+        "company": "Example LLC", 
+        "title": "Developer", 
+        "name": "Bob Johnson", 
+        "email": "bob@example.com"
+      }
+    }
+  ]
+}

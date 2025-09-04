@@ -1,0 +1,26 @@
+{
+  "timestamp": "2025-09-03T21:32:16.454454",
+  "contact_info": {
+    "name": "Katie Boysen",
+    "company": "Smith Point Capital",
+    "title": "Marketing Lead"
+  },
+  "email_metadata": {
+    "generated_at": "2025-09-03T21:32:16.451219",
+    "style": "professional_friendly",
+    "personalization_points": [
+      "Referenced company"
+    ],
+    "confidence_score": 0.8
+  },
+  "personalization_points": [
+    "Referenced company"
+  ],
+  "research_quality": 0.0,
+  "outcome": {
+    "was_sent": true,
+    "got_response": false
+  },
+  "email_length": 212,
+  "email_style": "professional_friendly"
+}

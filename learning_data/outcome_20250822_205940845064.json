@@ -1,0 +1,26 @@
+{
+  "timestamp": "2025-08-22T20:59:40.845015",
+  "contact_info": {
+    "name": "Sarah Chen",
+    "company": "InnovateTech Solutions",
+    "title": "Chief Technology Officer"
+  },
+  "email_metadata": {
+    "generated_at": "2025-08-22T20:59:21.634676",
+    "style": "professional_friendly",
+    "personalization_points": [
+      "Referenced company"
+    ],
+    "confidence_score": 0.6
+  },
+  "personalization_points": [
+    "Referenced company"
+  ],
+  "research_quality": 0.0,
+  "outcome": {
+    "was_sent": true,
+    "got_response": false
+  },
+  "email_length": 196,
+  "email_style": "professional_friendly"
+}

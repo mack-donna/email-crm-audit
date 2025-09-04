@@ -1,0 +1,26 @@
+{
+  "timestamp": "2025-08-22T20:59:40.845687",
+  "contact_info": {
+    "name": "Jennifer Walsh",
+    "company": "HealthCare Innovations",
+    "title": "Director of Strategy"
+  },
+  "email_metadata": {
+    "generated_at": "2025-08-22T20:59:40.840763",
+    "style": "professional_friendly",
+    "personalization_points": [
+      "Referenced company"
+    ],
+    "confidence_score": 0.6
+  },
+  "personalization_points": [
+    "Referenced company"
+  ],
+  "research_quality": 0.0,
+  "outcome": {
+    "was_sent": true,
+    "got_response": false
+  },
+  "email_length": 178,
+  "email_style": "professional_friendly"
+}

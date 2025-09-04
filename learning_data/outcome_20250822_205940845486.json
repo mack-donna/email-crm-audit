@@ -1,0 +1,26 @@
+{
+  "timestamp": "2025-08-22T20:59:40.845469",
+  "contact_info": {
+    "name": "Michael Rodriguez",
+    "company": "Global Manufacturing Inc",
+    "title": "VP Operations"
+  },
+  "email_metadata": {
+    "generated_at": "2025-08-22T20:59:30.868256",
+    "style": "professional_friendly",
+    "personalization_points": [
+      "Referenced company"
+    ],
+    "confidence_score": 0.6
+  },
+  "personalization_points": [
+    "Referenced company"
+  ],
+  "research_quality": 0.0,
+  "outcome": {
+    "was_sent": true,
+    "got_response": false
+  },
+  "email_length": 180,
+  "email_style": "professional_friendly"
+}

@@ -1,0 +1,149 @@
+{
+  "campaign_info": {
+    "name": "Gmail Integration Test",
+    "timestamp": "20250822_205940",
+    "total_contacts": 3,
+    "emails_generated": 3,
+    "emails_approved": 3
+  },
+  "approved_emails": [
+    {
+      "email_content": "Subject: AI & Innovation Collaboration Opportunity\n\nHi Sarah,\n\nI came across your profile and your work at InnovateTech Solutions, and I was particularly impressed by your leadership in driving technological innovation. As a fellow technology professional, I'm always excited to connect with CTOs who are shaping the future of their industries.\n\nI'd love to learn more about the technical challenges and opportunities you're currently focusing on at InnovateTech. My team specializes in [brief value proposition], and we've helped similar organizations tackle complex technological transformations while reducing implementation time by [specific metric or outcome].\n\nWould you be open to a brief 15-minute conversation next week? I'd appreciate the opportunity to understand your priorities and explore if there might be areas where we could add value to your technology initiatives.\n\nBest regards,\n[Your name]\n\n[Your title]\n[Your company]\n[Phone number]\n[Email signature]\n\nNote: This template maintains professionalism while being conversational, shows genuine interest in their work, and offers clear value without being pushy. Since the research findings were empty, I kept the personalization focused on their role and company name. With more specific research insights, we could add more personalized details about their company initiatives or recent achievements.",
+      "metadata": {
+        "generated_at": "2025-08-22T20:59:21.634676",
+        "style": "professional_friendly",
+        "personalization_points": [
+          "Referenced company"
+        ],
+        "confidence_score": 0.6
+      },
+      "contact_context": {
+        "contact": {
+          "name": "Sarah Chen",
+          "email": "sarah.chen@innovatetech.com",
+          "company": "InnovateTech Solutions",
+          "title": "Chief Technology Officer",
+          "phone": "415-555-0123"
+        },
+        "email_history": {},
+        "research": {
+          "contact": {
+            "name": "Sarah Chen",
+            "email": "sarah.chen@innovatetech.com",
+            "company": "InnovateTech Solutions",
+            "title": "Chief Technology Officer",
+            "phone": "415-555-0123"
+          },
+          "company_research": {},
+          "person_research": {},
+          "industry_insights": {},
+          "recent_news": [],
+          "research_quality_score": 0.0,
+          "sources_accessed": [],
+          "research_timestamp": "2025-08-22T20:59:11.457034"
+        }
+      },
+      "coaching_data": {
+        "can_be_improved": true,
+        "improvement_suggestions": []
+      },
+      "review_status": "approved",
+      "review_timestamp": "2025-08-22T20:59:40.841154"
+    },
+    {
+      "email_content": "Subject: Manufacturing efficiency collaboration opportunity\n\nHi Michael,\n\nI noticed your leadership role in operations at Global Manufacturing Inc and wanted to reach out directly. Your company's focus on [I would normally insert a specific detail from research here, but since research findings are empty, I'll keep this general] operational excellence caught my attention.\n\nWith over [X] years of experience partnering with manufacturing operations leaders, I've developed a strong understanding of the challenges in optimizing production efficiency while maintaining quality standards. I believe there may be some relevant opportunities for collaboration, particularly around [specific value proposition that would be tailored based on research].\n\nI'd welcome the chance to have a brief conversation to learn more about your current operational priorities and share how we've helped similar manufacturing organizations. Would you be open to a 15-minute call next week? I'm happy to work around your schedule.\n\nBest regards,\n[Your name]\n\n[Note: This is a basic framework that would be much more personalized with actual research findings. The key is to demonstrate genuine interest and relevant expertise while being respectful of their time.]",
+      "metadata": {
+        "generated_at": "2025-08-22T20:59:30.868256",
+        "style": "professional_friendly",
+        "personalization_points": [
+          "Referenced company"
+        ],
+        "confidence_score": 0.6
+      },
+      "contact_context": {
+        "contact": {
+          "name": "Michael Rodriguez",
+          "email": "m.rodriguez@globalmanufacturing.com",
+          "company": "Global Manufacturing Inc",
+          "title": "VP Operations",
+          "phone": "312-555-0456"
+        },
+        "email_history": {},
+        "research": {
+          "contact": {
+            "name": "Michael Rodriguez",
+            "email": "m.rodriguez@globalmanufacturing.com",
+            "company": "Global Manufacturing Inc",
+            "title": "VP Operations",
+            "phone": "312-555-0456"
+          },
+          "company_research": {},
+          "person_research": {},
+          "industry_insights": {},
+          "recent_news": [],
+          "research_quality_score": 0.0,
+          "sources_accessed": [],
+          "research_timestamp": "2025-08-22T20:59:21.636184"
+        }
+      },
+      "coaching_data": {
+        "can_be_improved": true,
+        "improvement_suggestions": []
+      },
+      "review_status": "approved",
+      "review_timestamp": "2025-08-22T20:59:40.841164"
+    },
+    {
+      "email_content": "Subject: Exploring strategic healthcare innovation opportunities\n\nHi Jennifer,\n\nI noticed your work as Director of Strategy at HealthCare Innovations and wanted to reach out. The healthcare landscape is rapidly evolving, and I've been following how organizations are adapting their strategic approaches to meet these new challenges.\n\nGiven your role in shaping strategic initiatives, I'd love to learn more about the key priorities and opportunities you're focusing on at HealthCare Innovations. I believe there could be some interesting ways we could collaborate, particularly around [specific value proposition that aligns with healthcare strategy].\n\nWould you be open to a brief 20-minute conversation next week? I'm genuinely interested in understanding your perspective on the industry's direction and sharing some insights that might be valuable for your strategic planning.\n\nBest regards,\n[Your name]\n\nNote: I kept this email brief and focused, acknowledging the lack of detailed research findings while maintaining a professional yet conversational tone. The email opens a dialogue without making assumptions or being overly pushy. Let me know if you'd like me to adjust anything about the approach or tone.",
+      "metadata": {
+        "generated_at": "2025-08-22T20:59:40.840763",
+        "style": "professional_friendly",
+        "personalization_points": [
+          "Referenced company"
+        ],
+        "confidence_score": 0.6
+      },
+      "contact_context": {
+        "contact": {
+          "name": "Jennifer Walsh",
+          "email": "jwalsh@healthcareinnovations.org",
+          "company": "HealthCare Innovations",
+          "title": "Director of Strategy",
+          "phone": null
+        },
+        "email_history": {},
+        "research": {
+          "contact": {
+            "name": "Jennifer Walsh",
+            "email": "jwalsh@healthcareinnovations.org",
+            "company": "HealthCare Innovations",
+            "title": "Director of Strategy",
+            "phone": null
+          },
+          "company_research": {},
+          "person_research": {},
+          "industry_insights": {},
+          "recent_news": [],
+          "research_quality_score": 0.0,
+          "sources_accessed": [],
+          "research_timestamp": "2025-08-22T20:59:30.868959"
+        }
+      },
+      "coaching_data": {
+        "can_be_improved": true,
+        "improvement_suggestions": []
+      },
+      "review_status": "approved",
+      "review_timestamp": "2025-08-22T20:59:40.841168"
+    }
+  ],
+  "workflow_stats": {
+    "start_time": "2025-08-22T20:59:11.454780",
+    "end_time": null,
+    "total_contacts": 3,
+    "contacts_processed": 3,
+    "emails_generated": 3,
+    "emails_approved": 3,
+    "errors": []
+  }
+}

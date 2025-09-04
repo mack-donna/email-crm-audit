@@ -1,0 +1,22 @@
+{
+  "timestamp": "2025-09-03T21:39:30.414079",
+  "contact_info": {
+    "name": "Chun Wong",
+    "company": "Safe Harbor LLP",
+    "title": "CPA"
+  },
+  "email_metadata": {
+    "generated_at": "2025-09-03T21:39:07.710342",
+    "style": "professional_friendly",
+    "personalization_points": [],
+    "confidence_score": 0.8
+  },
+  "personalization_points": [],
+  "research_quality": 0.0,
+  "outcome": {
+    "was_sent": true,
+    "got_response": false
+  },
+  "email_length": 176,
+  "email_style": "professional_friendly"
+}

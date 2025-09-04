@@ -1,0 +1,24 @@
+{
+  "campaign_info": {
+    "name": "Campaign 9-3-2025",
+    "timestamp": "20250903_214542",
+    "total_contacts": 7,
+    "emails_generated": 4,
+    "emails_approved": 4
+  },
+  "approved_emails": [],
+  "workflow_stats": {
+    "start_time": "2025-09-03T21:44:32.563772",
+    "end_time": null,
+    "total_contacts": 7,
+    "contacts_processed": 4,
+    "emails_generated": 4,
+    "emails_approved": 4,
+    "errors": [
+      "Contact Jeff Foster: 'NoneType' object has no attribute 'lower'",
+      "Contact Krista Pouncey-Dyson: 'NoneType' object has no attribute 'lower'",
+      "Contact John Cummings: 'NoneType' object has no attribute 'lower'"
+    ]
+  },
+  "approval_timestamp": "2025-09-03T21:48:17.414070"
+}
