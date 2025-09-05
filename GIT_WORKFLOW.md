@@ -2,43 +2,47 @@
 
 ## 📋 Current Status
 
-✅ **CSV Validation Feature Committed**: 
-- Commit: `2dcaae4 Add CSV validation and error reporting system`
-- **Status**: Committed locally, needs push to GitHub
+✅ **CSV Validation Feature**: Complete and committed
+✅ **All Changes**: Committed locally, ready for push
 
-## 🚀 Pushing Changes
+## 🚀 Quick Start
 
-### Method 1: Simple Push (Recommended)
+### First Time Setup (One-time only)
 ```bash
-./git-push.sh
+./setup-auth.sh
 ```
+This will:
+- Configure macOS keychain for secure credential storage
+- Prompt for your GitHub Personal Access Token (PAT)
+- Test the authentication and store credentials
 
-### Method 2: If Authentication Fails
-1. Update credentials:
-   ```bash
-   ./update-github-token.sh
-   ```
-2. Then push:
-   ```bash
-   ./git-push.sh
-   ```
+### Daily Usage
+```bash
+./push.sh
+```
+Automatically commits changes and pushes to GitHub.
 
 ## 🔧 Scripts Overview
 
-- **`git-push.sh`** - Primary push script (uses stored keychain credentials)
-- **`update-github-token.sh`** - Updates GitHub authentication token
+- **`setup-auth.sh`** - One-time authentication setup
+- **`push.sh`** - Daily automated add/commit/push script
 
-## 🧹 Cleaned Up
+## 📋 Requirements
 
-Removed redundant scripts:
-- ❌ `push-now.sh` 
-- ❌ `secure-push.sh`
-- ❌ `save-to-keychain.sh` 
-- ❌ `update-token.sh`
-- ❌ `.git-credentials-helper.sh`
+- **GitHub PAT**: Create at https://github.com/settings/tokens
+  - Scope needed: `repo` (for private repos) or `public_repo`
+  - Token format: `ghp_...`
 
-## 📝 Notes
+## 🔒 Security Features
 
-- All commits are saved locally and safe
-- GitHub credentials use macOS keychain for security
-- The CSV validation feature is fully implemented and ready to use
+- ✅ Uses macOS keychain for credential storage
+- ✅ No hardcoded tokens in scripts
+- ✅ Standard Git credential helper
+- ✅ Secure HTTPS authentication
+
+## 📝 What's Ready to Push
+
+- CSV validation and error reporting system
+- Interactive UI for removing invalid records  
+- Campaign setup page for validated contacts
+- Cleaned up GitHub authentication scripts
