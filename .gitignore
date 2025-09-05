@@ -155,6 +155,7 @@ Thumbs.db
 # Project specific - sensitive files
 credentials.json
 token.json
+token.pickle
 *.csv
 client_secret*.json
 
