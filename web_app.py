@@ -830,12 +830,23 @@ def api_linkedin_status():
     token_info = session.get(token_key)
     connected = bool(token_info and token_info.get('access_token'))
     
-    return jsonify({
+    # Debug info for troubleshooting
+    debug_info = {
         'connected': connected,
         'available': LINKEDIN_AVAILABLE,
         'configured': linkedin_client.is_configured() if linkedin_client else False,
-        'user_id': user_id
-    })
+        'user_id': user_id,
+        'debug': {
+            'import_success': LINKEDIN_AVAILABLE,
+            'client_exists': linkedin_client is not None,
+            'env_vars_set': {
+                'LINKEDIN_CLIENT_ID': bool(os.getenv('LINKEDIN_CLIENT_ID')),
+                'LINKEDIN_CLIENT_SECRET': bool(os.getenv('LINKEDIN_CLIENT_SECRET'))
+            }
+        }
+    }
+    
+    return jsonify(debug_info)
 
 if __name__ == '__main__':
     print("🚀 Email Outreach Web App")
