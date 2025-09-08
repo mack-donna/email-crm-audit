@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+
+{% block title %}{{ campaign.campaign_info.name or "Campaign Details" }}{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="flex items-center justify-between mb-8">
+        <div>
+            <nav class="flex" aria-label="Breadcrumb">
+                <ol class="flex items-center space-x-4">
+                    <li>
+                        <a href="/campaigns" class="text-gray-400 hover:text-gray-500">
+                            <span class="sr-only">Campaigns</span>
+                            Campaigns
+                        </a>
+                    </li>
+                    <li>
+                        <div class="flex items-center">
+                            <svg class="flex-shrink-0 h-4 w-4 text-gray-400" viewBox="0 0 24 24" fill="currentColor">
+                                <path d="M8.59 16.59L13.17 12 8.59 7.41 10 6l6 6-6 6-1.41-1.41z"/>
+                            </svg>
+                            <span class="ml-4 text-sm text-gray-700">{{ campaign.campaign_info.name or "Unnamed Campaign" }}</span>
+                        </div>
+                    </li>
+                </ol>
+            </nav>
+            <h1 class="mt-2 text-3xl font-bold text-gray-900">{{ campaign.campaign_info.name or "Campaign Details" }}</h1>
+        </div>
+        <div class="flex space-x-3">
+            <a href="/download/{{ campaign_id }}.json" class="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path>
+                </svg>
+                Download
+            </a>
+        </div>
+    </div>
+
+    <!-- Campaign Summary -->
+    <div class="bg-white shadow-sm border border-gray-200 rounded-lg p-6 mb-8">
+        <h2 class="text-lg font-medium text-gray-900 mb-4">Campaign Summary</h2>
+        <dl class="grid grid-cols-1 gap-x-4 gap-y-6 sm:grid-cols-3">
+            <div>
+                <dt class="text-sm font-medium text-gray-500">Created</dt>
+                <dd class="mt-1 text-sm text-gray-900">
+                    {% set timestamp = campaign.campaign_info.timestamp %}
+                    {% if timestamp and timestamp|length >= 13 %}
+                        {{ timestamp[:4] }}-{{ timestamp[4:6] }}-{{ timestamp[6:8] }} {{ timestamp[9:11] }}:{{ timestamp[11:13] }}
+                    {% else %}
+                        {{ timestamp or "Unknown" }}
+                    {% endif %}
+                </dd>
+            </div>
+            <div>
+                <dt class="text-sm font-medium text-gray-500">Total Contacts</dt>
+                <dd class="mt-1 text-sm text-gray-900">{{ campaign.campaign_info.total_contacts or 0 }}</dd>
+            </div>
+            <div>
+                <dt class="text-sm font-medium text-gray-500">Emails Generated</dt>
+                <dd class="mt-1 text-sm text-gray-900">{{ campaign.approved_emails|length }}</dd>
+            </div>
+        </dl>
+    </div>
+
+    <!-- Generated Emails -->
+    <div class="bg-white shadow-sm border border-gray-200 rounded-lg overflow-hidden">
+        <div class="px-6 py-4 border-b border-gray-200">
+            <h3 class="text-lg font-medium text-gray-900">Generated Emails ({{ campaign.approved_emails|length }})</h3>
+        </div>
+        
+        {% if campaign.approved_emails %}
+        <div class="divide-y divide-gray-200">
+            {% for email in campaign.approved_emails %}
+            <div class="p-6">
+                <div class="flex items-start justify-between mb-4">
+                    <div class="flex-1">
+                        <div class="flex items-center space-x-3">
+                            <h4 class="text-sm font-medium text-gray-900">
+                                {{ email.contact_context.contact.name or "Unknown Contact" }}
+                            </h4>
+                            <span class="text-sm text-gray-500">
+                                {{ email.contact_context.contact.email }}
+                            </span>
+                            {% if email.contact_context.contact.company %}
+                            <span class="text-sm text-gray-500">
+                                • {{ email.contact_context.contact.company }}
+                            </span>
+                            {% endif %}
+                        </div>
+                        <div class="mt-1 flex items-center space-x-4 text-xs text-gray-500">
+                            <span>{{ email.metadata.style or "Unknown Style" }}</span>
+                            {% if email.metadata.generation_method %}
+                            <span>•</span>
+                            {% if email.metadata.generation_method == 'template' %}
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                                ⚠️ Template
+                            </span>
+                            {% elif email.metadata.generation_method == 'ai' %}
+                            <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                                🤖 AI Generated
+                            </span>
+                            {% endif %}
+                            {% endif %}
+                            <span>• Score: {{ (email.metadata.confidence_score * 100)|round|int }}%</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-50 rounded-lg p-4">
+                    <div class="whitespace-pre-wrap font-mono text-sm text-gray-800">{{ email.email_content }}</div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <div class="p-6 text-center text-gray-500">
+            <p>No emails found in this campaign.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

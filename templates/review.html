@@ -67,6 +67,15 @@
             <div class="px-4 py-3 bg-gray-50 text-sm text-gray-500">
                 <span class="font-medium">Style:</span> {{ email.style }} • 
                 <span class="font-medium">Score:</span> {{ email.contact_context.priority_score }}/100
+                {% if email.metadata.generation_method == 'template' %}
+                • <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                    ⚠️ Template Email - Set ANTHROPIC_API_KEY for AI generation
+                  </span>
+                {% elif email.metadata.generation_method == 'ai' %}
+                • <span class="inline-flex items-center px-2 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                    🤖 AI Generated
+                  </span>
+                {% endif %}
             </div>
         </div>
         {% endfor %}

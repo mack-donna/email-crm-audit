@@ -24,6 +24,7 @@ except ImportError:
 # Import existing modules
 from workflow_orchestrator import WorkflowOrchestrator
 from gmail_drafts_manager import GmailDraftsManager
+from gmail_oauth import GmailOAuth
 
 app = Flask(__name__)
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'dev-secret-key-change-in-production')
@@ -325,12 +326,34 @@ def generate_emails():
             # Store results for review
             session['campaign_results'] = results['campaign_file']
             
-            return jsonify({
+            # Check if any emails were generated using templates
+            template_count = 0
+            ai_count = 0
+            approved_emails = results.get('approved_emails', [])
+            
+            for email in approved_emails:
+                generation_method = email.get('metadata', {}).get('generation_method', 'unknown')
+                if generation_method == 'template':
+                    template_count += 1
+                elif generation_method == 'ai':
+                    ai_count += 1
+            
+            response_data = {
                 'success': True,
                 'campaign_id': campaign_id,
-                'emails_generated': len(results.get('approved_emails', [])),
+                'emails_generated': len(approved_emails),
                 'redirect': url_for('review_emails')
-            })
+            }
+            
+            # Add warning if templates were used
+            if template_count > 0:
+                response_data['template_warning'] = {
+                    'template_count': template_count,
+                    'ai_count': ai_count,
+                    'message': f"{template_count} emails generated using templates. Set ANTHROPIC_API_KEY for AI generation."
+                }
+            
+            return jsonify(response_data)
         else:
             # Check for specific error messages
             error_msg = 'Failed to generate emails'
@@ -408,14 +431,31 @@ def approve_emails():
         drafts_created = []
         draft_error = None
         if create_drafts:
-            # Check if credentials.json exists first
-            if not os.path.exists('credentials.json'):
-                draft_error = 'Gmail credentials.json file not found. Please add your Google OAuth credentials to enable Gmail integration.'
+            # Get user ID from session
+            user_id = session.get('user_id')
+            if not user_id:
+                session['user_id'] = str(uuid.uuid4())
+                user_id = session['user_id']
+            
+            # Check if user has Gmail connected
+            if not gmail_oauth.user_has_gmail_connected(user_id):
+                draft_error = 'Gmail account not connected. Please connect your Gmail account first.'
             else:
                 try:
-                    gmail_manager = GmailDraftsManager()
-                    drafts_created = gmail_manager.create_drafts_from_campaign(campaign_file)
-                    if len(drafts_created) == 0:
+                    # Create drafts using user's OAuth credentials
+                    for email in approved_emails:
+                        draft_id, error = gmail_oauth.create_draft_for_user(
+                            user_id,
+                            email.get('to_email'),
+                            email.get('subject'),
+                            email.get('email_content')
+                        )
+                        if draft_id:
+                            drafts_created.append(draft_id)
+                        elif error and not draft_error:
+                            draft_error = error
+                    
+                    if len(drafts_created) == 0 and not draft_error:
                         draft_error = 'No Gmail drafts were created. Please check your Gmail authentication and try again.'
                 except Exception as e:
                     draft_error = f'Gmail draft creation failed: {str(e)}'
@@ -469,16 +509,63 @@ def list_campaigns():
     campaign_files = Path(CAMPAIGNS_FOLDER).glob('*.json')
     
     for file in sorted(campaign_files, key=lambda x: x.stat().st_mtime, reverse=True):
-        with open(file, 'r') as f:
-            data = json.load(f)
-            campaigns.append({
-                'name': data.get('campaign_name', 'Unnamed'),
-                'date': data.get('timestamp', ''),
-                'emails_count': len(data.get('approved_emails', [])),
-                'file': file.name
-            })
+        try:
+            with open(file, 'r') as f:
+                data = json.load(f)
+                
+                # Handle both old and new data structures
+                campaign_info = data.get('campaign_info', {})
+                
+                # Extract campaign name - try multiple locations
+                name = (campaign_info.get('name') or 
+                       data.get('campaign_name') or 
+                       file.stem.replace('_', ' '))
+                
+                # Extract timestamp and format date
+                timestamp = campaign_info.get('timestamp') or data.get('timestamp', '')
+                if timestamp and len(timestamp) >= 13:  # Format: 20250907_161230
+                    try:
+                        # Parse timestamp format YYYYMMDD_HHMMSS
+                        date_part = timestamp[:8]  # YYYYMMDD
+                        time_part = timestamp[9:15] if len(timestamp) > 8 else "000000"  # HHMMSS
+                        formatted_date = f"{date_part[:4]}-{date_part[4:6]}-{date_part[6:8]} {time_part[:2]}:{time_part[2:4]}"
+                    except:
+                        formatted_date = timestamp
+                else:
+                    formatted_date = file.stat().st_mtime  # Fallback to file modification time
+                    from datetime import datetime
+                    formatted_date = datetime.fromtimestamp(formatted_date).strftime("%Y-%m-%d %H:%M")
+                
+                campaigns.append({
+                    'name': name,
+                    'date': formatted_date,
+                    'emails_count': len(data.get('approved_emails', [])),
+                    'file': file.name,
+                    'file_stem': file.stem  # For view links
+                })
+        except Exception as e:
+            print(f"Error reading campaign file {file}: {e}")
+            continue
     
     return render_template('campaigns.html', campaigns=campaigns)
+
+@app.route('/campaign/<campaign_id>')
+def view_campaign(campaign_id):
+    """View campaign details"""
+    # Look for the campaign file
+    json_file = None
+    for file in Path(CAMPAIGNS_FOLDER).glob('*.json'):
+        if file.stem == campaign_id:
+            json_file = file
+            break
+    
+    if not json_file or not json_file.exists():
+        return "Campaign not found", 404
+    
+    with open(json_file, 'r') as f:
+        campaign_data = json.load(f)
+    
+    return render_template('view_campaign.html', campaign=campaign_data, campaign_id=campaign_id)
 
 @app.route('/download/<filename>')
 def download_campaign(filename):
@@ -487,6 +574,99 @@ def download_campaign(filename):
     if os.path.exists(file_path):
         return send_file(file_path, as_attachment=True, download_name=f"campaign_{filename}")
     return "File not found", 404
+
+# Gmail OAuth Routes
+gmail_oauth = GmailOAuth(app)
+
+@app.route('/gmail/connect')
+def gmail_connect():
+    """Initiate Gmail OAuth flow"""
+    # Generate a user ID (in production, use actual user ID from auth system)
+    if 'user_id' not in session:
+        session['user_id'] = str(uuid.uuid4())
+    
+    user_id = session['user_id']
+    
+    # Get the redirect URI
+    redirect_uri = url_for('gmail_callback', _external=True, _scheme='https' if os.environ.get('FLASK_ENV') == 'production' else 'http')
+    
+    # Get authorization URL
+    auth_url, state = gmail_oauth.get_authorization_url(user_id, redirect_uri)
+    
+    if not auth_url:
+        return jsonify({'error': 'Gmail OAuth not configured. Please set up credentials.'}), 500
+    
+    # Store state in session for verification
+    session['oauth_state'] = state
+    
+    return redirect(auth_url)
+
+@app.route('/gmail/callback')
+def gmail_callback():
+    """Handle Gmail OAuth callback"""
+    # Verify state
+    if 'oauth_state' not in session:
+        return jsonify({'error': 'Invalid session state'}), 400
+    
+    state = session.get('oauth_state')
+    user_id = session.get('user_id')
+    
+    if not user_id:
+        return jsonify({'error': 'User session not found'}), 400
+    
+    # Get the redirect URI
+    redirect_uri = url_for('gmail_callback', _external=True, _scheme='https' if os.environ.get('FLASK_ENV') == 'production' else 'http')
+    
+    # Handle the callback
+    success = gmail_oauth.handle_callback(
+        user_id,
+        request.url,
+        state,
+        redirect_uri
+    )
+    
+    if success:
+        # Redirect back to the main app with success message
+        return redirect(url_for('gmail_status', status='success'))
+    else:
+        return redirect(url_for('gmail_status', status='error'))
+
+@app.route('/gmail/status')
+def gmail_status():
+    """Show Gmail connection status"""
+    status = request.args.get('status', 'unknown')
+    user_id = session.get('user_id')
+    
+    connected = False
+    if user_id:
+        connected = gmail_oauth.user_has_gmail_connected(user_id)
+    
+    return render_template('gmail_status.html', status=status, connected=connected)
+
+@app.route('/gmail/disconnect')
+def gmail_disconnect():
+    """Disconnect Gmail account"""
+    user_id = session.get('user_id')
+    
+    if user_id:
+        gmail_oauth.revoke_user_credentials(user_id)
+    
+    return redirect(url_for('gmail_status', status='disconnected'))
+
+@app.route('/api/gmail/status')
+def api_gmail_status():
+    """API endpoint to check Gmail connection status"""
+    user_id = session.get('user_id')
+    
+    if not user_id:
+        return jsonify({'connected': False, 'message': 'No user session'})
+    
+    connected = gmail_oauth.user_has_gmail_connected(user_id)
+    
+    return jsonify({
+        'connected': connected,
+        'user_id': user_id
+    })
 
 if __name__ == '__main__':
     print("🚀 Email Outreach Web App")

@@ -208,12 +208,21 @@ function campaignSetup() {
                 const data = await response.json();
                 
                 if (data.success) {
-                    this.status = `Successfully generated ${data.emails_generated} emails!`;
-                    this.statusClass = 'bg-green-50 text-green-700 border border-green-200';
+                    let statusMessage = `Successfully generated ${data.emails_generated} emails!`;
+                    let statusClass = 'bg-green-50 text-green-700 border border-green-200';
+                    
+                    // Check for template warning
+                    if (data.template_warning) {
+                        statusMessage = `Generated ${data.emails_generated} emails (${data.template_warning.template_count} using templates). Set ANTHROPIC_API_KEY for AI generation.`;
+                        statusClass = 'bg-yellow-50 text-yellow-700 border border-yellow-200';
+                    }
+                    
+                    this.status = statusMessage;
+                    this.statusClass = statusClass;
                     
                     setTimeout(() => {
                         window.location.href = data.redirect;
-                    }, 1500);
+                    }, 2500); // Give more time to read template warning
                 } else {
                     this.status = 'Error: ' + data.error;
                     this.statusClass = 'bg-red-50 text-red-700 border border-red-200';

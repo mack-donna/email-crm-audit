@@ -86,8 +86,9 @@ class EmailGenerator:
         # Build comprehensive prompt
         prompt = self._build_generation_prompt(contact_context, email_style, campaign_settings)
         
-        # For demonstration, use a template-based approach
-        # In production, this would call Claude API
+        # Choose generation method based on API key availability
+        generation_method = 'ai' if self.api_key else 'template'
+        
         if self.api_key:
             email_content = self._call_claude_api(prompt)
         else:
@@ -100,6 +101,7 @@ class EmailGenerator:
                 'email_content': email_content,
                 'metadata': {
                     'generated_at': datetime.now().isoformat(),
+                    'generation_method': generation_method,
                     'style': email_style,
                     'personalization_points': self._identify_personalization_points(
                         email_content, contact_context
@@ -213,6 +215,12 @@ WHAT TO AVOID:
 - Clichés like "I hope this email finds you well"
 - Making assumptions about their needs
 - Being too formal or too casual
+- ANY placeholders like [specific value] or [insert here]
+- ANY meta-notes or explanatory text (e.g., "Note:", "P.S. about this email:")
+- ANY instructions or comments about the email itself
+
+CRITICAL: Generate ONLY the email content that would be sent to the recipient. 
+Do not include any notes, placeholders, or explanations. The email should be complete and ready to send.
 
 Generate an email that feels genuinely personalized, aligns with the campaign goal, and provides clear value.
 """.format(
@@ -261,9 +269,9 @@ Generate an email that feels genuinely personalized, aligns with the campaign go
         if email_style == "professional_friendly":
             email = """Hi {name},
 
-{personalization}I'm reaching out because I believe there might be an opportunity for us to help {company} with [specific value proposition based on research].
+{personalization}I'm reaching out because I believe there might be an opportunity for us to help {company} improve operational efficiency and customer engagement.
 
-[Specific paragraph showing understanding of their business/challenges based on research findings]
+We've worked with similar companies in your industry to streamline their processes and increase revenue by 20-30% within the first quarter.
 
 Would you be open to a brief conversation to explore if there's a fit? I'm happy to share some specific ideas that have worked well for similar companies in your space.
 
@@ -277,9 +285,9 @@ Best regards,
         elif email_style == "brief_direct":
             email = """Hi {name},
 
-Quick question - are you currently looking for ways to [specific challenge based on research]?
+Quick question - are you currently looking for ways to optimize your operations and increase customer satisfaction?
 
-We've helped companies like {company} to [specific benefit], typically seeing [specific metric] improvement.
+We've helped companies like {company} achieve significant improvements in efficiency and revenue growth.
 
 Worth a quick chat?
 
@@ -292,9 +300,9 @@ Thanks,
         else:  # casual_conversational
             email = """Hey {name},
 
-{personalization}I've been following {company}'s journey and I'm impressed by [specific achievement or characteristic from research].
+{personalization}I've been following {company}'s journey and I'm impressed by your growth and innovation in the market.
 
-I work with similar companies on [specific area], and I have a few ideas that might be relevant for you.
+I work with similar companies on improving their customer engagement and operational efficiency, and I have a few ideas that might be relevant for you.
 
 Any interest in a quick coffee chat (virtual or otherwise)?
 

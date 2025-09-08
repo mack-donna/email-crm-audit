@@ -43,9 +43,14 @@
                         </span>
                     </td>
                     <td class="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <a href="/download/{{ campaign.file }}" class="text-indigo-600 hover:text-indigo-900">
-                            Download
-                        </a>
+                        <div class="flex justify-end space-x-3">
+                            <a href="/campaign/{{ campaign.file_stem }}" class="text-indigo-600 hover:text-indigo-900">
+                                View
+                            </a>
+                            <a href="/download/{{ campaign.file }}" class="text-indigo-600 hover:text-indigo-900">
+                                Download
+                            </a>
+                        </div>
                     </td>
                 </tr>
                 {% endfor %}
