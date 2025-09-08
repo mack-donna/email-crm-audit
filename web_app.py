@@ -727,9 +727,12 @@ def linkedin_connect():
     if not linkedin_client or not linkedin_client.is_configured():
         return jsonify({'error': 'LinkedIn OAuth not configured. Please set LINKEDIN_CLIENT_ID and LINKEDIN_CLIENT_SECRET environment variables.'}), 500
     
-    # Ensure user has a session
+    # Ensure user has a session - preserve existing user_id to prevent double OAuth loops
     if 'user_id' not in session:
         session['user_id'] = str(uuid.uuid4())
+        app.logger.info(f"LinkedIn OAuth: Generated new user_id {session['user_id']}")
+    else:
+        app.logger.info(f"LinkedIn OAuth: Using existing user_id {session['user_id']}")
     
     user_id = session['user_id']
     
@@ -750,13 +753,18 @@ def linkedin_callback():
         return "LinkedIn integration not available", 500
     
     user_id = session.get('user_id')
+    app.logger.info(f"LinkedIn callback: user_id={user_id}")
+    
     if not user_id:
+        app.logger.error("LinkedIn callback: No user session found")
         return "No user session found", 400
     
     # Get authorization code from callback
     code = request.args.get('code')
     state = request.args.get('state')
     error = request.args.get('error')
+    
+    app.logger.info(f"LinkedIn callback: code={'***' if code else None}, state={state}, error={error}")
     
     if error:
         return f"LinkedIn authorization failed: {error}", 400
@@ -781,6 +789,7 @@ def linkedin_callback():
             'connected_at': datetime.now().isoformat()
         }
         
+        app.logger.info(f"LinkedIn OAuth successful: redirecting to status page for user {user_id}")
         return redirect(url_for('linkedin_status', status='connected'))
         
     except Exception as e:
