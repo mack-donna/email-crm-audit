@@ -70,9 +70,14 @@ def main():
     from web_app import app
     
     # Get configuration from environment
+    # Render uses PORT environment variable, default to 8080 for local
     host = os.environ.get('HOST', '127.0.0.1')
     port = int(os.environ.get('PORT', 8080))
     debug = os.environ.get('FLASK_DEBUG', 'False').lower() == 'true'
+    
+    # For production on Render, bind to all interfaces
+    if os.environ.get('FLASK_ENV') == 'production':
+        host = '0.0.0.0'
     
     print(f"📍 Server running at http://{host}:{port}")
     print("📊 Debug mode:", "ON" if debug else "OFF")
