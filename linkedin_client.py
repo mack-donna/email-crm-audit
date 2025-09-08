@@ -74,7 +74,9 @@ class LinkedInClient:
         if not self.is_configured():
             raise ValueError("LinkedIn API credentials not configured")
             
-        default_scopes = ['r_liteprofile', 'r_emailaddress']
+        # Use the new LinkedIn API scopes (v2)
+        # Based on what's available in the LinkedIn app settings
+        default_scopes = ['openid', 'profile', 'email']
         scopes = scopes or default_scopes
         
         params = {
