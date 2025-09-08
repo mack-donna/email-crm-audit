@@ -302,8 +302,30 @@ def generate_emails():
         tone = data.get('tone', 'professional')
         message = data.get('message', '')
         
-        # Initialize orchestrator
-        orchestrator = WorkflowOrchestrator()
+        # Create LinkedIn enrichment function
+        def linkedin_enrichment_func(contact_info):
+            """Enriches contact with LinkedIn data using user's session token"""
+            if not linkedin_client or not linkedin_client.is_configured():
+                return None
+                
+            user_id = session.get('user_id')
+            if not user_id:
+                return None
+                
+            # Get user's LinkedIn token from session
+            token_key = f'linkedin_token_{user_id}'
+            if token_key not in session:
+                return None
+                
+            token_info = session[token_key]
+            linkedin_client.access_token = token_info.get('access_token')
+            
+            # Enhance contact with LinkedIn data
+            enhanced_contact = linkedin_client.enhance_contact_with_linkedin(contact_info)
+            return enhanced_contact
+        
+        # Initialize orchestrator with LinkedIn enrichment
+        orchestrator = WorkflowOrchestrator(linkedin_enrichment_func=linkedin_enrichment_func)
         
         # Store campaign ID in session
         campaign_id = str(uuid.uuid4())

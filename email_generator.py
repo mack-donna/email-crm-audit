@@ -130,6 +130,8 @@ class EmailGenerator:
         contact = contact_context.get('contact', {})
         email_history = contact_context.get('email_history', {})
         research = contact_context.get('research', {})
+        linkedin_data = contact_context.get('linkedin_data', {})
+        linkedin_context = contact_context.get('linkedin_context', {})
         
         # Extract campaign settings
         if campaign_settings:
@@ -202,11 +204,18 @@ RESEARCH FINDINGS:
 - Recent news: {recent_news}
 - Industry context: {industry_context}
 
+LINKEDIN INSIGHTS:
+- Professional background: {linkedin_headline}
+- Current location: {linkedin_location}
+- Profile URL: {linkedin_profile}
+- Conversation starters: {linkedin_conversation_starters}
+
 EMAIL REQUIREMENTS:
 - Style: {style}
 - Tone: {tone}
 - Length: {length}
-- Personalization: Reference specific research findings naturally
+- Personalization: Reference specific research findings and LinkedIn insights naturally
+- LinkedIn Integration: Use professional background, location, or mutual connections when available
 - Call-to-Action: Focus on the campaign goal
 
 WHAT TO AVOID:
@@ -238,6 +247,10 @@ Generate an email that feels genuinely personalized, aligns with the campaign go
             company_info=json.dumps(research.get('company_research', {})),
             recent_news=json.dumps(research.get('recent_news', [])),
             industry_context=json.dumps(research.get('industry_insights', {})),
+            linkedin_headline=linkedin_context.get('headline', 'N/A'),
+            linkedin_location=linkedin_context.get('location', 'N/A'),
+            linkedin_profile=linkedin_context.get('profile_url', 'N/A'),
+            linkedin_conversation_starters=json.dumps(linkedin_context.get('conversation_starters', [])),
             style=email_style,
             tone=campaign_tone.title(),
             length=length_guide

@@ -27,6 +27,14 @@ except ImportError:
     GMAIL_AVAILABLE = False
     print("Warning: Gmail integration not available (missing dependencies)")
 
+# Optional import for LinkedIn integration
+try:
+    from linkedin_client import LinkedInClient
+    LINKEDIN_AVAILABLE = True
+except ImportError:
+    LINKEDIN_AVAILABLE = False
+    print("Warning: LinkedIn integration not available (missing dependencies)")
+
 
 class WorkflowOrchestrator:
     """
@@ -40,9 +48,12 @@ class WorkflowOrchestrator:
     - Production-ready logging
     """
     
-    def __init__(self, config=None, log_level="INFO"):
+    def __init__(self, config=None, log_level="INFO", linkedin_enrichment_func=None):
         self.config = config or self.load_default_config()
         self.setup_logging(log_level)
+        
+        # Store LinkedIn enrichment function for session-based data
+        self.linkedin_enrichment_func = linkedin_enrichment_func
         
         # Initialize all modules
         self.logger.info("Initializing workflow orchestrator")
@@ -99,6 +110,16 @@ class WorkflowOrchestrator:
             else:
                 self.email_analyzer = None
                 self.logger.warning("Gmail integration disabled")
+                
+            # Initialize LinkedIn client only if available
+            if LINKEDIN_AVAILABLE and self.config.get('enable_linkedin', True):
+                self.linkedin_client = LinkedInClient()
+            else:
+                self.linkedin_client = None
+                if not LINKEDIN_AVAILABLE:
+                    self.logger.warning("LinkedIn integration not available")
+                else:
+                    self.logger.warning("LinkedIn integration disabled")
                 
             self.researcher = PublicInfoResearcher()
             self.email_generator = EmailGenerator(
@@ -324,7 +345,9 @@ class WorkflowOrchestrator:
         context = {
             'contact': contact['basic_info'],
             'email_history': {},
-            'research': {}
+            'research': {},
+            'linkedin_data': {},
+            'linkedin_context': {}
         }
         
         # Email history analysis
@@ -354,6 +377,20 @@ class WorkflowOrchestrator:
             ))
         except Exception as e:
             self.logger.warning("Research failed: {}".format(str(e)))
+            
+        # LinkedIn enrichment (if function provided)
+        if self.linkedin_enrichment_func:
+            print("    💼 Enriching with LinkedIn data...")
+            try:
+                linkedin_data = self.linkedin_enrichment_func(contact['basic_info'])
+                if linkedin_data:
+                    context['linkedin_data'] = linkedin_data.get('linkedin_data', {})
+                    context['linkedin_context'] = linkedin_data.get('linkedin_context', {})
+                    print("    ✅ LinkedIn data found")
+                else:
+                    print("    ⚠ No LinkedIn data available")
+            except Exception as e:
+                self.logger.warning("LinkedIn enrichment failed: {}".format(str(e)))
             
         return context
         
