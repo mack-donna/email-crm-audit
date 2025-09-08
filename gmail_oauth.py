@@ -17,7 +17,10 @@ from googleapiclient.discovery import build
 os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 # OAuth2 scopes for Gmail
-SCOPES = ['https://www.googleapis.com/auth/gmail.compose']
+SCOPES = [
+    'https://www.googleapis.com/auth/gmail.compose',
+    'https://www.googleapis.com/auth/gmail.readonly'
+]
 
 class GmailOAuth:
     """Handle Gmail OAuth2 flow for multiple users"""

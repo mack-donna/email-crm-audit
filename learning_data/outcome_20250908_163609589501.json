@@ -1,0 +1,29 @@
+{
+  "timestamp": "2025-09-08T16:36:09.589428",
+  "contact_info": {
+    "name": "Dan Quigley",
+    "company": "Matax",
+    "title": "Bookkeeper"
+  },
+  "email_metadata": {
+    "generated_at": "2025-09-08T16:35:37.764027",
+    "generation_method": "ai",
+    "style": "professional_friendly",
+    "personalization_points": [
+      "Referenced company",
+      "Referenced company research"
+    ],
+    "confidence_score": 1.0
+  },
+  "personalization_points": [
+    "Referenced company",
+    "Referenced company research"
+  ],
+  "research_quality": 0.30000000000000004,
+  "outcome": {
+    "was_sent": true,
+    "got_response": false
+  },
+  "email_length": 127,
+  "email_style": "professional_friendly"
+}

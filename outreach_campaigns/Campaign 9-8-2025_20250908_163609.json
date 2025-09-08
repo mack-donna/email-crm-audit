@@ -1,0 +1,856 @@
+{
+  "campaign_info": {
+    "name": "Campaign 9-8-2025",
+    "timestamp": "20250908_163609",
+    "total_contacts": 7,
+    "emails_generated": 4,
+    "emails_approved": 4
+  },
+  "approved_emails": [
+    {
+      "email_content": "Subject: Quick update on Sentient's evolution + demo opportunity\n\nHi Shahar,\n\nI wanted to follow up on our previous conversations and share some exciting developments at Sentient. We've expanded beyond our Salesforce roots into a comprehensive email automation platform, specifically designed for companies building advanced AI applications like Arato.\n\nGiven your focus on structured LLM development and scaling GenAI apps, I think you'll be particularly interested in our new behavioral triggers and multi-platform integration capabilities. They align well with what you're doing at Arato in terms of building reliable, production-ready AI solutions.\n\nWould you have 20 minutes this week for a quick demo? I'd love to show you how our platform could enhance Arato's development workflow and support your end-to-end LLM infrastructure.\n\nBest regards,\n[Your name]",
+      "metadata": {
+        "generated_at": "2025-09-08T16:34:54.872610",
+        "generation_method": "ai",
+        "style": "professional_friendly",
+        "personalization_points": [
+          "Referenced company research"
+        ],
+        "confidence_score": 1.0
+      },
+      "contact_context": {
+        "contact": {
+          "name": "Shahar Erez",
+          "email": "shahar@arato.ai",
+          "company": "Arato.ai",
+          "title": "CEO/Founder",
+          "phone": null
+        },
+        "email_history": {
+          "email_address": "shahar@arato.ai",
+          "total_interactions": 5,
+          "emails_sent": [
+            {
+              "id": "19913136d3424a20",
+              "date": "Wed, 3 Sep 2025 21:54:24 -0700",
+              "subject": "",
+              "from": "stu@sentient-sf.com",
+              "to": "",
+              "direction": "sent",
+              "snippet": "Hi Shahar, I hope you had a great summer. When we last spoke at the beginning of July about Arato.ai&#39;s growth plans, you mentioned some interesting challenges around scaling your AI implementation"
+            },
+            {
+              "id": "197e741134302178",
+              "date": "Mon, 7 Jul 2025 16:38:10 -0700",
+              "subject": "Re: Thank You for Signing Up for Arato!",
+              "from": "Stu Fisher <stu@sentient-sf.com>",
+              "to": "Shahar Erez <shahar@arato.ai>",
+              "direction": "sent",
+              "snippet": "Great to reconnect today, Shahar! I&#39;m going to check out your tool. Let&#39;s stay in touch. On Mon, Jul 7, 2025 at 4:32 PM Shahar Erez &lt;shahar@arato.ai&gt; wrote: Welcome to Arato! I&#39;m"
+            },
+            {
+              "id": "197c700f9fff9691",
+              "date": "Tue, 1 Jul 2025 10:20:19 -0700",
+              "subject": "Re: 30 Min Meeting between Shahar Erez and Stu Fisher",
+              "from": "Stu Fisher <stu@sentient-sf.com>",
+              "to": "Shahar Erez <shahar@arato.ai>",
+              "direction": "sent",
+              "snippet": "Sure, no problem. I moved to Monday. Have a great rest of your week! On Tue, Jul 1, 2025 at 7:39 AM Shahar Erez &lt;shahar@arato.ai&gt; wrote: 30 Min Meeting between Shahar Erez and Stu Fisher Hey Stu"
+            }
+          ],
+          "emails_received": [
+            {
+              "id": "197e73c364ab4d4a",
+              "date": "Mon, 07 Jul 2025 23:32:51 +0000",
+              "subject": "Thank You for Signing Up for Arato!",
+              "from": "Shahar Erez <shahar@arato.ai>",
+              "to": "stu@sentient-sf.com",
+              "direction": "received",
+              "snippet": "Welcome to Arato! I&#39;m Shahar Erez, CEO of Arato.ai, and I want to personally thank you for joining us. At Arato, we believe that every organization will be creating Gen AI enabled applications from"
+            },
+            {
+              "id": "197c66d87a094460",
+              "date": "Tue, 01 Jul 2025 14:39:15 +0000",
+              "subject": "30 Min Meeting between Shahar Erez and Stu Fisher",
+              "from": "Shahar Erez <shahar@arato.ai>",
+              "to": "stu@sentient-sf.com, Shahar Erez <shahar@arato.ai>",
+              "direction": "received",
+              "snippet": "30 Min Meeting between Shahar Erez and Stu Fisher Hey Stu I have something come up for Thursday Can we push this to Monday, July 7th? Thanks 30 Min Meeting between Shahar Erez and Stu Fisher Thursday"
+            }
+          ],
+          "first_interaction": "Mon, 07 Jul 2025 23:32:51 +0000",
+          "last_interaction": "Wed, 3 Sep 2025 21:54:24 -0700",
+          "interaction_dates": [
+            "Mon, 07 Jul 2025 23:32:51 +0000",
+            "Mon, 7 Jul 2025 16:38:10 -0700",
+            "Tue, 01 Jul 2025 14:39:15 +0000",
+            "Tue, 1 Jul 2025 10:20:19 -0700",
+            "Wed, 3 Sep 2025 21:54:24 -0700"
+          ],
+          "subject_lines": [
+            "",
+            "Re: Thank You for Signing Up for Arato!",
+            "Thank You for Signing Up for Arato!",
+            "Re: 30 Min Meeting between Shahar Erez and Stu Fisher",
+            "30 Min Meeting between Shahar Erez and Stu Fisher"
+          ],
+          "relationship_warmth": "existing",
+          "key_topics": [],
+          "interaction_summary": ""
+        },
+        "research": {
+          "contact": {
+            "name": "Shahar Erez",
+            "email": "shahar@arato.ai",
+            "company": "Arato.ai",
+            "title": "CEO/Founder",
+            "phone": null
+          },
+          "company_research": {
+            "title": "Arato.ai",
+            "description": "Build, evaluate, and scale GenAI apps with Arato \u2014 the end-to-end platform for structured, reliable, and production-ready LLM development."
+          },
+          "person_research": {},
+          "industry_insights": {},
+          "recent_news": [],
+          "research_quality_score": 0.30000000000000004,
+          "sources_accessed": [
+            "company_website"
+          ],
+          "research_timestamp": "2025-09-08T16:34:49.163451"
+        },
+        "linkedin_data": {},
+        "linkedin_context": {}
+      },
+      "coaching_data": {
+        "can_be_improved": true,
+        "improvement_suggestions": []
+      },
+      "review_status": "approved",
+      "review_timestamp": "2025-09-08T16:36:09.578652"
+    },
+    {
+      "email_content": "Subject: Quick update on our email automation platform\n\nHi Dan,\n\nI wanted to share some exciting updates about Sentient's platform since our last conversation in September. We've evolved significantly from the Salesforce tool you're familiar with into a comprehensive solution that I think could streamline Matax's client communications and automated bookkeeping notifications.\n\nThe new platform now includes advanced behavioral triggers that can automatically send tailored updates based on client accounting milestones or tax deadlines. I'm particularly excited about our new e-commerce integrations, which I believe could help automate many of the routine communications your team handles daily.\n\nI'd love to show you a brief demo of how these new features could benefit Matax. Would you have 20 minutes for a quick presentation next week?\n\nBest,\n[Your name]",
+      "metadata": {
+        "generated_at": "2025-09-08T16:35:37.764027",
+        "generation_method": "ai",
+        "style": "professional_friendly",
+        "personalization_points": [
+          "Referenced company",
+          "Referenced company research"
+        ],
+        "confidence_score": 1.0
+      },
+      "contact_context": {
+        "contact": {
+          "name": "Dan Quigley",
+          "email": "dan@mataxhq.com",
+          "company": "Matax",
+          "title": "Bookkeeper",
+          "phone": null
+        },
+        "email_history": {
+          "email_address": "dan@mataxhq.com",
+          "total_interactions": 20,
+          "emails_sent": [
+            {
+              "id": "1991bde29a179c56",
+              "date": "Fri, 05 Sep 2025 21:52:47 +0000 (UTC)",
+              "subject": "Sentient Holding Co LLC\u2019s: Thu, Sep 11 payment confirmation",
+              "from": "Gusto <gustonoreply@gusto.com>",
+              "to": "dan@mataxhq.com, dawn@mataxsf.com, stu@sentient-sf.com",
+              "direction": "sent",
+              "snippet": "Gusto We got your contractor payment, here&#39;s what&#39;s next Hi Stu, Dawn, and Dan, We received your contractor payment\u2014we&#39;ll debit $330.00 from the bank account ending in 9749 at 4:00PM (PDT)"
+            },
+            {
+              "id": "199147e7496530ce",
+              "date": "Thu, 04 Sep 2025 11:30:54 +0000 (UTC)",
+              "subject": "Run Sentient Holding Co LLC\u2019s payroll by  4:00PM PDT tomorrow",
+              "from": "Gusto <automated@gusto.com>",
+              "to": "dan@mataxhq.com, dawn@mataxsf.com, stu@sentient-sf.com",
+              "direction": "sent",
+              "snippet": "Gusto Heads up! Hi Stu, Dawn, and Dan, Please run payroll by 4:00PM PDT tomorrow to pay your employees at Sentient Holding Co LLC for their hard work. This payroll will be for: Aug 22, 2025 \u2013 Sep 4,"
+            },
+            {
+              "id": "19913136e4065bca",
+              "date": "Wed, 3 Sep 2025 23:54:24 -0500",
+              "subject": "",
+              "from": "stu@sentient-sf.com",
+              "to": "",
+              "direction": "sent",
+              "snippet": "Hi Dan, I hope you&#39;ve been having a smooth tax season. I was just reviewing our conversation from August about Matax&#39;s bookkeeping workflows, and I wanted to check in about those automation"
+            },
+            {
+              "id": "1990a35200849eb0",
+              "date": "Tue, 02 Sep 2025 11:34:36 +0000 (UTC)",
+              "subject": "Time to run payroll for Sentient Holding Co LLC",
+              "from": "Gusto <automated@gusto.com>",
+              "to": "dan@mataxhq.com, dawn@mataxsf.com, stu@sentient-sf.com",
+              "direction": "sent",
+              "snippet": "Gusto Heads up! Hi Stu, Dawn, and Dan, It&#39;s almost time to pay your employees at Sentient Holding Co LLC for their hard work. The next payroll will be for: Aug 22, 2025 \u2013 Sep 4, 2025 You have 3"
+            },
+            {
+              "id": "198d3a605251ad84",
+              "date": "Fri, 22 Aug 2025 14:18:49 -0700",
+              "subject": "Re: Bill.com instant transfer fee",
+              "from": "Stu Fisher <stu@sentient-sf.com>",
+              "to": "Dan Quigley <dan@mataxhq.com>",
+              "direction": "sent",
+              "snippet": "thanks, dan - that&#39;s exactly the transaction i was working on. On Fri, Aug 22, 2025 at 12:27 PM Dan Quigley &lt;dan@mataxhq.com&gt; wrote: Hi Stu, \u200b Thanks for reaching out! Here&#39;s a quick"
+            },
+            {
+              "id": "198cc625e9ce3e80",
+              "date": "Thu, 21 Aug 2025 11:27:35 +0000 (UTC)",
+              "subject": "Run Sentient Holding Co LLC\u2019s payroll by  4:00PM PDT tomorrow",
+              "from": "Gusto <automated@gusto.com>",
+              "to": "dan@mataxhq.com, dawn@mataxsf.com, stu@sentient-sf.com",
+              "direction": "sent",
+              "snippet": "Gusto Heads up! Hi Stu, Dawn, and Dan, Please run payroll by 4:00PM PDT tomorrow to pay your employees at Sentient Holding Co LLC for their hard work. This payroll will be for: Aug 8, 2025 \u2013 Aug 21,"
+            },
+            {
+              "id": "198ca318bc83805b",
+              "date": "Wed, 20 Aug 2025 18:15:01 -0700",
+              "subject": "Bill.com instant transfer fee",
+              "from": "Stu Fisher <stu@sentient-sf.com>",
+              "to": "Dawn Hatch <dawn@mataxhq.com>, Dan Quigley <dan@mataxhq.com>",
+              "direction": "sent",
+              "snippet": "Hi Dawn, Dan, I hope both of you are doing well and enjoying your summers. Q: I had a receivable come through Bill.com and was charged an instant transfer fee. I believe I discussed this scenario with"
+            },
+            {
+              "id": "198c218675a6cb13",
+              "date": "Tue, 19 Aug 2025 11:30:35 +0000 (UTC)",
+              "subject": "Time to run payroll for Sentient Holding Co LLC",
+              "from": "Gusto <automated@gusto.com>",
+              "to": "dan@mataxhq.com, dawn@mataxsf.com, stu@sentient-sf.com",
+              "direction": "sent",
+              "snippet": "Gusto Heads up! Hi Stu, Dawn, and Dan, It&#39;s almost time to pay your employees at Sentient Holding Co LLC for their hard work. The next payroll will be for: Aug 8, 2025 \u2013 Aug 21, 2025 You have 3"
+            },
+            {
+              "id": "198844af7ee36803",
+              "date": "Thu, 07 Aug 2025 11:29:20 +0000 (UTC)",
+              "subject": "Run Sentient Holding Co LLC\u2019s payroll by  4:00PM PDT tomorrow",
+              "from": "Gusto <automated@gusto.com>",
+              "to": "dan@mataxhq.com, dawn@mataxsf.com, stu@sentient-sf.com",
+              "direction": "sent",
+              "snippet": "Gusto Heads up! Hi Stu, Dawn, and Dan, Please run payroll by 4:00PM PDT tomorrow to pay your employees at Sentient Holding Co LLC for their hard work. This payroll will be for: Jul 25, 2025 \u2013 Aug 7,"
+            },
+            {
+              "id": "19879fba34660622",
+              "date": "Tue, 05 Aug 2025 11:26:30 +0000 (UTC)",
+              "subject": "Time to run payroll for Sentient Holding Co LLC",
+              "from": "Gusto <automated@gusto.com>",
+              "to": "dan@mataxhq.com, dawn@mataxsf.com, stu@sentient-sf.com",
+              "direction": "sent",
+              "snippet": "Gusto Heads up! Hi Stu, Dawn, and Dan, It&#39;s almost time to pay your employees at Sentient Holding Co LLC for their hard work. The next payroll will be for: Jul 25, 2025 \u2013 Aug 7, 2025 You have 3"
+            },
+            {
+              "id": "198677f56a68f1aa",
+              "date": "Fri, 1 Aug 2025 14:17:34 -0700",
+              "subject": "Re: Sentient SF Q4/Year-End 2024 Update",
+              "from": "Stu Fisher <stu@sentient-sf.com>",
+              "to": "Dan Quigley <dan@mataxhq.com>",
+              "direction": "sent",
+              "snippet": "Ok, thanks for the clarification. On Fri, Aug 1, 2025 at 2:00 PM Dan Quigley &lt;dan@mataxhq.com&gt; wrote: Hi Stu, \u200b Unfortunately that&#39;s a current limitation within Xero&#39;s reporting where the"
+            },
+            {
+              "id": "1986727fc8a66985",
+              "date": "Fri, 1 Aug 2025 12:42:10 -0700",
+              "subject": "Re: Sentient SF Q4/Year-End 2024 Update",
+              "from": "Stu Fisher <stu@sentient-sf.com>",
+              "to": "Dan Quigley <dan@mataxhq.com>",
+              "direction": "sent",
+              "snippet": "got it. can we start with January? Reverse the order? On Fri, Aug 1, 2025 at 12:08 PM Dan Quigley &lt;dan@mataxhq.com&gt; wrote: Hi Stu, \u200b You can reach these reports by following the same link or"
+            },
+            {
+              "id": "19866d91e3067f44",
+              "date": "Fri, 1 Aug 2025 11:16:01 -0700",
+              "subject": "Re: Sentient SF Q4/Year-End 2024 Update",
+              "from": "Stu Fisher <stu@sentient-sf.com>",
+              "to": "Dan Quigley <dan@mataxhq.com>",
+              "direction": "sent",
+              "snippet": "thanks dan. how can i navigate to these packs from the dashboard? On Fri, Aug 1, 2025 at 11:07 AM Dan Quigley &lt;dan@mataxhq.com&gt; wrote: Hi Stu \u2014 thanks for the questions! \u200b On the reports page in"
+            },
+            {
+              "id": "198665fa80bf5355",
+              "date": "Fri, 1 Aug 2025 09:03:20 -0700",
+              "subject": "Re: Sentient SF Q4/Year-End 2024 Update",
+              "from": "Stu Fisher <stu@sentient-sf.com>",
+              "to": "Dan Quigley <dan@mataxhq.com>",
+              "direction": "sent",
+              "snippet": "Hi Dan, Thanks for the update and the reports. I have a couple of questions: Layout of the P&amp;L: it seems wonky to have last year&#39;s data mixed in with this year&#39;s data. can you lay this out"
+            },
+            {
+              "id": "198664e3cc5e0560",
+              "date": "Fri, 01 Aug 2025 15:44:19 +0000 (UTC)",
+              "subject": "Jeffrey Foster dba Pixel Painter from Sentient Holding Co LLC can now be paid",
+              "from": "Gusto <gustonoreply@gusto.com>",
+              "to": "dan@mataxhq.com, jennifer@jennifer-lebeau.com, stu@sentient-sf.com",
+              "direction": "sent",
+              "snippet": "Gusto Heads up! Hi Stu, Jennifer, and Dan, Jeffrey Foster dba Pixel Painter has finished setting up their Gusto account and can now be paid by Sentient Holding Co LLC. To view the details, check out"
+            }
+          ],
+          "emails_received": [
+            {
+              "id": "198d33fc479934bd",
+              "date": "Fri, 22 Aug 2025 12:27:07 -0700",
+              "subject": "RE: Bill.com instant transfer fee",
+              "from": "Dan Quigley <dan@mataxhq.com>",
+              "to": "stu@sentient-sf.com",
+              "direction": "received",
+              "snippet": "Hi Stu, \u200b Thanks for reaching out! Here&#39;s a quick video covering how to record these merchant fees in Xero when matching against an invoice. \u200b If you have any questions, please let me know. Thanks"
+            },
+            {
+              "id": "198677f999aa828e",
+              "date": "Fri, 1 Aug 2025 14:17:51 -0700",
+              "subject": "Delayed Response Re: Sentient SF Q4/Year-End 2024 Update",
+              "from": "Dan Quigley <dan@mataxhq.com>",
+              "to": "stu@sentient-sf.com",
+              "direction": "received",
+              "snippet": "Thank you for your email. Please note that I am out of the office through August 10th. If your request is urgent, please email admin@mataxhq.com. Otherwise, I will get back to you upon my return on"
+            },
+            {
+              "id": "198676fd8da77e18",
+              "date": "Fri, 1 Aug 2025 14:00:36 -0700",
+              "subject": "Re: Sentient SF Q4/Year-End 2024 Update",
+              "from": "Dan Quigley <dan@mataxhq.com>",
+              "to": "stu@sentient-sf.com",
+              "direction": "received",
+              "snippet": "Hi Stu, \u200b Unfortunately that&#39;s a current limitation within Xero&#39;s reporting where the most recent period shown in reports will be the leftmost column. \u200b Xero Gold Partner of the Year, Americas"
+            },
+            {
+              "id": "19867095acbf9213",
+              "date": "Fri, 1 Aug 2025 12:08:39 -0700",
+              "subject": "Re: Sentient SF Q4/Year-End 2024 Update",
+              "from": "Dan Quigley <dan@mataxhq.com>",
+              "to": "stu@sentient-sf.com",
+              "direction": "received",
+              "snippet": "Hi Stu, \u200b You can reach these reports by following the same link or within Xero following \u201cAccounting &gt; Reports &gt; Published\u201d. \u200b Thanks! \u200b \u200b Xero Gold Partner of the Year, Americas \u200b image Dan"
+            },
+            {
+              "id": "19866d1133f3c09b",
+              "date": "Fri, 1 Aug 2025 11:07:11 -0700",
+              "subject": "Re: Sentient SF Q4/Year-End 2024 Update",
+              "from": "Dan Quigley <dan@mataxhq.com>",
+              "to": "stu@sentient-sf.com",
+              "direction": "received",
+              "snippet": "Hi Stu \u2014 thanks for the questions! \u200b On the reports page in Xero I&#39;ve added 2 more report packs (cash &amp; accrual) only showing 2025&#39;s data with no 2024 comparative data. \u200b In regards to the"
+            }
+          ],
+          "first_interaction": "Fri, 01 Aug 2025 15:44:19 +0000 (UTC)",
+          "last_interaction": "Wed, 3 Sep 2025 23:54:24 -0500",
+          "interaction_dates": [
+            "Fri, 01 Aug 2025 15:44:19 +0000 (UTC)",
+            "Fri, 05 Sep 2025 21:52:47 +0000 (UTC)",
+            "Fri, 1 Aug 2025 09:03:20 -0700",
+            "Fri, 1 Aug 2025 11:07:11 -0700",
+            "Fri, 1 Aug 2025 11:16:01 -0700",
+            "Fri, 1 Aug 2025 12:08:39 -0700",
+            "Fri, 1 Aug 2025 12:42:10 -0700",
+            "Fri, 1 Aug 2025 14:00:36 -0700",
+            "Fri, 1 Aug 2025 14:17:34 -0700",
+            "Fri, 1 Aug 2025 14:17:51 -0700",
+            "Fri, 22 Aug 2025 12:27:07 -0700",
+            "Fri, 22 Aug 2025 14:18:49 -0700",
+            "Thu, 04 Sep 2025 11:30:54 +0000 (UTC)",
+            "Thu, 07 Aug 2025 11:29:20 +0000 (UTC)",
+            "Thu, 21 Aug 2025 11:27:35 +0000 (UTC)",
+            "Tue, 02 Sep 2025 11:34:36 +0000 (UTC)",
+            "Tue, 05 Aug 2025 11:26:30 +0000 (UTC)",
+            "Tue, 19 Aug 2025 11:30:35 +0000 (UTC)",
+            "Wed, 20 Aug 2025 18:15:01 -0700",
+            "Wed, 3 Sep 2025 23:54:24 -0500"
+          ],
+          "subject_lines": [
+            "Sentient Holding Co LLC\u2019s: Thu, Sep 11 payment confirmation",
+            "Run Sentient Holding Co LLC\u2019s payroll by  4:00PM PDT tomorrow",
+            "",
+            "Time to run payroll for Sentient Holding Co LLC",
+            "Re: Bill.com instant transfer fee",
+            "RE: Bill.com instant transfer fee",
+            "Run Sentient Holding Co LLC\u2019s payroll by  4:00PM PDT tomorrow",
+            "Bill.com instant transfer fee",
+            "Time to run payroll for Sentient Holding Co LLC",
+            "Run Sentient Holding Co LLC\u2019s payroll by  4:00PM PDT tomorrow",
+            "Time to run payroll for Sentient Holding Co LLC",
+            "Delayed Response Re: Sentient SF Q4/Year-End 2024 Update",
+            "Re: Sentient SF Q4/Year-End 2024 Update",
+            "Re: Sentient SF Q4/Year-End 2024 Update",
+            "Re: Sentient SF Q4/Year-End 2024 Update",
+            "Re: Sentient SF Q4/Year-End 2024 Update",
+            "Re: Sentient SF Q4/Year-End 2024 Update",
+            "Re: Sentient SF Q4/Year-End 2024 Update",
+            "Re: Sentient SF Q4/Year-End 2024 Update",
+            "Jeffrey Foster dba Pixel Painter from Sentient Holding Co LLC can now be paid"
+          ],
+          "relationship_warmth": "existing",
+          "key_topics": [],
+          "interaction_summary": ""
+        },
+        "research": {
+          "contact": {
+            "name": "Dan Quigley",
+            "email": "dan@mataxhq.com",
+            "company": "Matax",
+            "title": "Bookkeeper",
+            "phone": null
+          },
+          "company_research": {
+            "title": "Meta Accountants - Your Financial Partner | Meta Accountants and Tax Advisors Ltd",
+            "description": "Meta Accountants and Tax Advisors Ltd offers professional accounting and tax advisory services for businesses. Contact us today for expert financial support."
+          },
+          "person_research": {},
+          "industry_insights": {},
+          "recent_news": [],
+          "research_quality_score": 0.30000000000000004,
+          "sources_accessed": [
+            "company_website"
+          ],
+          "research_timestamp": "2025-09-08T16:35:09.215606"
+        },
+        "linkedin_data": {},
+        "linkedin_context": {}
+      },
+      "coaching_data": {
+        "can_be_improved": true,
+        "improvement_suggestions": []
+      },
+      "review_status": "approved",
+      "review_timestamp": "2025-09-08T16:36:09.578661"
+    },
+    {
+      "email_content": "Subject: Quick update on our email automation platform\n\nHi Chun,\n\nI hope you've been having a great week. Since our last conversation in September, we've made some exciting improvements to Sentient's email automation platform that I think could be particularly valuable for Safe Harbor LLP.\n\nThe platform has evolved significantly, now offering advanced behavioral triggers that could help streamline your client communications and automate tax season outreach. I know we've previously discussed some of the challenges around managing multiple client touchpoints, and I'd love to show you how our new features address those pain points while integrating seamlessly with your existing workflows.\n\nWould you have 20 minutes this week for a quick demo? I'd be happy to focus specifically on the features most relevant to your accounting practice.\n\nBest regards,\n[Your name]",
+      "metadata": {
+        "generated_at": "2025-09-08T16:35:48.035164",
+        "generation_method": "ai",
+        "style": "professional_friendly",
+        "personalization_points": [
+          "Referenced company"
+        ],
+        "confidence_score": 0.9
+      },
+      "contact_context": {
+        "contact": {
+          "name": "Chun Wong",
+          "email": "cwong@safeharborcpa.com",
+          "company": "Safe Harbor LLP",
+          "title": "CPA",
+          "phone": null
+        },
+        "email_history": {
+          "email_address": "cwong@safeharborcpa.com",
+          "total_interactions": 20,
+          "emails_sent": [
+            {
+              "id": "1992674d7e83087b",
+              "date": "Sun, 7 Sep 2025 18:13:35 -0500",
+              "subject": "",
+              "from": "stu@sentient-sf.com",
+              "to": "",
+              "direction": "sent",
+              "snippet": "Hi Chun, I&#39;m reaching out because I believe there might be an opportunity for us to help Safe Harbor LLP with [specific value proposition based on research]. [Specific paragraph showing"
+            },
+            {
+              "id": "1991be88c663d460",
+              "date": "Fri, 5 Sep 2025 22:04:06 +0000",
+              "subject": "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Tracy Than <tthan@safeharborcpa.com>",
+              "to": "Chun Wong <cwong@safeharborcpa.com>, \"stu@sentient-sf.com\" <stu@sentient-sf.com>",
+              "direction": "sent",
+              "snippet": "Hi Stu, If your portal account wasn&#39;t set up before you sent your documents, you couldn&#39;t view the files you uploaded. If you&#39;d like, I can send you copies of all the documents you uploaded"
+            },
+            {
+              "id": "19917e7abaf62cba",
+              "date": "Thu, 4 Sep 2025 20:24:42 -0700",
+              "subject": "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Stu Fisher <stu@sentient-sf.com>",
+              "to": "Chun Wong <cwong@safeharborcpa.com>",
+              "direction": "sent",
+              "snippet": "I am working on building a 2024 medical expense ledger. I am not sure how to access the files that were uploaded to your portal, but I would like to double check them because on Schedule C, I have"
+            },
+            {
+              "id": "19913136e16dbff4",
+              "date": "Wed, 3 Sep 2025 21:54:24 -0700",
+              "subject": "",
+              "from": "stu@sentient-sf.com",
+              "to": "",
+              "direction": "sent",
+              "snippet": "Hi Chun, Hope you&#39;ve had a good few months since our last chat in August. I was just reviewing some of our previous collaborations and wanted to reach out to see how things are progressing at Safe"
+            },
+            {
+              "id": "198fb5bd456cf8f0",
+              "date": "Sat, 30 Aug 2025 08:22:35 -0600",
+              "subject": "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Stu Fisher <stu@sentient-sf.com>",
+              "to": "Chun Wong <cwong@safeharborcpa.com>",
+              "direction": "sent",
+              "snippet": "Hi Chun, I want to address your comment that I \u201cdid not mention either of these issues.\u201d In the initial information request from Tracy, I was specifically asked about medical expenses for 2024, so I"
+            },
+            {
+              "id": "198f6a57c3777b52",
+              "date": "Fri, 29 Aug 2025 10:24:56 -0600",
+              "subject": "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Stu Fisher <stu@sentient-sf.com>",
+              "to": "Chun Wong <cwong@safeharborcpa.com>",
+              "direction": "sent",
+              "snippet": "Thanks for clarifying that, Chun. But I will compile all of our qualifying medical expenses so we can reduce the penalty. On Fri, Aug 29, 2025 at 9:16 AM Chun Wong &lt;cwong@safeharborcpa.com&gt; wrote"
+            },
+            {
+              "id": "198f42f7f875f3f9",
+              "date": "Thu, 28 Aug 2025 22:56:49 -0600",
+              "subject": "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Stu Fisher <stu@sentient-sf.com>",
+              "to": "Chun Wong <cwong@safeharborcpa.com>",
+              "direction": "sent",
+              "snippet": "Hi Chun, Can you take another look at the premium tax credit and the self employed health insurance deduction to confirm the $8253 repayment is accurate? We did have medical expenses in 2024 that may"
+            },
+            {
+              "id": "198e8ab93dfafab8",
+              "date": "Tue, 26 Aug 2025 16:16:55 -0700",
+              "subject": "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Stu Fisher <stu@sentient-sf.com>",
+              "to": "Tracy Than <tthan@safeharborcpa.com>",
+              "direction": "sent",
+              "snippet": "Thank you. If you could summarize what the drivers of the High tax bill were that would be helpful. I&#39;ve never had a tax bill this high. On Tue, Aug 26, 2025 at 3:55 PM Tracy Than &lt;tthan@"
+            },
+            {
+              "id": "198e89819320cd24",
+              "date": "Tue, 26 Aug 2025 22:55:34 +0000",
+              "subject": "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Tracy Than <tthan@safeharborcpa.com>",
+              "to": "\"stu@sentient-sf.com\" <stu@sentient-sf.com>",
+              "direction": "sent",
+              "snippet": "Hi Stu, Thank you for confirming that you would like to contribute to your SEP IRA. We will deliver your return later today for your review. Please note that your return shows a federal tax balance due"
+            },
+            {
+              "id": "198e762420bba6ee",
+              "date": "Tue, 26 Aug 2025 10:17:13 -0700",
+              "subject": "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Stu Fisher <stu@sentient-sf.com>",
+              "to": "Tracy Than <tthan@safeharborcpa.com>",
+              "direction": "sent",
+              "snippet": "Thanks, Tracy. What I would most likely need to do is contribute to the SEP and pay the state amount due, but get on a payment plan for the federal amount due. On Tue, Aug 26, 2025 at 10:07 AM Tracy"
+            },
+            {
+              "id": "198e759a6a4373f7",
+              "date": "Tue, 26 Aug 2025 17:07:43 +0000",
+              "subject": "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Tracy Than <tthan@safeharborcpa.com>",
+              "to": "\"stu@sentient-sf.com\" <stu@sentient-sf.com>",
+              "direction": "sent",
+              "snippet": "Hi Stu, The SEP IRA contribution must be made by the tax filing deadline of 10/15/2025. Below is a comparison of your tax liability with and without the SEP contribution. These figures include"
+            },
+            {
+              "id": "198e3bb553517881",
+              "date": "Mon, 25 Aug 2025 17:16:01 -0700",
+              "subject": "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Stu Fisher <stu@sentient-sf.com>",
+              "to": "Tracy Than <tthan@safeharborcpa.com>",
+              "direction": "sent",
+              "snippet": "Hi Tracy, Thank you for the update and for moving things forward. Could you let me know by what date I would need to contribute the SEP IRA amount for it to count toward my 2024 tax return? Also, if I"
+            },
+            {
+              "id": "198e3254d08d9e03",
+              "date": "Mon, 25 Aug 2025 21:32:06 +0000",
+              "subject": "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Tracy Than <tthan@safeharborcpa.com>",
+              "to": "\"stu@sentient-sf.com\" <stu@sentient-sf.com>",
+              "direction": "sent",
+              "snippet": "Hi Stewart, We are finalizing your 2024 tax return. Please confirm that you can contribute the SEP IRA amount of $18385. Thanks, Tracy Click Here to upload files &amp; send files to me securely! Tracy"
+            },
+            {
+              "id": "198b811c830d1dc1",
+              "date": "Sun, 17 Aug 2025 08:47:09 -0400",
+              "subject": "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Stu Fisher <stu@sentient-sf.com>",
+              "to": "Tracy Than <tthan@safeharborcpa.com>",
+              "direction": "sent",
+              "snippet": "Hi Tracy - this was a withdrawal I took as I was bootstrapping my business. On Fri, Aug 15, 2025 at 4:54 PM Tracy Than &lt;tthan@safeharborcpa.com&gt; wrote: Hi Stewart, We&#39;re in the process of"
+            }
+          ],
+          "emails_received": [
+            {
+              "id": "198fbc880171affe",
+              "date": "Sat, 30 Aug 2025 16:21:14 +0000",
+              "subject": "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Chun Wong <cwong@safeharborcpa.com>",
+              "to": "\"stu@sentient-sf.com\" <stu@sentient-sf.com>",
+              "direction": "received",
+              "snippet": "Hi Stu I am happy to pick provide this and clearly what we talked about. Advisory is not a part of this tax preparation and if there are issues known or unknown that need additional time or more bleeds"
+            },
+            {
+              "id": "198fa04dbdf284fa",
+              "date": "Sat, 30 Aug 2025 08:07:55 +0000",
+              "subject": "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Chun Wong <cwong@safeharborcpa.com>",
+              "to": "\"stu@sentient-sf.com\" <stu@sentient-sf.com>",
+              "direction": "received",
+              "snippet": "Hi Stu - you did not mention either of these issues when I agree to a flat $2100mformyour return. I have written off approx&#39; $1400 of time already. I do not expect these additional issues after"
+            },
+            {
+              "id": "198f666d38148816",
+              "date": "Fri, 29 Aug 2025 15:16:22 +0000",
+              "subject": "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Chun Wong <cwong@safeharborcpa.com>",
+              "to": "\"stu@sentient-sf.com\" <stu@sentient-sf.com>",
+              "direction": "received",
+              "snippet": "Hi Stu No PTC that is for people at the poverty level Sent from my iPhone On Aug 28, 2025, at 10:57 PM, Stu Fisher &lt;stu@sentient-sf.com&gt; wrote: \ufeff Hi Chun, Can you take another look at the premium"
+            },
+            {
+              "id": "198eeea0bfe5712b",
+              "date": "Thu, 28 Aug 2025 04:22:49 +0000",
+              "subject": "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Chun Wong <cwong@safeharborcpa.com>",
+              "to": "Tracy Than <tthan@safeharborcpa.com>, \"stu@sentient-sf.com\" <stu@sentient-sf.com>",
+              "direction": "received",
+              "snippet": "Hi Stu - look at your two year comparison in the return that was sent. Your tax is lower than 2023: The drivers of 2024 tax vs 2023 taxes are: You took the advance premium tax credit and must pay back"
+            },
+            {
+              "id": "198e46592c0e6d7a",
+              "date": "Tue, 26 Aug 2025 03:21:53 +0000",
+              "subject": "RE: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Chun Wong <cwong@safeharborcpa.com>",
+              "to": "\"stu@sentient-sf.com\" <stu@sentient-sf.com>, Tracy Than <tthan@safeharborcpa.com>",
+              "direction": "received",
+              "snippet": "Hi Stu \u2013 you have until the due date of the return. Contributing the recommended max of $18K will save you $6000 to $8000 in taxes if you had a 27% effective federal tax rate and a 8% FTB effective tax"
+            },
+            {
+              "id": "198e3bb9b53e4631",
+              "date": "Tue, 26 Aug 2025 00:16:17 +0000",
+              "subject": "Automatic reply: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Chun Wong <cwong@safeharborcpa.com>",
+              "to": "Stu Fisher <stu@sentient-sf.com>",
+              "direction": "received",
+              "snippet": "Greetings, I am out of the office and will have limited access to my email until Friday, August 31st. I will be replying to messages in the order of urgency, and will reply to your message at the"
+            }
+          ],
+          "first_interaction": "Fri, 29 Aug 2025 10:24:56 -0600",
+          "last_interaction": "Wed, 3 Sep 2025 21:54:24 -0700",
+          "interaction_dates": [
+            "Fri, 29 Aug 2025 10:24:56 -0600",
+            "Fri, 29 Aug 2025 15:16:22 +0000",
+            "Fri, 5 Sep 2025 22:04:06 +0000",
+            "Mon, 25 Aug 2025 17:16:01 -0700",
+            "Mon, 25 Aug 2025 21:32:06 +0000",
+            "Sat, 30 Aug 2025 08:07:55 +0000",
+            "Sat, 30 Aug 2025 08:22:35 -0600",
+            "Sat, 30 Aug 2025 16:21:14 +0000",
+            "Sun, 17 Aug 2025 08:47:09 -0400",
+            "Sun, 7 Sep 2025 18:13:35 -0500",
+            "Thu, 28 Aug 2025 04:22:49 +0000",
+            "Thu, 28 Aug 2025 22:56:49 -0600",
+            "Thu, 4 Sep 2025 20:24:42 -0700",
+            "Tue, 26 Aug 2025 00:16:17 +0000",
+            "Tue, 26 Aug 2025 03:21:53 +0000",
+            "Tue, 26 Aug 2025 10:17:13 -0700",
+            "Tue, 26 Aug 2025 16:16:55 -0700",
+            "Tue, 26 Aug 2025 17:07:43 +0000",
+            "Tue, 26 Aug 2025 22:55:34 +0000",
+            "Wed, 3 Sep 2025 21:54:24 -0700"
+          ],
+          "subject_lines": [
+            "",
+            "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "",
+            "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "RE: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "Automatic reply: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)"
+          ],
+          "relationship_warmth": "existing",
+          "key_topics": [],
+          "interaction_summary": ""
+        },
+        "research": {
+          "contact": {
+            "name": "Chun Wong",
+            "email": "cwong@safeharborcpa.com",
+            "company": "Safe Harbor LLP",
+            "title": "CPA",
+            "phone": null
+          },
+          "company_research": {},
+          "person_research": {},
+          "industry_insights": {},
+          "recent_news": [],
+          "research_quality_score": 0.0,
+          "sources_accessed": [],
+          "research_timestamp": "2025-09-08T16:35:39.735152"
+        },
+        "linkedin_data": {},
+        "linkedin_context": {}
+      },
+      "coaching_data": {
+        "can_be_improved": true,
+        "improvement_suggestions": []
+      },
+      "review_status": "approved",
+      "review_timestamp": "2025-09-08T16:36:09.578667"
+    },
+    {
+      "email_content": "Subject: Exciting updates to share about our email automation platform\n\nHi Katie,\n\nI hope you're having a great week! I wanted to reach out since our last conversation about Salesforce integration back in September. Our team has been busy evolving our platform, and I'm excited to share how we've transformed it into something I think would be particularly valuable for Smith Point Capital.\n\nWe've expanded beyond basic Salesforce outreach to include advanced behavioral triggers and multi-platform integrations specifically designed for companies like yours. The new subscription model makes it much more flexible, and we've seen impressive results from other marketing teams using these new features.\n\nWould you have 20 minutes this week for a quick demo? I'd love to show you how these new capabilities could streamline your marketing operations at Smith Point Capital.\n\nBest regards,\n[Your name]",
+      "metadata": {
+        "generated_at": "2025-09-08T16:36:09.578522",
+        "generation_method": "ai",
+        "style": "professional_friendly",
+        "personalization_points": [
+          "Referenced company"
+        ],
+        "confidence_score": 0.9
+      },
+      "contact_context": {
+        "contact": {
+          "name": "Katie Boysen",
+          "email": "katie@katieboysen.com",
+          "company": "Smith Point Capital",
+          "title": "Marketing Lead",
+          "phone": null
+        },
+        "email_history": {
+          "email_address": "katie@katieboysen.com",
+          "total_interactions": 7,
+          "emails_sent": [
+            {
+              "id": "19913137033776a0",
+              "date": "Wed, 3 Sep 2025 21:54:25 -0700",
+              "subject": "",
+              "from": "stu@sentient-sf.com",
+              "to": "",
+              "direction": "sent",
+              "snippet": "Hi Katie, I hope you had a great rest of your summer since we last connected in August. I&#39;ve been thinking about our previous discussions around marketing strategy, and wanted to follow up"
+            },
+            {
+              "id": "198c8d725506d3ec",
+              "date": "Wed, 20 Aug 2025 11:56:38 -0700",
+              "subject": "Re: Stu Fisher and John Cummings Email Introducition",
+              "from": "Stu Fisher <stu@sentient-sf.com>",
+              "to": "Katie Boysen <katie@katieboysen.com>",
+              "direction": "sent",
+              "snippet": "Looks like our messages just crossed in the air! I&#39;ll use your link to find a time. On Wed, Aug 20, 2025 at 11:55 AM Katie Boysen &lt;katie@katieboysen.com&gt; wrote: Thanks John, and hi Stu! Would"
+            },
+            {
+              "id": "198c8d648e99a3e3",
+              "date": "Wed, 20 Aug 2025 11:55:42 -0700",
+              "subject": "Re: Stu Fisher and John Cummings Email Introducition",
+              "from": "Stu Fisher <stu@sentient-sf.com>",
+              "to": "John Cummings <john@smithpointcapital.com>",
+              "direction": "sent",
+              "snippet": "Hi John, Welcome back! I hope your Kilimanjaro expedition was incredible\u2014would love to hear how it went. Thanks so much for connecting me with Katie. It&#39;s great to meet you. I&#39;m excited to meet"
+            },
+            {
+              "id": "198c8ce1d77aaa2a",
+              "date": "Wed, 20 Aug 2025 18:46:16 +0000",
+              "subject": "Re: Stu Fisher and John Cummings Email Introducition",
+              "from": "John Cummings <john@smithpointcapital.com>",
+              "to": "\"stu@sentient-sf.com\" <stu@sentient-sf.com>, Katie Boysen <katie@katieboysen.com>",
+              "direction": "sent",
+              "snippet": "Stu, Great meeting you and apologies for long pause. That said, getting back on top of things after summer travel. I wanted to introduce you to Katie Boysen who helps us and several of our portfolio"
+            }
+          ],
+          "emails_received": [
+            {
+              "id": "198c8dc8d4ad61c7",
+              "date": "Wed, 20 Aug 2025 12:02:21 -0700",
+              "subject": "Re: Stu Fisher and John Cummings Email Introducition",
+              "from": "Katie Boysen <katie@katieboysen.com>",
+              "to": "stu@sentient-sf.com",
+              "direction": "received",
+              "snippet": "Thanks so much Stu - looking forward to connecting tomorrow! On Wed, Aug 20, 2025 at 11:56 AM Stu Fisher &lt;stu@sentient-sf.com&gt; wrote: Looks like our messages just crossed in the air! I&#39;ll use"
+            },
+            {
+              "id": "198c8d7b44e370f9",
+              "date": "Wed, 20 Aug 2025 18:57:16 +0000",
+              "subject": "Invitation: Stu Fisher and Katie Boysen @ Thu Aug 21, 2025 11:30am - 12pm (PDT) (stu@sentient-sf.com)",
+              "from": "Katie Boysen <katie@katieboysen.com>",
+              "to": "stu@sentient-sf.com",
+              "direction": "received",
+              "snippet": "Stu Fisher and Katie Boysen Event Name Smith Point Capital Meetings (30 min) Location: This is a Zoom web conference. You can join this meeting from your computer, tablet, or smartphone. https://"
+            },
+            {
+              "id": "198c8d65ef47bd7c",
+              "date": "Wed, 20 Aug 2025 11:55:35 -0700",
+              "subject": "Re: Stu Fisher and John Cummings Email Introducition",
+              "from": "Katie Boysen <katie@katieboysen.com>",
+              "to": "John Cummings <john@smithpointcapital.com>",
+              "direction": "received",
+              "snippet": "Thanks John, and hi Stu! Would love to find time to chat! You can book a time with me via this link. Looking forward to connecting and please shout with any questions or thoughts in the meantime!"
+            }
+          ],
+          "first_interaction": "Wed, 20 Aug 2025 11:55:35 -0700",
+          "last_interaction": "Wed, 3 Sep 2025 21:54:25 -0700",
+          "interaction_dates": [
+            "Wed, 20 Aug 2025 11:55:35 -0700",
+            "Wed, 20 Aug 2025 11:55:42 -0700",
+            "Wed, 20 Aug 2025 11:56:38 -0700",
+            "Wed, 20 Aug 2025 12:02:21 -0700",
+            "Wed, 20 Aug 2025 18:46:16 +0000",
+            "Wed, 20 Aug 2025 18:57:16 +0000",
+            "Wed, 3 Sep 2025 21:54:25 -0700"
+          ],
+          "subject_lines": [
+            "",
+            "Re: Stu Fisher and John Cummings Email Introducition",
+            "Invitation: Stu Fisher and Katie Boysen @ Thu Aug 21, 2025 11:30am - 12pm (PDT) (stu@sentient-sf.com)",
+            "Re: Stu Fisher and John Cummings Email Introducition",
+            "Re: Stu Fisher and John Cummings Email Introducition",
+            "Re: Stu Fisher and John Cummings Email Introducition",
+            "Re: Stu Fisher and John Cummings Email Introducition"
+          ],
+          "relationship_warmth": "existing",
+          "key_topics": [],
+          "interaction_summary": ""
+        },
+        "research": {
+          "contact": {
+            "name": "Katie Boysen",
+            "email": "katie@katieboysen.com",
+            "company": "Smith Point Capital",
+            "title": "Marketing Lead",
+            "phone": null
+          },
+          "company_research": {},
+          "person_research": {},
+          "industry_insights": {},
+          "recent_news": [],
+          "research_quality_score": 0.0,
+          "sources_accessed": [],
+          "research_timestamp": "2025-09-08T16:36:00.997950"
+        },
+        "linkedin_data": {},
+        "linkedin_context": {}
+      },
+      "coaching_data": {
+        "can_be_improved": true,
+        "improvement_suggestions": []
+      },
+      "review_status": "approved",
+      "review_timestamp": "2025-09-08T16:36:09.578671"
+    }
+  ],
+  "workflow_stats": {
+    "start_time": "2025-09-08T16:34:48.427734",
+    "end_time": null,
+    "total_contacts": 7,
+    "contacts_processed": 4,
+    "emails_generated": 4,
+    "emails_approved": 4,
+    "errors": [
+      "Contact Jeff Foster: 'NoneType' object has no attribute 'lower'",
+      "Contact Krista Pouncey-Dyson: 'NoneType' object has no attribute 'lower'",
+      "Contact John Cummings: 'NoneType' object has no attribute 'lower'"
+    ]
+  },
+  "approval_timestamp": "2025-09-08T16:39:07.872175"
+}

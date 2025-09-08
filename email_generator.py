@@ -534,9 +534,9 @@ Generate an improved version that addresses the feedback while maintaining perso
             personalization_points.append('Referenced company')
             
         # Check for research references
-        if research.get('company_research', {}).get('description', ''):
+        if research.get('company_research', {}).get('description'):
             description = research['company_research'].get('description')
-            if description:
+            if description and isinstance(description, str):
                 if any(word in email_content.lower() 
                        for word in description.lower().split()):
                     personalization_points.append('Referenced company research')

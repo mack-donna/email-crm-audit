@@ -397,9 +397,10 @@ class LinkedInClient:
         }
         
         # Generate conversation starters based on available data
-        if linkedin_data.get('headline'):
+        headline = linkedin_data.get('headline')
+        if headline and isinstance(headline, str):
             context['conversation_starters'].append(
-                f"I noticed you're {linkedin_data['headline'].lower()}"
+                f"I noticed you're {headline.lower()}"
             )
             
         if linkedin_data.get('location'):

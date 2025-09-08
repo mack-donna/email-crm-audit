@@ -1,0 +1,72 @@
+APPROVED EMAILS FOR CAMPAIGN: Campaign 9-8-2025
+Generated: 20250908_163609
+============================================================
+
+EMAIL 1 - To: Shahar Erez (shahar@arato.ai)
+------------------------------------------------------------
+Subject: Quick update on Sentient's evolution + demo opportunity
+
+Hi Shahar,
+
+I wanted to follow up on our previous conversations and share some exciting developments at Sentient. We've expanded beyond our Salesforce roots into a comprehensive email automation platform, specifically designed for companies building advanced AI applications like Arato.
+
+Given your focus on structured LLM development and scaling GenAI apps, I think you'll be particularly interested in our new behavioral triggers and multi-platform integration capabilities. They align well with what you're doing at Arato in terms of building reliable, production-ready AI solutions.
+
+Would you have 20 minutes this week for a quick demo? I'd love to show you how our platform could enhance Arato's development workflow and support your end-to-end LLM infrastructure.
+
+Best regards,
+[Your name]
+
+============================================================
+
+EMAIL 2 - To: Dan Quigley (dan@mataxhq.com)
+------------------------------------------------------------
+Subject: Quick update on our email automation platform
+
+Hi Dan,
+
+I wanted to share some exciting updates about Sentient's platform since our last conversation in September. We've evolved significantly from the Salesforce tool you're familiar with into a comprehensive solution that I think could streamline Matax's client communications and automated bookkeeping notifications.
+
+The new platform now includes advanced behavioral triggers that can automatically send tailored updates based on client accounting milestones or tax deadlines. I'm particularly excited about our new e-commerce integrations, which I believe could help automate many of the routine communications your team handles daily.
+
+I'd love to show you a brief demo of how these new features could benefit Matax. Would you have 20 minutes for a quick presentation next week?
+
+Best,
+[Your name]
+
+============================================================
+
+EMAIL 3 - To: Chun Wong (cwong@safeharborcpa.com)
+------------------------------------------------------------
+Subject: Quick update on our email automation platform
+
+Hi Chun,
+
+I hope you've been having a great week. Since our last conversation in September, we've made some exciting improvements to Sentient's email automation platform that I think could be particularly valuable for Safe Harbor LLP.
+
+The platform has evolved significantly, now offering advanced behavioral triggers that could help streamline your client communications and automate tax season outreach. I know we've previously discussed some of the challenges around managing multiple client touchpoints, and I'd love to show you how our new features address those pain points while integrating seamlessly with your existing workflows.
+
+Would you have 20 minutes this week for a quick demo? I'd be happy to focus specifically on the features most relevant to your accounting practice.
+
+Best regards,
+[Your name]
+
+============================================================
+
+EMAIL 4 - To: Katie Boysen (katie@katieboysen.com)
+------------------------------------------------------------
+Subject: Exciting updates to share about our email automation platform
+
+Hi Katie,
+
+I hope you're having a great week! I wanted to reach out since our last conversation about Salesforce integration back in September. Our team has been busy evolving our platform, and I'm excited to share how we've transformed it into something I think would be particularly valuable for Smith Point Capital.
+
+We've expanded beyond basic Salesforce outreach to include advanced behavioral triggers and multi-platform integrations specifically designed for companies like yours. The new subscription model makes it much more flexible, and we've seen impressive results from other marketing teams using these new features.
+
+Would you have 20 minutes this week for a quick demo? I'd love to show you how these new capabilities could streamline your marketing operations at Smith Point Capital.
+
+Best regards,
+[Your name]
+
+============================================================
+

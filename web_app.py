@@ -21,6 +21,9 @@ except ImportError:
     print("Note: python-dotenv not installed. Using system environment variables only.")
     print("Install with: pip install python-dotenv")
 
+# Allow OAuth over HTTP for local development
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+
 # Import existing modules
 from workflow_orchestrator import WorkflowOrchestrator
 from gmail_drafts_manager import GmailDraftsManager
@@ -279,7 +282,7 @@ def validate_csv_file(filepath):
         'total_records': len(all_records),
         'valid_count': len(valid_records),
         'invalid_records': invalid_records,
-        'valid_preview': valid_records[:5]  # First 5 valid records for preview
+        'valid_preview': valid_records  # Show all valid records
     }
 
 @app.route('/generate', methods=['POST'])
