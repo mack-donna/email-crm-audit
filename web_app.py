@@ -622,61 +622,84 @@ gmail_oauth = GmailOAuth(app)
 @app.route('/gmail/connect')
 def gmail_connect():
     """Initiate Gmail OAuth flow"""
-    # Generate a user ID (in production, use actual user ID from auth system)
-    if 'user_id' not in session:
-        session['user_id'] = str(uuid.uuid4())
-    
-    user_id = session['user_id']
-    
-    # Get the redirect URI
-    redirect_uri = url_for('gmail_callback', _external=True, _scheme='https' if os.environ.get('FLASK_ENV') == 'production' else 'http')
-    
-    # Get authorization URL
-    auth_url, state = gmail_oauth.get_authorization_url(user_id, redirect_uri)
-    
-    if not auth_url:
-        return jsonify({'error': 'Gmail OAuth not configured. Please set up credentials.'}), 500
-    
-    # Store state in session for verification
-    session['oauth_state'] = state
-    
-    return redirect(auth_url)
+    try:
+        # Generate a user ID (in production, use actual user ID from auth system)
+        if 'user_id' not in session:
+            session['user_id'] = str(uuid.uuid4())
+        
+        user_id = session['user_id']
+        app.logger.info(f"Gmail OAuth: Starting flow for user {user_id}")
+        
+        # Get the redirect URI
+        redirect_uri = url_for('gmail_callback', _external=True, _scheme='https' if os.environ.get('FLASK_ENV') == 'production' else 'http')
+        app.logger.info(f"Gmail OAuth: Redirect URI = {redirect_uri}")
+        
+        # Get authorization URL
+        auth_url, state = gmail_oauth.get_authorization_url(user_id, redirect_uri)
+        
+        if not auth_url:
+            app.logger.error("Gmail OAuth: No authorization URL returned - configuration issue")
+            return jsonify({'error': 'Gmail OAuth not configured. Please set up credentials.'}), 500
+        
+        # Store state in session for verification
+        session['oauth_state'] = state
+        app.logger.info(f"Gmail OAuth: Generated auth URL successfully")
+        
+        return redirect(auth_url)
+        
+    except Exception as e:
+        app.logger.error(f"Gmail OAuth connect error: {str(e)}")
+        return jsonify({'error': f'Gmail OAuth initialization failed: {str(e)}'}), 500
 
 @app.route('/gmail/callback')
 def gmail_callback():
     """Handle Gmail OAuth callback"""
-    # Verify state
-    if 'oauth_state' not in session:
-        return jsonify({'error': 'Invalid session state'}), 400
-    
-    state = session.get('oauth_state')
-    user_id = session.get('user_id')
-    
-    if not user_id:
-        return jsonify({'error': 'User session not found'}), 400
-    
-    # Get the redirect URI
-    redirect_uri = url_for('gmail_callback', _external=True, _scheme='https' if os.environ.get('FLASK_ENV') == 'production' else 'http')
-    
-    # Handle the callback
-    success = gmail_oauth.handle_callback(
-        user_id,
-        request.url,
-        state,
-        redirect_uri
-    )
-    
-    if success:
-        # Check if we have pending drafts to create after authentication
-        if 'pending_drafts' in session:
-            pending = session.pop('pending_drafts')
-            # Redirect back to review with a flag to auto-submit
-            return redirect(url_for('resume_draft_creation'))
+    try:
+        # Verify state
+        if 'oauth_state' not in session:
+            app.logger.error("Gmail OAuth callback: No oauth_state in session")
+            return jsonify({'error': 'Invalid session state'}), 400
+        
+        state = session.get('oauth_state')
+        user_id = session.get('user_id')
+        
+        app.logger.info(f"Gmail OAuth callback: user_id={user_id}, state={state[:10] if state else None}...")
+        
+        if not user_id:
+            app.logger.error("Gmail OAuth callback: No user_id in session")
+            return jsonify({'error': 'User session not found'}), 400
+        
+        # Get the redirect URI
+        redirect_uri = url_for('gmail_callback', _external=True, _scheme='https' if os.environ.get('FLASK_ENV') == 'production' else 'http')
+        app.logger.info(f"Gmail OAuth callback: redirect_uri={redirect_uri}")
+        
+        # Handle the callback
+        success = gmail_oauth.handle_callback(
+            user_id,
+            request.url,
+            state,
+            redirect_uri
+        )
+        
+        app.logger.info(f"Gmail OAuth callback: success={success}")
+        
+        if success:
+            # Check if we have pending drafts to create after authentication
+            if 'pending_drafts' in session:
+                pending = session.pop('pending_drafts')
+                app.logger.info("Gmail OAuth: Resuming draft creation after auth")
+                # Redirect back to review with a flag to auto-submit
+                return redirect(url_for('resume_draft_creation'))
+            else:
+                # Redirect back to the main app with success message
+                return redirect(url_for('gmail_status', status='success'))
         else:
-            # Redirect back to the main app with success message
-            return redirect(url_for('gmail_status', status='success'))
-    else:
-        return redirect(url_for('gmail_status', status='error'))
+            app.logger.error("Gmail OAuth callback: Authentication failed")
+            return redirect(url_for('gmail_status', status='error'))
+            
+    except Exception as e:
+        app.logger.error(f"Gmail OAuth callback error: {str(e)}")
+        return jsonify({'error': f'Gmail OAuth callback failed: {str(e)}'}), 500
 
 @app.route('/gmail/status')
 def gmail_status():
