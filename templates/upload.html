@@ -204,12 +204,16 @@ function uploadHandler() {
                 });
 
                 const data = await response.json();
-                if (data.success) {
+                if (data.error) {
+                    alert('Upload failed: ' + data.error);
+                } else if (data.redirect) {
+                    // Redirect to validation page
+                    window.location.href = data.redirect;
+                } else {
+                    // Legacy behavior - show inline preview
                     this.uploaded = true;
                     this.preview = data;
                     this.campaignName = 'Campaign ' + new Date().toLocaleDateString();
-                } else {
-                    alert('Upload failed: ' + data.error);
                 }
             } catch (error) {
                 alert('Upload error: ' + error.message);

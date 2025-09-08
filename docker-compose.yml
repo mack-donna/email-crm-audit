@@ -1,0 +1,22 @@
+version: '3.8'
+
+services:
+  email-outreach:
+    build: .
+    ports:
+      - "8080:8080"
+    environment:
+      # These will be loaded from .env file automatically
+      - ANTHROPIC_API_KEY=${ANTHROPIC_API_KEY}
+      - FLASK_SECRET_KEY=${FLASK_SECRET_KEY:-generate-a-secure-key}
+      - FLASK_ENV=${FLASK_ENV:-production}
+      - HOST=0.0.0.0
+      - PORT=8080
+    volumes:
+      # Mount credentials for Gmail (if available)
+      - ./credentials.json:/app/credentials.json:ro
+      - ./token.json:/app/token.json:rw
+      # Persist campaign data
+      - ./outreach_campaigns:/app/outreach_campaigns
+      - ./uploads:/app/uploads
+    restart: unless-stopped

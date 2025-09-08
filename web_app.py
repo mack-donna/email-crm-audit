@@ -13,6 +13,14 @@ from datetime import datetime
 from pathlib import Path
 import traceback
 
+# Load environment variables from .env file
+try:
+    from dotenv import load_dotenv
+    load_dotenv()
+except ImportError:
+    print("Note: python-dotenv not installed. Using system environment variables only.")
+    print("Install with: pip install python-dotenv")
+
 # Import existing modules
 from workflow_orchestrator import WorkflowOrchestrator
 from gmail_drafts_manager import GmailDraftsManager
@@ -279,6 +287,12 @@ def generate_emails():
         raw_name = data.get('campaign_name', f'Campaign_{datetime.now().strftime("%Y%m%d_%H%M%S")}')
         campaign_name = raw_name.replace('/', '-').replace('\\', '-')
         
+        # Extract campaign settings
+        campaign_goal = data.get('campaign_goal', 'first_meeting')
+        email_length = data.get('email_length', 'medium')
+        tone = data.get('tone', 'professional')
+        message = data.get('message', '')
+        
         # Initialize orchestrator
         orchestrator = WorkflowOrchestrator()
         
@@ -289,10 +303,19 @@ def generate_emails():
         # Set auto-approve to skip CLI review (we'll review in web UI)
         os.environ['AUTO_APPROVE_EMAILS'] = 'true'
         
+        # Prepare campaign settings
+        campaign_settings = {
+            'goal': campaign_goal,
+            'tone': tone,
+            'length': email_length,
+            'message': message
+        }
+        
         # Run campaign with correct arguments (using cleaned CSV)
         results = orchestrator.run_campaign(
             csv_file=csv_file,  # Use cleaned CSV if available
-            campaign_name=campaign_name
+            campaign_name=campaign_name,
+            campaign_settings=campaign_settings
         )
         
         # Clean up the environment variable
@@ -383,16 +406,31 @@ def approve_emails():
         
         # Create Gmail drafts if requested
         drafts_created = []
+        draft_error = None
         if create_drafts:
-            gmail_manager = GmailDraftsManager()
-            drafts_created = gmail_manager.create_drafts_from_campaign(campaign_file)
+            # Check if credentials.json exists first
+            if not os.path.exists('credentials.json'):
+                draft_error = 'Gmail credentials.json file not found. Please add your Google OAuth credentials to enable Gmail integration.'
+            else:
+                try:
+                    gmail_manager = GmailDraftsManager()
+                    drafts_created = gmail_manager.create_drafts_from_campaign(campaign_file)
+                    if len(drafts_created) == 0:
+                        draft_error = 'No Gmail drafts were created. Please check your Gmail authentication and try again.'
+                except Exception as e:
+                    draft_error = f'Gmail draft creation failed: {str(e)}'
         
-        return jsonify({
+        response_data = {
             'success': True,
             'approved_count': len(approved_emails),
             'drafts_created': len(drafts_created),
             'redirect': url_for('campaign_complete')
-        })
+        }
+        
+        if draft_error:
+            response_data['draft_error'] = draft_error
+        
+        return jsonify(response_data)
         
     except Exception as e:
         print(f"Error approving emails: {e}")

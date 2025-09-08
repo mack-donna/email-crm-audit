@@ -158,6 +158,8 @@ token.json
 token.pickle
 *.csv
 client_secret*.json
+set_key.sh
+.env.local
 
 # Backup files
 *_backup.py

@@ -113,17 +113,28 @@ class WorkflowOrchestrator:
             self.logger.error("Error initializing modules: {}".format(str(e)))
             raise
             
-    def run_campaign(self, csv_file, campaign_name=None):
+    def run_campaign(self, csv_file, campaign_name=None, campaign_settings=None):
         """
         Run a complete email outreach campaign.
         
         Args:
             csv_file: Path to CSV file with contacts
             campaign_name: Optional campaign name
+            campaign_settings: Dict with goal, tone, length, message
             
         Returns:
             Campaign results summary
         """
+        # Store campaign settings for email generation
+        if campaign_settings:
+            self.campaign_settings = campaign_settings
+        else:
+            self.campaign_settings = {
+                'goal': 'first_meeting',
+                'tone': 'professional',
+                'length': 'medium',
+                'message': ''
+            }
         self.workflow_stats['start_time'] = datetime.now()
         campaign_name = campaign_name or "campaign_{}".format(
             datetime.now().strftime("%Y%m%d_%H%M%S")
@@ -286,7 +297,9 @@ class WorkflowOrchestrator:
                     
                 # Generate email
                 print("    📝 Generating {} email...".format(email_style))
-                email_result = self.email_generator.generate_email(context, email_style)
+                email_result = self.email_generator.generate_email(
+                    context, email_style, self.campaign_settings
+                )
                 
                 if email_result:
                     batch_emails.append(email_result)

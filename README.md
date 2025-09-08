@@ -27,6 +27,11 @@ export ANTHROPIC_API_KEY='your-api-key'
 
 # Configure Gmail (follow GMAIL_API_SETUP.md)
 # Download credentials.json from Google Cloud Console
+
+# Configure LinkedIn API (optional, for enhanced personalization)
+# Follow LINKEDIN_API_SETUP.md for LinkedIn Developer setup
+export LINKEDIN_CLIENT_ID='your-linkedin-client-id'
+export LINKEDIN_CLIENT_SECRET='your-linkedin-client-secret'
 ```
 
 ### 🌐 Web Interface (NEW! Recommended)
@@ -64,7 +69,8 @@ python3 run_outreach_with_gmail.py
 1. **Python 3.9+** (3.13+ recommended) - **Python 2.7 no longer supported**
 2. **API Key**: Set `ANTHROPIC_API_KEY` environment variable
 3. **Gmail Setup**: Follow [Gmail API Setup Guide](GMAIL_API_SETUP.md) for automatic drafts creation
-4. **Dependencies**: Run `pip install -r requirements.txt`
+4. **LinkedIn Setup (Optional)**: Follow [LinkedIn API Setup Guide](LINKEDIN_API_SETUP.md) for enhanced personalization
+5. **Dependencies**: Run `pip install -r requirements.txt`
 
 ## 🏗️ Architecture
 
@@ -244,7 +250,7 @@ The repository includes automated CI/CD workflows that:
 
 ### Technology Stack
 - **Language**: Python 3.9+ (3.13+ recommended)
-- **APIs**: Gmail API, Claude API, Klaviyo API
+- **APIs**: Gmail API, Claude API, LinkedIn API, Klaviyo API
 - **Storage**: JSON files → SQLite (future)
 - **Logging**: Comprehensive debugging support
 - **E-commerce**: Klaviyo, Shopify metafields, HeyGen video API
@@ -254,7 +260,9 @@ The repository includes automated CI/CD workflows that:
 - [Solution Specification](OUTREACH_AUTOMATION_SOLUTION_SPEC.md) - Detailed system design
 - [Architecture Decisions](ARCHITECTURAL_DECISIONS.md) - Technical choices explained
 - [Gmail Setup Guide](GMAIL_API_SETUP.md) - Step-by-step API configuration
+- [LinkedIn Setup Guide](LINKEDIN_API_SETUP.md) - LinkedIn API integration for enhanced personalization
 - [Klaviyo Flows Specification](KLAVIYO_FLOWS_SPEC.md) - E-commerce automation flows
+- [Phase 2 Enhancements](PHASE_2_ENHANCEMENTS.md) - Upcoming features and improvements
 - [GitHub Token Management](GITHUB_TOKEN_UPDATE.md) - Authentication troubleshooting
 - [Troubleshooting Guide](TROUBLESHOOTING.md) - Common issues and solutions
 - [Session Logs](SESSION_LOG.md) - Development history and decisions

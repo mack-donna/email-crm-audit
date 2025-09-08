@@ -66,13 +66,14 @@ class EmailGenerator:
         )
         self.logger = logging.getLogger(__name__)
         
-    def generate_email(self, contact_context, email_style="professional_friendly"):
+    def generate_email(self, contact_context, email_style="professional_friendly", campaign_settings=None):
         """
         Generate a personalized email based on research context.
         
         Args:
             contact_context: Dict containing all research about the contact
             email_style: Style of email to generate
+            campaign_settings: Dict with campaign goal, tone, length, message
             
         Returns:
             Dict with generated email and metadata
@@ -83,7 +84,7 @@ class EmailGenerator:
         self.generation_stats['total_generated'] += 1
         
         # Build comprehensive prompt
-        prompt = self._build_generation_prompt(contact_context, email_style)
+        prompt = self._build_generation_prompt(contact_context, email_style, campaign_settings)
         
         # For demonstration, use a template-based approach
         # In production, this would call Claude API
@@ -117,7 +118,7 @@ class EmailGenerator:
             self.generation_stats['failed_generations'] += 1
             return None
             
-    def _build_generation_prompt(self, contact_context, email_style):
+    def _build_generation_prompt(self, contact_context, email_style, campaign_settings=None):
         """
         Build a comprehensive prompt for email generation.
         
@@ -128,6 +129,52 @@ class EmailGenerator:
         email_history = contact_context.get('email_history', {})
         research = contact_context.get('research', {})
         
+        # Extract campaign settings
+        if campaign_settings:
+            campaign_goal = campaign_settings.get('goal', 'first_meeting')
+            campaign_tone = campaign_settings.get('tone', 'professional')
+            campaign_length = campaign_settings.get('length', 'medium')
+            campaign_message = campaign_settings.get('message', '')
+        else:
+            campaign_goal = 'first_meeting'
+            campaign_tone = 'professional'
+            campaign_length = 'medium'
+            campaign_message = ''
+        
+        # Map campaign goals to specific purposes and CTAs
+        goal_mapping = {
+            'first_meeting': {
+                'purpose': 'Schedule an initial conversation or discovery call',
+                'cta': 'Would you be available for a brief 15-20 minute call next week to explore this further?'
+            },
+            'demo': {
+                'purpose': 'Request a demo or presentation of your product/service',
+                'cta': 'I\'d love to show you a brief demo of how this could benefit {company}. Would you have 20 minutes for a quick presentation?'
+            },
+            'reengagement': {
+                'purpose': 'Reconnect with previous contacts or dormant leads',
+                'cta': 'I wanted to reconnect and see if there might be an opportunity to collaborate now.'
+            },
+            'partnership': {
+                'purpose': 'Explore collaboration or partnership opportunities',
+                'cta': 'I\'d be interested in exploring potential partnership opportunities between our companies.'
+            },
+            'followup': {
+                'purpose': 'Continue previous conversation or interaction',
+                'cta': 'I wanted to follow up on our previous conversation and see how I can help.'
+            }
+        }
+        
+        goal_info = goal_mapping.get(campaign_goal, goal_mapping['first_meeting'])
+        
+        # Map length preferences
+        length_mapping = {
+            'concise': '2-3 short paragraphs (100-150 words)',
+            'medium': '3-4 paragraphs (150-200 words)',
+            'detailed': '4-5 paragraphs with more detail (200-300 words)'
+        }
+        length_guide = length_mapping.get(campaign_length, length_mapping['medium'])
+        
         prompt = """
 Generate a personalized outreach email with the following context:
 
@@ -136,6 +183,12 @@ RECIPIENT INFORMATION:
 - Company: {company}
 - Title: {title}
 - Email: {email}
+
+CAMPAIGN OBJECTIVE:
+- Primary Goal: {campaign_goal}
+- Purpose: {purpose}
+- Suggested CTA: {cta}
+- User Message/Context: {user_message}
 
 INTERACTION HISTORY:
 - Relationship: {relationship}
@@ -149,10 +202,10 @@ RESEARCH FINDINGS:
 
 EMAIL REQUIREMENTS:
 - Style: {style}
-- Purpose: Initial outreach for business development
-- Tone: Professional but personable, not robotic
-- Length: 3-4 paragraphs maximum
+- Tone: {tone}
+- Length: {length}
 - Personalization: Reference specific research findings naturally
+- Call-to-Action: Focus on the campaign goal
 
 WHAT TO AVOID:
 - Generic templates
@@ -161,19 +214,25 @@ WHAT TO AVOID:
 - Making assumptions about their needs
 - Being too formal or too casual
 
-Generate an email that feels genuinely personalized and provides clear value.
+Generate an email that feels genuinely personalized, aligns with the campaign goal, and provides clear value.
 """.format(
             name=contact.get('name', 'there'),
             company=contact.get('company', 'your company'),
             title=contact.get('title', 'your role'),
             email=contact.get('email', ''),
+            campaign_goal=campaign_goal.replace('_', ' ').title(),
+            purpose=goal_info['purpose'],
+            cta=goal_info['cta'].format(company=contact.get('company', 'your company')),
+            user_message=campaign_message,
             relationship=email_history.get('relationship_warmth', 'cold'),
             interaction_count=email_history.get('total_interactions', 0),
             last_interaction=email_history.get('last_interaction', 'None'),
             company_info=json.dumps(research.get('company_research', {})),
             recent_news=json.dumps(research.get('recent_news', [])),
             industry_context=json.dumps(research.get('industry_insights', {})),
-            style=email_style
+            style=email_style,
+            tone=campaign_tone.title(),
+            length=length_guide
         )
         
         return prompt
@@ -250,7 +309,7 @@ Cheers,
         
     def _call_claude_api(self, prompt):
         """
-        Call Claude API for email generation using curl to avoid SSL issues.
+        Call Claude API for email generation using the anthropic library.
         
         Note: Requires valid ANTHROPIC_API_KEY environment variable.
         """
@@ -259,51 +318,76 @@ Cheers,
             return None
             
         try:
-            # Prepare the request data
-            data = {
-                'model': 'claude-3-5-sonnet-20241022',
-                'max_tokens': 1000,
-                'messages': [{
-                    'role': 'user',
-                    'content': prompt
-                }]
-            }
-            
-            # Write data to temp file
-            with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
-                json.dump(data, f)
-                temp_file = f.name
-            
+            # Try to use the anthropic library if available
             try:
-                # Use curl to make the API call
-                cmd = [
-                    'curl', '-X', 'POST',
-                    'https://api.anthropic.com/v1/messages',
-                    '-H', 'x-api-key: {}'.format(self.api_key),
-                    '-H', 'anthropic-version: 2023-06-01', 
-                    '-H', 'content-type: application/json',
-                    '-d', '@{}'.format(temp_file),
-                    '--silent'
-                ]
+                import anthropic
                 
-                result = subprocess.check_output(cmd)
-                response = json.loads(result.decode('utf-8'))
+                client = anthropic.Anthropic(api_key=self.api_key)
                 
-                if 'content' in response and len(response['content']) > 0:
-                    return response['content'][0]['text']
+                response = client.messages.create(
+                    model="claude-3-5-sonnet-20241022",
+                    max_tokens=1000,
+                    messages=[{
+                        "role": "user",
+                        "content": prompt
+                    }]
+                )
+                
+                if response.content and len(response.content) > 0:
+                    return response.content[0].text
                 else:
-                    self.logger.error("API Error: {}".format(response))
+                    self.logger.error("Empty response from API")
                     return None
                     
-            except subprocess.CalledProcessError as e:
-                self.logger.error("Curl error: {}".format(e))
-                return None
-            finally:
-                # Clean up temp file
+            except ImportError:
+                # Fall back to curl if anthropic library is not available
+                self.logger.info("Anthropic library not available, using curl fallback")
+                
+                # Prepare the request data
+                data = {
+                    'model': 'claude-3-5-sonnet-20241022',
+                    'max_tokens': 1000,
+                    'messages': [{
+                        'role': 'user',
+                        'content': prompt
+                    }]
+                }
+                
+                # Write data to temp file
+                with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
+                    json.dump(data, f)
+                    temp_file = f.name
+                
                 try:
-                    os.unlink(temp_file)
-                except:
-                    pass
+                    # Use curl to make the API call
+                    cmd = [
+                        'curl', '-X', 'POST',
+                        'https://api.anthropic.com/v1/messages',
+                        '-H', 'x-api-key: {}'.format(self.api_key),
+                        '-H', 'anthropic-version: 2023-06-01', 
+                        '-H', 'content-type: application/json',
+                        '-d', '@{}'.format(temp_file),
+                        '--silent'
+                    ]
+                    
+                    result = subprocess.check_output(cmd)
+                    response = json.loads(result.decode('utf-8'))
+                    
+                    if 'content' in response and len(response['content']) > 0:
+                        return response['content'][0]['text']
+                    else:
+                        self.logger.error("API Error: {}".format(response))
+                        return None
+                        
+                except subprocess.CalledProcessError as e:
+                    self.logger.error("Curl error: {}".format(e))
+                    return None
+                finally:
+                    # Clean up temp file
+                    try:
+                        os.unlink(temp_file)
+                    except:
+                        pass
                 
         except Exception as e:
             self.logger.error("Error calling Claude API: {}".format(str(e)))

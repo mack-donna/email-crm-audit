@@ -5,6 +5,12 @@
 Flask>=3.0.0
 Werkzeug>=3.0.0
 
+# Environment variable management
+python-dotenv>=1.0.0
+
+# AI Integration - CRITICAL
+anthropic>=0.34.0
+
 # Core Google API libraries
 google-api-python-client>=2.170.0
 google-auth-httplib2>=0.2.0
