@@ -1,0 +1,107 @@
+{
+  "campaign_info": {
+    "name": "Campaign 9-4-2025",
+    "timestamp": "20250904_215322",
+    "total_contacts": 2,
+    "emails_generated": 2,
+    "emails_approved": 2
+  },
+  "approved_emails": [
+    {
+      "email_content": "Subject: AI-Powered Email Personalization - Quick Discussion?\n\nHi John,\n\nAs TechCorp's CTO, I imagine you're constantly evaluating innovative solutions to streamline operations. I wanted to reach out specifically because we've developed an intelligent system that's transforming how companies handle personalized email outreach using AI - something I believe could be relevant to TechCorp's communication stack.\n\nOur platform takes contact data and automatically generates genuinely personalized outreach campaigns while maintaining authentic human connection - effectively solving the scale vs. personalization challenge that many enterprises face. We're seeing teams reduce campaign creation time by 70% while improving response rates significantly.\n\nWould you be open to a brief 15-20 minute call next week to explore how this might fit into TechCorp's workflow? I'd love to show you a quick demo and get your technical perspective on our approach.\n\nBest regards,\n[Your name]\n\nP.S. Happy to work around your schedule - just let me know what works best for you.",
+      "metadata": {
+        "generated_at": "2025-09-04T21:53:12.049041",
+        "style": "professional_friendly",
+        "personalization_points": [],
+        "confidence_score": 0.6
+      },
+      "contact_context": {
+        "contact": {
+          "name": "John Smith",
+          "email": "john@techcorp.com",
+          "company": "TechCorp Inc",
+          "title": "CTO",
+          "phone": null
+        },
+        "email_history": {},
+        "research": {
+          "contact": {
+            "name": "John Smith",
+            "email": "john@techcorp.com",
+            "company": "TechCorp Inc",
+            "title": "CTO",
+            "phone": null
+          },
+          "company_research": {},
+          "person_research": {},
+          "industry_insights": {},
+          "recent_news": [],
+          "research_quality_score": 0.0,
+          "sources_accessed": [],
+          "research_timestamp": "2025-09-04T21:53:01.247576"
+        }
+      },
+      "coaching_data": {
+        "can_be_improved": true,
+        "improvement_suggestions": []
+      },
+      "review_status": "approved",
+      "review_timestamp": "2025-09-04T21:53:22.597180"
+    },
+    {
+      "email_content": "Subject: AI-Powered Outreach Innovation for Innovate Solutions\n\nHi Sarah,\n\nI came across Innovate Solutions and was impressed by your company's commitment to driving business transformation. Given your role in leading technological advancement, I thought you might be interested in how we're revolutionizing personalized communication at scale.\n\nAt Sentient SF, we've developed an intelligent system that transforms standard contact lists into highly personalized outreach campaigns using advanced AI. This means achieving genuine, one-to-one connections while maintaining efficiency \u2013 something I believe could align well with Innovate Solutions' forward-thinking approach.\n\nWould you be open to a brief 15-20 minute conversation next week? I'd love to show you specifically how this technology could enhance your team's outreach efforts and hear your thoughts on the future of AI-driven communication.\n\nBest regards,\n[Your name]\n\nP.S. I can work around your schedule \u2013 let me know what time works best for you.",
+      "metadata": {
+        "generated_at": "2025-09-04T21:53:22.596938",
+        "style": "professional_friendly",
+        "personalization_points": [
+          "Referenced company"
+        ],
+        "confidence_score": 0.7
+      },
+      "contact_context": {
+        "contact": {
+          "name": "Sarah Johnson",
+          "email": "sarah@innovate.com",
+          "company": "Innovate Solutions",
+          "title": "CEO",
+          "phone": null
+        },
+        "email_history": {},
+        "research": {
+          "contact": {
+            "name": "Sarah Johnson",
+            "email": "sarah@innovate.com",
+            "company": "Innovate Solutions",
+            "title": "CEO",
+            "phone": null
+          },
+          "company_research": {},
+          "person_research": {},
+          "industry_insights": {},
+          "recent_news": [],
+          "research_quality_score": 0.0,
+          "sources_accessed": [],
+          "research_timestamp": "2025-09-04T21:53:12.049314"
+        }
+      },
+      "coaching_data": {
+        "can_be_improved": true,
+        "improvement_suggestions": []
+      },
+      "review_status": "approved",
+      "review_timestamp": "2025-09-04T21:53:22.597193"
+    }
+  ],
+  "workflow_stats": {
+    "start_time": "2025-09-04T21:53:01.244149",
+    "end_time": null,
+    "total_contacts": 2,
+    "contacts_processed": 2,
+    "emails_generated": 2,
+    "emails_approved": 2,
+    "errors": [
+      "Gmail auth: 'NoneType' object has no attribute 'authenticate'"
+    ]
+  },
+  "approval_timestamp": "2025-09-04T21:54:12.581019"
+}

@@ -1,0 +1,22 @@
+{
+  "timestamp": "2025-09-04T21:53:22.599506",
+  "contact_info": {
+    "name": "John Smith",
+    "company": "TechCorp Inc",
+    "title": "CTO"
+  },
+  "email_metadata": {
+    "generated_at": "2025-09-04T21:53:12.049041",
+    "style": "professional_friendly",
+    "personalization_points": [],
+    "confidence_score": 0.6
+  },
+  "personalization_points": [],
+  "research_quality": 0.0,
+  "outcome": {
+    "was_sent": true,
+    "got_response": false
+  },
+  "email_length": 156,
+  "email_style": "professional_friendly"
+}

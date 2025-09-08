@@ -1,0 +1,129 @@
+{
+  "campaign_info": {
+    "name": "Campaign 9-4-2025",
+    "timestamp": "20250904_222239",
+    "total_contacts": 2,
+    "emails_generated": 2,
+    "emails_approved": 2
+  },
+  "approved_emails": [
+    {
+      "email_content": "Subject: Quick question about TechCorp's email outreach\n\nHi John,\n\nI noticed your leadership in driving technical innovation at TechCorp and thought you might be interested in something we've developed at Sentient SF. We've built an intelligent system that transforms contact lists into highly personalized email campaigns using AI, helping tech companies scale their outreach while maintaining a genuine, human touch.\n\nI'd love to show you a quick demo of how this could streamline TechCorp's email communications while significantly improving engagement rates. The system is particularly effective for companies looking to maintain quality at scale \u2013 I think you'll find the personalization capabilities especially interesting.\n\nWould you be open to a 20-minute presentation this week or next? I'll keep it focused and practical, showing you specific examples of how it could work for TechCorp.\n\nBest,\n[Your name]",
+      "metadata": {
+        "generated_at": "2025-09-04T22:22:28.135220",
+        "style": "professional_friendly",
+        "personalization_points": [],
+        "confidence_score": 0.7
+      },
+      "contact_context": {
+        "contact": {
+          "name": "John Smith",
+          "email": "john@techcorp.com",
+          "company": "TechCorp Inc",
+          "title": "CTO",
+          "phone": null
+        },
+        "email_history": {
+          "email_address": "john@techcorp.com",
+          "total_interactions": 0,
+          "emails_sent": [],
+          "emails_received": [],
+          "first_interaction": null,
+          "last_interaction": null,
+          "interaction_dates": [],
+          "subject_lines": [],
+          "relationship_warmth": "cold",
+          "key_topics": [],
+          "interaction_summary": ""
+        },
+        "research": {
+          "contact": {
+            "name": "John Smith",
+            "email": "john@techcorp.com",
+            "company": "TechCorp Inc",
+            "title": "CTO",
+            "phone": null
+          },
+          "company_research": {},
+          "person_research": {},
+          "industry_insights": {},
+          "recent_news": [],
+          "research_quality_score": 0.0,
+          "sources_accessed": [],
+          "research_timestamp": "2025-09-04T22:22:17.058736"
+        }
+      },
+      "coaching_data": {
+        "can_be_improved": true,
+        "improvement_suggestions": []
+      },
+      "review_status": "approved",
+      "review_timestamp": "2025-09-04T22:22:39.325019"
+    },
+    {
+      "email_content": "Subject: Quick question about streamlining outreach at Innovate Solutions\n\nHi Sarah,\n\nI came across Innovate Solutions while researching companies leading the way in business transformation, and I thought you might be interested in what we're doing at Sentient SF to revolutionize personalized outreach.\n\nWe've developed an intelligent system that transforms basic contact lists into highly personalized email campaigns using AI, helping companies like yours scale their outreach while maintaining that crucial personal touch. Organizations using our solution have seen their response rates increase by 3x while cutting campaign setup time in half.\n\nI'd love to show you a brief demo of how this could benefit Innovate Solutions. Would you have 20 minutes next week for a quick presentation? Feel free to pick a time that works best for you: [Calendar Link]\n\nBest regards,\n[Your name]\n\nP.S. If you're not the right person to discuss this, I'd appreciate being pointed in the right direction.",
+      "metadata": {
+        "generated_at": "2025-09-04T22:22:39.324909",
+        "style": "professional_friendly",
+        "personalization_points": [
+          "Referenced company"
+        ],
+        "confidence_score": 0.6
+      },
+      "contact_context": {
+        "contact": {
+          "name": "Sarah Johnson",
+          "email": "sarah@innovate.com",
+          "company": "Innovate Solutions",
+          "title": "CEO",
+          "phone": null
+        },
+        "email_history": {
+          "email_address": "sarah@innovate.com",
+          "total_interactions": 0,
+          "emails_sent": [],
+          "emails_received": [],
+          "first_interaction": null,
+          "last_interaction": null,
+          "interaction_dates": [],
+          "subject_lines": [],
+          "relationship_warmth": "cold",
+          "key_topics": [],
+          "interaction_summary": ""
+        },
+        "research": {
+          "contact": {
+            "name": "Sarah Johnson",
+            "email": "sarah@innovate.com",
+            "company": "Innovate Solutions",
+            "title": "CEO",
+            "phone": null
+          },
+          "company_research": {},
+          "person_research": {},
+          "industry_insights": {},
+          "recent_news": [],
+          "research_quality_score": 0.0,
+          "sources_accessed": [],
+          "research_timestamp": "2025-09-04T22:22:28.258499"
+        }
+      },
+      "coaching_data": {
+        "can_be_improved": true,
+        "improvement_suggestions": []
+      },
+      "review_status": "approved",
+      "review_timestamp": "2025-09-04T22:22:39.325029"
+    }
+  ],
+  "workflow_stats": {
+    "start_time": "2025-09-04T22:22:16.611407",
+    "end_time": null,
+    "total_contacts": 2,
+    "contacts_processed": 2,
+    "emails_generated": 2,
+    "emails_approved": 2,
+    "errors": []
+  },
+  "approval_timestamp": "2025-09-04T22:23:09.039805"
+}

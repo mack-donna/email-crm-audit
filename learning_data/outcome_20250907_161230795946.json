@@ -1,0 +1,28 @@
+{
+  "timestamp": "2025-09-07T16:12:30.795915",
+  "contact_info": {
+    "name": "Shahar Erez",
+    "company": "Arato.ai",
+    "title": "CEO/Founder"
+  },
+  "email_metadata": {
+    "generated_at": "2025-09-07T16:11:46.436836",
+    "style": "professional_friendly",
+    "personalization_points": [
+      "Referenced company",
+      "Referenced company research"
+    ],
+    "confidence_score": 1.0
+  },
+  "personalization_points": [
+    "Referenced company",
+    "Referenced company research"
+  ],
+  "research_quality": 0.30000000000000004,
+  "outcome": {
+    "was_sent": true,
+    "got_response": false
+  },
+  "email_length": 90,
+  "email_style": "professional_friendly"
+}

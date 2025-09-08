@@ -1,0 +1,108 @@
+{
+  "campaign_info": {
+    "name": "Campaign 9-4-2025",
+    "timestamp": "20250904_212903",
+    "total_contacts": 2,
+    "emails_generated": 2,
+    "emails_approved": 2
+  },
+  "approved_emails": [
+    {
+      "email_content": "Hi John,\n\nI'm reaching out because I believe there might be an opportunity for us to help TechCorp Inc with [specific value proposition based on research].\n\n[Specific paragraph showing understanding of their business/challenges based on research findings]\n\nWould you be open to a brief conversation to explore if there's a fit? I'm happy to share some specific ideas that have worked well for similar companies in your space.\n\nBest regards,\n[Your name]",
+      "metadata": {
+        "generated_at": "2025-09-04T21:28:58.207377",
+        "style": "professional_friendly",
+        "personalization_points": [
+          "Referenced company"
+        ],
+        "confidence_score": 0.7
+      },
+      "contact_context": {
+        "contact": {
+          "name": "John Smith",
+          "email": "john@techcorp.com",
+          "company": "TechCorp Inc",
+          "title": "CTO",
+          "phone": null
+        },
+        "email_history": {},
+        "research": {
+          "contact": {
+            "name": "John Smith",
+            "email": "john@techcorp.com",
+            "company": "TechCorp Inc",
+            "title": "CTO",
+            "phone": null
+          },
+          "company_research": {},
+          "person_research": {},
+          "industry_insights": {},
+          "recent_news": [],
+          "research_quality_score": 0.0,
+          "sources_accessed": [],
+          "research_timestamp": "2025-09-04T21:28:53.683271"
+        }
+      },
+      "coaching_data": {
+        "can_be_improved": true,
+        "improvement_suggestions": []
+      },
+      "review_status": "approved",
+      "review_timestamp": "2025-09-04T21:29:03.496518"
+    },
+    {
+      "email_content": "Hi Sarah,\n\nI'm reaching out because I believe there might be an opportunity for us to help Innovate Solutions with [specific value proposition based on research].\n\n[Specific paragraph showing understanding of their business/challenges based on research findings]\n\nWould you be open to a brief conversation to explore if there's a fit? I'm happy to share some specific ideas that have worked well for similar companies in your space.\n\nBest regards,\n[Your name]",
+      "metadata": {
+        "generated_at": "2025-09-04T21:29:03.496414",
+        "style": "professional_friendly",
+        "personalization_points": [
+          "Referenced company"
+        ],
+        "confidence_score": 0.7
+      },
+      "contact_context": {
+        "contact": {
+          "name": "Sarah Johnson",
+          "email": "sarah@innovate.com",
+          "company": "Innovate Solutions",
+          "title": "CEO",
+          "phone": null
+        },
+        "email_history": {},
+        "research": {
+          "contact": {
+            "name": "Sarah Johnson",
+            "email": "sarah@innovate.com",
+            "company": "Innovate Solutions",
+            "title": "CEO",
+            "phone": null
+          },
+          "company_research": {},
+          "person_research": {},
+          "industry_insights": {},
+          "recent_news": [],
+          "research_quality_score": 0.0,
+          "sources_accessed": [],
+          "research_timestamp": "2025-09-04T21:28:58.207557"
+        }
+      },
+      "coaching_data": {
+        "can_be_improved": true,
+        "improvement_suggestions": []
+      },
+      "review_status": "approved",
+      "review_timestamp": "2025-09-04T21:29:03.496526"
+    }
+  ],
+  "workflow_stats": {
+    "start_time": "2025-09-04T21:28:53.680814",
+    "end_time": null,
+    "total_contacts": 2,
+    "contacts_processed": 2,
+    "emails_generated": 2,
+    "emails_approved": 2,
+    "errors": [
+      "Gmail auth: 'NoneType' object has no attribute 'authenticate'"
+    ]
+  }
+}

@@ -1,0 +1,304 @@
+{
+  "campaign_info": {
+    "name": "Campaign 9-7-2025",
+    "timestamp": "20250907_161230",
+    "total_contacts": 7,
+    "emails_generated": 4,
+    "emails_approved": 4
+  },
+  "approved_emails": [
+    {
+      "email_content": "Hi Chun,\n\nI'm reaching out because I believe there might be an opportunity for us to help Safe Harbor LLP with [specific value proposition based on research].\n\n[Specific paragraph showing understanding of their business/challenges based on research findings]\n\nWould you be open to a brief conversation to explore if there's a fit? I'm happy to share some specific ideas that have worked well for similar companies in your space.\n\nBest regards,\n[Your name]",
+      "metadata": {
+        "generated_at": "2025-09-07T16:12:12.816420",
+        "style": "professional_friendly",
+        "personalization_points": [
+          "Referenced company"
+        ],
+        "confidence_score": 0.9
+      },
+      "contact_context": {
+        "contact": {
+          "name": "Chun Wong",
+          "email": "cwong@safeharborcpa.com",
+          "company": "Safe Harbor LLP",
+          "title": "CPA",
+          "phone": null
+        },
+        "email_history": {
+          "email_address": "cwong@safeharborcpa.com",
+          "total_interactions": 20,
+          "emails_sent": [
+            {
+              "id": "1991be88c663d460",
+              "date": "Fri, 5 Sep 2025 22:04:06 +0000",
+              "subject": "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Tracy Than <tthan@safeharborcpa.com>",
+              "to": "Chun Wong <cwong@safeharborcpa.com>, \"stu@sentient-sf.com\" <stu@sentient-sf.com>",
+              "direction": "sent",
+              "snippet": "Hi Stu, If your portal account wasn&#39;t set up before you sent your documents, you couldn&#39;t view the files you uploaded. If you&#39;d like, I can send you copies of all the documents you uploaded"
+            },
+            {
+              "id": "19917e7abaf62cba",
+              "date": "Thu, 4 Sep 2025 20:24:42 -0700",
+              "subject": "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Stu Fisher <stu@sentient-sf.com>",
+              "to": "Chun Wong <cwong@safeharborcpa.com>",
+              "direction": "sent",
+              "snippet": "I am working on building a 2024 medical expense ledger. I am not sure how to access the files that were uploaded to your portal, but I would like to double check them because on Schedule C, I have"
+            },
+            {
+              "id": "19913136e16dbff4",
+              "date": "Wed, 3 Sep 2025 21:54:24 -0700",
+              "subject": "",
+              "from": "stu@sentient-sf.com",
+              "to": "",
+              "direction": "sent",
+              "snippet": "Hi Chun, Hope you&#39;ve had a good few months since our last chat in August. I was just reviewing some of our previous collaborations and wanted to reach out to see how things are progressing at Safe"
+            },
+            {
+              "id": "198fb5bd456cf8f0",
+              "date": "Sat, 30 Aug 2025 08:22:35 -0600",
+              "subject": "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Stu Fisher <stu@sentient-sf.com>",
+              "to": "Chun Wong <cwong@safeharborcpa.com>",
+              "direction": "sent",
+              "snippet": "Hi Chun, I want to address your comment that I \u201cdid not mention either of these issues.\u201d In the initial information request from Tracy, I was specifically asked about medical expenses for 2024, so I"
+            },
+            {
+              "id": "198f6a57c3777b52",
+              "date": "Fri, 29 Aug 2025 10:24:56 -0600",
+              "subject": "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Stu Fisher <stu@sentient-sf.com>",
+              "to": "Chun Wong <cwong@safeharborcpa.com>",
+              "direction": "sent",
+              "snippet": "Thanks for clarifying that, Chun. But I will compile all of our qualifying medical expenses so we can reduce the penalty. On Fri, Aug 29, 2025 at 9:16 AM Chun Wong &lt;cwong@safeharborcpa.com&gt; wrote"
+            },
+            {
+              "id": "198f42f7f875f3f9",
+              "date": "Thu, 28 Aug 2025 22:56:49 -0600",
+              "subject": "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Stu Fisher <stu@sentient-sf.com>",
+              "to": "Chun Wong <cwong@safeharborcpa.com>",
+              "direction": "sent",
+              "snippet": "Hi Chun, Can you take another look at the premium tax credit and the self employed health insurance deduction to confirm the $8253 repayment is accurate? We did have medical expenses in 2024 that may"
+            },
+            {
+              "id": "198e8ab93dfafab8",
+              "date": "Tue, 26 Aug 2025 16:16:55 -0700",
+              "subject": "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Stu Fisher <stu@sentient-sf.com>",
+              "to": "Tracy Than <tthan@safeharborcpa.com>",
+              "direction": "sent",
+              "snippet": "Thank you. If you could summarize what the drivers of the High tax bill were that would be helpful. I&#39;ve never had a tax bill this high. On Tue, Aug 26, 2025 at 3:55 PM Tracy Than &lt;tthan@"
+            },
+            {
+              "id": "198e89819320cd24",
+              "date": "Tue, 26 Aug 2025 22:55:34 +0000",
+              "subject": "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Tracy Than <tthan@safeharborcpa.com>",
+              "to": "\"stu@sentient-sf.com\" <stu@sentient-sf.com>",
+              "direction": "sent",
+              "snippet": "Hi Stu, Thank you for confirming that you would like to contribute to your SEP IRA. We will deliver your return later today for your review. Please note that your return shows a federal tax balance due"
+            },
+            {
+              "id": "198e762420bba6ee",
+              "date": "Tue, 26 Aug 2025 10:17:13 -0700",
+              "subject": "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Stu Fisher <stu@sentient-sf.com>",
+              "to": "Tracy Than <tthan@safeharborcpa.com>",
+              "direction": "sent",
+              "snippet": "Thanks, Tracy. What I would most likely need to do is contribute to the SEP and pay the state amount due, but get on a payment plan for the federal amount due. On Tue, Aug 26, 2025 at 10:07 AM Tracy"
+            },
+            {
+              "id": "198e759a6a4373f7",
+              "date": "Tue, 26 Aug 2025 17:07:43 +0000",
+              "subject": "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Tracy Than <tthan@safeharborcpa.com>",
+              "to": "\"stu@sentient-sf.com\" <stu@sentient-sf.com>",
+              "direction": "sent",
+              "snippet": "Hi Stu, The SEP IRA contribution must be made by the tax filing deadline of 10/15/2025. Below is a comparison of your tax liability with and without the SEP contribution. These figures include"
+            },
+            {
+              "id": "198e3bb553517881",
+              "date": "Mon, 25 Aug 2025 17:16:01 -0700",
+              "subject": "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Stu Fisher <stu@sentient-sf.com>",
+              "to": "Tracy Than <tthan@safeharborcpa.com>",
+              "direction": "sent",
+              "snippet": "Hi Tracy, Thank you for the update and for moving things forward. Could you let me know by what date I would need to contribute the SEP IRA amount for it to count toward my 2024 tax return? Also, if I"
+            },
+            {
+              "id": "198e3254d08d9e03",
+              "date": "Mon, 25 Aug 2025 21:32:06 +0000",
+              "subject": "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Tracy Than <tthan@safeharborcpa.com>",
+              "to": "\"stu@sentient-sf.com\" <stu@sentient-sf.com>",
+              "direction": "sent",
+              "snippet": "Hi Stewart, We are finalizing your 2024 tax return. Please confirm that you can contribute the SEP IRA amount of $18385. Thanks, Tracy Click Here to upload files &amp; send files to me securely! Tracy"
+            },
+            {
+              "id": "198b811c830d1dc1",
+              "date": "Sun, 17 Aug 2025 08:47:09 -0400",
+              "subject": "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Stu Fisher <stu@sentient-sf.com>",
+              "to": "Tracy Than <tthan@safeharborcpa.com>",
+              "direction": "sent",
+              "snippet": "Hi Tracy - this was a withdrawal I took as I was bootstrapping my business. On Fri, Aug 15, 2025 at 4:54 PM Tracy Than &lt;tthan@safeharborcpa.com&gt; wrote: Hi Stewart, We&#39;re in the process of"
+            },
+            {
+              "id": "198af8312760a923",
+              "date": "Fri, 15 Aug 2025 20:54:15 +0000",
+              "subject": "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Tracy Than <tthan@safeharborcpa.com>",
+              "to": "\"stu@sentient-sf.com\" <stu@sentient-sf.com>",
+              "direction": "sent",
+              "snippet": "Hi Stewart, We&#39;re in the process of finalizing your tax return and noticed an early withdrawal distribution from Mid Atlantic Trust Company in the amount of $27128.55. The IRS generally imposes a"
+            }
+          ],
+          "emails_received": [
+            {
+              "id": "198fbc880171affe",
+              "date": "Sat, 30 Aug 2025 16:21:14 +0000",
+              "subject": "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Chun Wong <cwong@safeharborcpa.com>",
+              "to": "\"stu@sentient-sf.com\" <stu@sentient-sf.com>",
+              "direction": "received",
+              "snippet": "Hi Stu I am happy to pick provide this and clearly what we talked about. Advisory is not a part of this tax preparation and if there are issues known or unknown that need additional time or more bleeds"
+            },
+            {
+              "id": "198fa04dbdf284fa",
+              "date": "Sat, 30 Aug 2025 08:07:55 +0000",
+              "subject": "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Chun Wong <cwong@safeharborcpa.com>",
+              "to": "\"stu@sentient-sf.com\" <stu@sentient-sf.com>",
+              "direction": "received",
+              "snippet": "Hi Stu - you did not mention either of these issues when I agree to a flat $2100mformyour return. I have written off approx&#39; $1400 of time already. I do not expect these additional issues after"
+            },
+            {
+              "id": "198f666d38148816",
+              "date": "Fri, 29 Aug 2025 15:16:22 +0000",
+              "subject": "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Chun Wong <cwong@safeharborcpa.com>",
+              "to": "\"stu@sentient-sf.com\" <stu@sentient-sf.com>",
+              "direction": "received",
+              "snippet": "Hi Stu No PTC that is for people at the poverty level Sent from my iPhone On Aug 28, 2025, at 10:57 PM, Stu Fisher &lt;stu@sentient-sf.com&gt; wrote: \ufeff Hi Chun, Can you take another look at the premium"
+            },
+            {
+              "id": "198eeea0bfe5712b",
+              "date": "Thu, 28 Aug 2025 04:22:49 +0000",
+              "subject": "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Chun Wong <cwong@safeharborcpa.com>",
+              "to": "Tracy Than <tthan@safeharborcpa.com>, \"stu@sentient-sf.com\" <stu@sentient-sf.com>",
+              "direction": "received",
+              "snippet": "Hi Stu - look at your two year comparison in the return that was sent. Your tax is lower than 2023: The drivers of 2024 tax vs 2023 taxes are: You took the advance premium tax credit and must pay back"
+            },
+            {
+              "id": "198e46592c0e6d7a",
+              "date": "Tue, 26 Aug 2025 03:21:53 +0000",
+              "subject": "RE: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Chun Wong <cwong@safeharborcpa.com>",
+              "to": "\"stu@sentient-sf.com\" <stu@sentient-sf.com>, Tracy Than <tthan@safeharborcpa.com>",
+              "direction": "received",
+              "snippet": "Hi Stu \u2013 you have until the due date of the return. Contributing the recommended max of $18K will save you $6000 to $8000 in taxes if you had a 27% effective federal tax rate and a 8% FTB effective tax"
+            },
+            {
+              "id": "198e3bb9b53e4631",
+              "date": "Tue, 26 Aug 2025 00:16:17 +0000",
+              "subject": "Automatic reply: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+              "from": "Chun Wong <cwong@safeharborcpa.com>",
+              "to": "Stu Fisher <stu@sentient-sf.com>",
+              "direction": "received",
+              "snippet": "Greetings, I am out of the office and will have limited access to my email until Friday, August 31st. I will be replying to messages in the order of urgency, and will reply to your message at the"
+            }
+          ],
+          "first_interaction": "Fri, 15 Aug 2025 20:54:15 +0000",
+          "last_interaction": "Wed, 3 Sep 2025 21:54:24 -0700",
+          "interaction_dates": [
+            "Fri, 15 Aug 2025 20:54:15 +0000",
+            "Fri, 29 Aug 2025 10:24:56 -0600",
+            "Fri, 29 Aug 2025 15:16:22 +0000",
+            "Fri, 5 Sep 2025 22:04:06 +0000",
+            "Mon, 25 Aug 2025 17:16:01 -0700",
+            "Mon, 25 Aug 2025 21:32:06 +0000",
+            "Sat, 30 Aug 2025 08:07:55 +0000",
+            "Sat, 30 Aug 2025 08:22:35 -0600",
+            "Sat, 30 Aug 2025 16:21:14 +0000",
+            "Sun, 17 Aug 2025 08:47:09 -0400",
+            "Thu, 28 Aug 2025 04:22:49 +0000",
+            "Thu, 28 Aug 2025 22:56:49 -0600",
+            "Thu, 4 Sep 2025 20:24:42 -0700",
+            "Tue, 26 Aug 2025 00:16:17 +0000",
+            "Tue, 26 Aug 2025 03:21:53 +0000",
+            "Tue, 26 Aug 2025 10:17:13 -0700",
+            "Tue, 26 Aug 2025 16:16:55 -0700",
+            "Tue, 26 Aug 2025 17:07:43 +0000",
+            "Tue, 26 Aug 2025 22:55:34 +0000",
+            "Wed, 3 Sep 2025 21:54:24 -0700"
+          ],
+          "subject_lines": [
+            "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "",
+            "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "RE: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "Automatic reply: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)",
+            "Re: Fisher, Stewart - 2024 Tax Information Request (From Safe Harbor LLP)"
+          ],
+          "relationship_warmth": "existing",
+          "key_topics": [],
+          "interaction_summary": ""
+        },
+        "research": {
+          "contact": {
+            "name": "Chun Wong",
+            "email": "cwong@safeharborcpa.com",
+            "company": "Safe Harbor LLP",
+            "title": "CPA",
+            "phone": null
+          },
+          "company_research": {},
+          "person_research": {},
+          "industry_insights": {},
+          "recent_news": [],
+          "research_quality_score": 0.0,
+          "sources_accessed": [],
+          "research_timestamp": "2025-09-07T16:12:08.672950"
+        }
+      },
+      "coaching_data": {
+        "can_be_improved": true,
+        "improvement_suggestions": []
+      },
+      "review_status": "approved",
+      "review_timestamp": "2025-09-07T16:12:30.793126"
+    }
+  ],
+  "workflow_stats": {
+    "start_time": "2025-09-07T16:11:43.219290",
+    "end_time": null,
+    "total_contacts": 7,
+    "contacts_processed": 4,
+    "emails_generated": 4,
+    "emails_approved": 4,
+    "errors": [
+      "Contact Jeff Foster: 'NoneType' object has no attribute 'lower'",
+      "Contact Krista Pouncey-Dyson: 'NoneType' object has no attribute 'lower'",
+      "Contact John Cummings: 'NoneType' object has no attribute 'lower'"
+    ]
+  },
+  "approval_timestamp": "2025-09-07T16:13:34.982769"
+}

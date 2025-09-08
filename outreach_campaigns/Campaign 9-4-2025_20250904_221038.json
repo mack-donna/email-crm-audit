@@ -1,0 +1,130 @@
+{
+  "campaign_info": {
+    "name": "Campaign 9-4-2025",
+    "timestamp": "20250904_221038",
+    "total_contacts": 2,
+    "emails_generated": 2,
+    "emails_approved": 2
+  },
+  "approved_emails": [
+    {
+      "email_content": "Hi John,\n\nI'm reaching out because I believe there might be an opportunity for us to help TechCorp Inc with [specific value proposition based on research].\n\n[Specific paragraph showing understanding of their business/challenges based on research findings]\n\nWould you be open to a brief conversation to explore if there's a fit? I'm happy to share some specific ideas that have worked well for similar companies in your space.\n\nBest regards,\n[Your name]",
+      "metadata": {
+        "generated_at": "2025-09-04T22:10:33.603824",
+        "style": "professional_friendly",
+        "personalization_points": [
+          "Referenced company"
+        ],
+        "confidence_score": 0.7
+      },
+      "contact_context": {
+        "contact": {
+          "name": "John Smith",
+          "email": "john@techcorp.com",
+          "company": "TechCorp Inc",
+          "title": "CTO",
+          "phone": null
+        },
+        "email_history": {
+          "email_address": "john@techcorp.com",
+          "total_interactions": 0,
+          "emails_sent": [],
+          "emails_received": [],
+          "first_interaction": null,
+          "last_interaction": null,
+          "interaction_dates": [],
+          "subject_lines": [],
+          "relationship_warmth": "cold",
+          "key_topics": [],
+          "interaction_summary": ""
+        },
+        "research": {
+          "contact": {
+            "name": "John Smith",
+            "email": "john@techcorp.com",
+            "company": "TechCorp Inc",
+            "title": "CTO",
+            "phone": null
+          },
+          "company_research": {},
+          "person_research": {},
+          "industry_insights": {},
+          "recent_news": [],
+          "research_quality_score": 0.0,
+          "sources_accessed": [],
+          "research_timestamp": "2025-09-04T22:10:29.578302"
+        }
+      },
+      "coaching_data": {
+        "can_be_improved": true,
+        "improvement_suggestions": []
+      },
+      "review_status": "approved",
+      "review_timestamp": "2025-09-04T22:10:38.125101"
+    },
+    {
+      "email_content": "Hi Sarah,\n\nI'm reaching out because I believe there might be an opportunity for us to help Innovate Solutions with [specific value proposition based on research].\n\n[Specific paragraph showing understanding of their business/challenges based on research findings]\n\nWould you be open to a brief conversation to explore if there's a fit? I'm happy to share some specific ideas that have worked well for similar companies in your space.\n\nBest regards,\n[Your name]",
+      "metadata": {
+        "generated_at": "2025-09-04T22:10:38.125002",
+        "style": "professional_friendly",
+        "personalization_points": [
+          "Referenced company"
+        ],
+        "confidence_score": 0.7
+      },
+      "contact_context": {
+        "contact": {
+          "name": "Sarah Johnson",
+          "email": "sarah@innovate.com",
+          "company": "Innovate Solutions",
+          "title": "CEO",
+          "phone": null
+        },
+        "email_history": {
+          "email_address": "sarah@innovate.com",
+          "total_interactions": 0,
+          "emails_sent": [],
+          "emails_received": [],
+          "first_interaction": null,
+          "last_interaction": null,
+          "interaction_dates": [],
+          "subject_lines": [],
+          "relationship_warmth": "cold",
+          "key_topics": [],
+          "interaction_summary": ""
+        },
+        "research": {
+          "contact": {
+            "name": "Sarah Johnson",
+            "email": "sarah@innovate.com",
+            "company": "Innovate Solutions",
+            "title": "CEO",
+            "phone": null
+          },
+          "company_research": {},
+          "person_research": {},
+          "industry_insights": {},
+          "recent_news": [],
+          "research_quality_score": 0.0,
+          "sources_accessed": [],
+          "research_timestamp": "2025-09-04T22:10:33.725557"
+        }
+      },
+      "coaching_data": {
+        "can_be_improved": true,
+        "improvement_suggestions": []
+      },
+      "review_status": "approved",
+      "review_timestamp": "2025-09-04T22:10:38.125110"
+    }
+  ],
+  "workflow_stats": {
+    "start_time": "2025-09-04T22:10:29.057842",
+    "end_time": null,
+    "total_contacts": 2,
+    "contacts_processed": 2,
+    "emails_generated": 2,
+    "emails_approved": 2,
+    "errors": []
+  }
+}
