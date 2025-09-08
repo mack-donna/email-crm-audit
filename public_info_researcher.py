@@ -29,6 +29,14 @@ except ImportError:
     BEAUTIFULSOUP_AVAILABLE = False
     print("Warning: BeautifulSoup not installed. Web scraping will be limited.")
 
+# LinkedIn integration
+try:
+    from linkedin_client import LinkedInClient
+    LINKEDIN_AVAILABLE = True
+except ImportError:
+    LINKEDIN_AVAILABLE = False
+    print("Warning: LinkedIn integration not available.")
+
 
 class PublicInfoResearcher:
     """

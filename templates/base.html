@@ -49,16 +49,31 @@
                             <span class="text-yellow-600">⚠ No API Key</span>
                         </template>
                     </span>
-                    <span class="text-sm text-gray-500" x-data="{ gmail: {} }" x-init="
+                    <span class="text-sm text-gray-500" x-data="{ gmail: {}, linkedin: {} }" x-init="
                         fetch('/api/gmail/status')
                             .then(r => r.json())
-                            .then(data => gmail = data)
+                            .then(data => gmail = data);
+                        fetch('/api/linkedin/status')
+                            .then(r => r.json())
+                            .then(data => linkedin = data)
                     ">
                         <template x-if="gmail.connected">
                             <a href="/gmail/status" class="text-green-600 hover:text-green-700">📧 Gmail Connected</a>
                         </template>
                         <template x-if="!gmail.connected">
                             <a href="/gmail/connect" class="text-gray-500 hover:text-indigo-600">📧 Connect Gmail</a>
+                        </template>
+                        
+                        <span class="mx-2 text-gray-300">|</span>
+                        
+                        <template x-if="linkedin.connected">
+                            <a href="/linkedin/status" class="text-blue-600 hover:text-blue-700">💼 LinkedIn Connected</a>
+                        </template>
+                        <template x-if="linkedin.available && !linkedin.connected">
+                            <a href="/linkedin/connect" class="text-gray-500 hover:text-blue-600">💼 Connect LinkedIn</a>
+                        </template>
+                        <template x-if="!linkedin.available">
+                            <span class="text-gray-400">💼 LinkedIn Unavailable</span>
                         </template>
                     </span>
                 </div>

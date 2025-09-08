@@ -26,6 +26,14 @@ from workflow_orchestrator import WorkflowOrchestrator
 from gmail_drafts_manager import GmailDraftsManager
 from gmail_oauth import GmailOAuth
 
+# Import LinkedIn integration
+try:
+    from linkedin_client import LinkedInClient
+    LINKEDIN_AVAILABLE = True
+except ImportError:
+    LINKEDIN_AVAILABLE = False
+    print("Warning: LinkedIn integration not available")
+
 app = Flask(__name__)
 app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'dev-secret-key-change-in-production')
 
@@ -665,6 +673,130 @@ def api_gmail_status():
     
     return jsonify({
         'connected': connected,
+        'user_id': user_id
+    })
+
+# LinkedIn OAuth Routes
+linkedin_client = None
+if LINKEDIN_AVAILABLE:
+    try:
+        linkedin_client = LinkedInClient()
+    except Exception as e:
+        print(f"Failed to initialize LinkedIn client: {e}")
+
+@app.route('/linkedin/connect')
+def linkedin_connect():
+    """Initiate LinkedIn OAuth flow"""
+    if not linkedin_client or not linkedin_client.is_configured():
+        return jsonify({'error': 'LinkedIn OAuth not configured. Please set LINKEDIN_CLIENT_ID and LINKEDIN_CLIENT_SECRET environment variables.'}), 500
+    
+    # Ensure user has a session
+    if 'user_id' not in session:
+        session['user_id'] = str(uuid.uuid4())
+    
+    user_id = session['user_id']
+    
+    # Build redirect URI
+    redirect_uri = url_for('linkedin_callback', _external=True, _scheme='https' if os.environ.get('FLASK_ENV') == 'production' else 'http')
+    
+    try:
+        # Get authorization URL
+        auth_url = linkedin_client.get_authorization_url(redirect_uri, state=user_id)
+        return redirect(auth_url)
+    except Exception as e:
+        return jsonify({'error': f'Failed to create LinkedIn authorization URL: {str(e)}'}), 500
+
+@app.route('/linkedin/callback')
+def linkedin_callback():
+    """Handle LinkedIn OAuth callback"""
+    if not linkedin_client:
+        return "LinkedIn integration not available", 500
+    
+    user_id = session.get('user_id')
+    if not user_id:
+        return "No user session found", 400
+    
+    # Get authorization code from callback
+    code = request.args.get('code')
+    state = request.args.get('state')
+    error = request.args.get('error')
+    
+    if error:
+        return f"LinkedIn authorization failed: {error}", 400
+    
+    if not code:
+        return "Authorization code not received", 400
+    
+    if state != user_id:
+        return "Invalid state parameter", 400
+    
+    # Build redirect URI (same as used in authorization)
+    redirect_uri = url_for('linkedin_callback', _external=True, _scheme='https' if os.environ.get('FLASK_ENV') == 'production' else 'http')
+    
+    try:
+        # Exchange code for access token
+        token_data = linkedin_client.exchange_code_for_token(code, redirect_uri)
+        
+        # Store token data in user session (in production, store in database)
+        session[f'linkedin_token_{user_id}'] = {
+            'access_token': token_data.get('access_token'),
+            'expires_in': token_data.get('expires_in'),
+            'connected_at': datetime.now().isoformat()
+        }
+        
+        return redirect(url_for('linkedin_status', status='connected'))
+        
+    except Exception as e:
+        return f"Failed to complete LinkedIn authorization: {str(e)}", 500
+
+@app.route('/linkedin/status')
+def linkedin_status():
+    """Show LinkedIn connection status"""
+    user_id = session.get('user_id')
+    status = request.args.get('status', 'unknown')
+    
+    # Check if user has LinkedIn connected
+    connected = False
+    token_info = None
+    
+    if user_id:
+        token_key = f'linkedin_token_{user_id}'
+        token_info = session.get(token_key)
+        connected = bool(token_info and token_info.get('access_token'))
+    
+    return render_template('linkedin_status.html', 
+                         status=status, 
+                         connected=connected, 
+                         token_info=token_info)
+
+@app.route('/linkedin/disconnect')
+def linkedin_disconnect():
+    """Disconnect LinkedIn account"""
+    user_id = session.get('user_id')
+    
+    if user_id:
+        token_key = f'linkedin_token_{user_id}'
+        if token_key in session:
+            del session[token_key]
+    
+    return redirect(url_for('linkedin_status', status='disconnected'))
+
+@app.route('/api/linkedin/status')
+def api_linkedin_status():
+    """API endpoint for LinkedIn connection status"""
+    user_id = session.get('user_id')
+    
+    if not user_id:
+        return jsonify({'connected': False, 'message': 'No user session'})
+    
+    token_key = f'linkedin_token_{user_id}'
+    token_info = session.get(token_key)
+    connected = bool(token_info and token_info.get('access_token'))
+    
+    return jsonify({
+        'connected': connected,
+        'available': LINKEDIN_AVAILABLE,
+        'configured': linkedin_client.is_configured() if linkedin_client else False,
         'user_id': user_id
     })
 
