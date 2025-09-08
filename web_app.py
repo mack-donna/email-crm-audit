@@ -447,7 +447,18 @@ def approve_emails():
             
             # Check if user has Gmail connected
             if not gmail_oauth.user_has_gmail_connected(user_id):
-                draft_error = 'Gmail account not connected. Please connect your Gmail account first.'
+                # Store the campaign state so we can resume after Gmail auth
+                session['pending_drafts'] = {
+                    'campaign_file': campaign_file,
+                    'approved_ids': approved_ids
+                }
+                # Return a response that tells the frontend to redirect to Gmail auth
+                return jsonify({
+                    'success': False,
+                    'needs_gmail_auth': True,
+                    'auth_url': url_for('gmail_connect'),
+                    'message': 'Gmail connection required to create drafts. You will be redirected to connect your Gmail account.'
+                })
             else:
                 try:
                     # Create drafts using user's OAuth credentials
@@ -634,8 +645,14 @@ def gmail_callback():
     )
     
     if success:
-        # Redirect back to the main app with success message
-        return redirect(url_for('gmail_status', status='success'))
+        # Check if we have pending drafts to create after authentication
+        if 'pending_drafts' in session:
+            pending = session.pop('pending_drafts')
+            # Redirect back to review with a flag to auto-submit
+            return redirect(url_for('resume_draft_creation'))
+        else:
+            # Redirect back to the main app with success message
+            return redirect(url_for('gmail_status', status='success'))
     else:
         return redirect(url_for('gmail_status', status='error'))
 
@@ -650,6 +667,26 @@ def gmail_status():
         connected = gmail_oauth.user_has_gmail_connected(user_id)
     
     return render_template('gmail_status.html', status=status, connected=connected)
+
+@app.route('/resume_draft_creation')
+def resume_draft_creation():
+    """Resume draft creation after Gmail authentication"""
+    if 'pending_drafts' not in session:
+        # Load the campaign file from session if available
+        campaign_file = session.get('campaign_results')
+        if campaign_file and os.path.exists(campaign_file):
+            # Redirect to review page with a message
+            return render_template('resume_drafts.html', campaign_file=campaign_file)
+        else:
+            return redirect(url_for('index'))
+    
+    # Get the pending draft info
+    pending = session.get('pending_drafts')
+    
+    # Render a page that will auto-submit the draft creation
+    return render_template('resume_drafts.html', 
+                         campaign_file=pending.get('campaign_file'),
+                         approved_ids=pending.get('approved_ids'))
 
 @app.route('/gmail/disconnect')
 def gmail_disconnect():

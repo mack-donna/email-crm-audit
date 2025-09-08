@@ -175,6 +175,11 @@ function reviewHandler() {
                         alert('Emails approved successfully!\n\nGmail Draft Error: ' + data.draft_error);
                     }
                     window.location.href = data.redirect;
+                } else if (data.needs_gmail_auth) {
+                    // Gmail authentication required - redirect to Gmail OAuth
+                    if (confirm(data.message + '\n\nClick OK to connect your Gmail account.')) {
+                        window.location.href = data.auth_url;
+                    }
                 } else {
                     alert('Approval failed: ' + data.error);
                 }
