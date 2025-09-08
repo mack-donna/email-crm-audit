@@ -905,6 +905,13 @@ def api_linkedin_status():
 if __name__ == '__main__':
     print("🚀 Email Outreach Web App")
     print("📍 Running at http://127.0.0.1:8080")
-    print("⚠️  Set ANTHROPIC_API_KEY environment variable for AI generation")
+    
+    # Check if ANTHROPIC_API_KEY is set
+    anthropic_key = os.environ.get('ANTHROPIC_API_KEY')
+    if not anthropic_key or not anthropic_key.startswith('sk-'):
+        print("⚠️  Set ANTHROPIC_API_KEY environment variable for AI generation")
+    else:
+        print("✅ ANTHROPIC_API_KEY is configured")
+    
     print("📧 Ensure credentials.json exists for Gmail integration")
     app.run(debug=True, host='127.0.0.1', port=8080)

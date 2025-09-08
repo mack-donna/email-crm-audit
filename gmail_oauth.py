@@ -13,6 +13,9 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import Flow
 from googleapiclient.discovery import build
 
+# Allow insecure transport for local development
+os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+
 # OAuth2 scopes for Gmail
 SCOPES = ['https://www.googleapis.com/auth/gmail.compose']
 
@@ -106,6 +109,9 @@ class GmailOAuth:
             
         except Exception as e:
             print(f"❌ OAuth callback error: {e}")
+            print(f"❌ OAuth callback error type: {type(e)}")
+            import traceback
+            print(f"❌ OAuth callback traceback: {traceback.format_exc()}")
             return False
             
     def get_user_credentials(self, user_id):
