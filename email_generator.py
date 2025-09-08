@@ -228,6 +228,15 @@ WHAT TO AVOID:
 - ANY meta-notes or explanatory text (e.g., "Note:", "P.S. about this email:")
 - ANY instructions or comments about the email itself
 
+CRITICAL FACTUAL ACCURACY REQUIREMENTS:
+- NEVER fabricate or invent previous conversations, meetings, or interactions that didn't happen
+- NEVER reference specific dates, calls, or discussions unless they are documented in the interaction history
+- NEVER claim "we previously discussed" or "our last conversation" unless there is actual evidence
+- NEVER invent mutual connections, shared experiences, or past communications
+- If there are 0 previous interactions or "None" last interaction, treat this as a completely cold outreach
+- Only reference factual information provided in the research findings and LinkedIn insights
+- When in doubt about a fact, do NOT include it - err on the side of honesty
+
 CRITICAL: Generate ONLY the email content that would be sent to the recipient. 
 Do not include any notes, placeholders, or explanations. The email should be complete and ready to send.
 
@@ -241,9 +250,9 @@ Generate an email that feels genuinely personalized, aligns with the campaign go
             purpose=goal_info['purpose'],
             cta=goal_info['cta'].format(company=contact.get('company', 'your company')),
             user_message=campaign_message,
-            relationship=email_history.get('relationship_warmth', 'cold'),
+            relationship=email_history.get('relationship_warmth', 'No prior relationship - this is cold outreach'),
             interaction_count=email_history.get('total_interactions', 0),
-            last_interaction=email_history.get('last_interaction', 'None'),
+            last_interaction=email_history.get('last_interaction', 'None - no previous interactions recorded'),
             company_info=json.dumps(research.get('company_research', {})),
             recent_news=json.dumps(research.get('recent_news', [])),
             industry_context=json.dumps(research.get('industry_insights', {})),
