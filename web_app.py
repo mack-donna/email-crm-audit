@@ -488,10 +488,20 @@ def approve_emails():
                 try:
                     # Create drafts using user's OAuth credentials
                     for email in approved_emails:
-                        draft_id, error = gmail_oauth.create_draft_for_user(
+                        # Get recipient email from contact context
+                        to_email = email.get('contact_context', {}).get('contact', {}).get('email')
+                        if not to_email:
+                            # Fallback to direct to_email field if it exists
+                            to_email = email.get('to_email')
+                        
+                        if not to_email:
+                            print(f"⚠️ No recipient email found for email: {email}")
+                            continue
+                            
+                        # Use new method that handles subject extraction and signature appending
+                        draft_id, error = gmail_oauth.create_draft_from_content(
                             user_id,
-                            email.get('to_email'),
-                            email.get('subject'),
+                            to_email,
                             email.get('email_content')
                         )
                         if draft_id:

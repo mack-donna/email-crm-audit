@@ -160,6 +160,7 @@ token.pickle
 client_secret*.json
 set_key.sh
 .env.local
+user_tokens/
 
 # Backup files
 *_backup.py

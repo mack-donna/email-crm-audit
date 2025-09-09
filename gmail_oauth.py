@@ -170,6 +170,89 @@ class GmailOAuth:
         creds = self.get_user_credentials(user_id)
         return creds is not None and creds.valid
         
+    def _extract_subject_from_content(self, email_content):
+        """Extract subject line from email content"""
+        lines = email_content.strip().split('\n')
+        
+        # Look for Subject: line
+        for line in lines:
+            if line.lower().startswith('subject:'):
+                return line.split(':', 1)[1].strip()
+        
+        # If no subject line found, create one from first line
+        first_line = lines[0] if lines else "Outreach Email"
+        if len(first_line) > 50:
+            first_line = first_line[:47] + "..."
+        
+        return first_line
+    
+    def _extract_body_from_content(self, email_content):
+        """Extract email body (everything after subject line)"""
+        lines = email_content.strip().split('\n')
+        
+        # Skip subject line if present
+        start_idx = 0
+        for i, line in enumerate(lines):
+            if line.lower().startswith('subject:'):
+                start_idx = i + 1
+                break
+        
+        # Skip empty lines after subject
+        while start_idx < len(lines) and not lines[start_idx].strip():
+            start_idx += 1
+        
+        # Return remaining content as body
+        return '\n'.join(lines[start_idx:])
+        
+    def get_user_signature(self, user_id):
+        """Get user's Gmail signature"""
+        creds = self.get_user_credentials(user_id)
+        
+        if not creds or not creds.valid:
+            return None
+            
+        try:
+            service = build('gmail', 'v1', credentials=creds)
+            
+            # Get user's settings, including signature
+            settings = service.users().settings().sendAs().list(userId='me').execute()
+            
+            # Look for the primary address signature
+            send_as_list = settings.get('sendAs', [])
+            for send_as in send_as_list:
+                if send_as.get('isPrimary', False):
+                    return send_as.get('signature', '')
+            
+            # If no primary found, try the first one
+            if send_as_list:
+                return send_as_list[0].get('signature', '')
+                
+            return None
+            
+        except Exception as e:
+            print(f"❌ Error retrieving Gmail signature: {e}")
+            return None
+        
+    def create_draft_from_content(self, user_id, to_email, email_content):
+        """Create a Gmail draft from email content (with subject line embedded)"""
+        if not email_content:
+            return None, "No email content provided"
+            
+        # Extract subject and body from content
+        subject = self._extract_subject_from_content(email_content)
+        body = self._extract_body_from_content(email_content)
+        
+        # Get user's signature and append if available
+        signature = self.get_user_signature(user_id)
+        if signature:
+            # Add signature with proper spacing
+            if body.strip():
+                body = body + "\n\n" + signature
+            else:
+                body = signature
+        
+        return self.create_draft_for_user(user_id, to_email, subject, body)
+    
     def create_draft_for_user(self, user_id, to, subject, body):
         """Create a Gmail draft for a specific user"""
         creds = self.get_user_credentials(user_id)
