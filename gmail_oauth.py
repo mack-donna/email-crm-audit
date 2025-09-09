@@ -58,7 +58,7 @@ class GmailOAuth:
     def get_authorization_url(self, user_id, redirect_uri):
         """Generate OAuth2 authorization URL"""
         if not self.client_config:
-            return None
+            return None, None
             
         flow = Flow.from_client_config(
             self.client_config,
