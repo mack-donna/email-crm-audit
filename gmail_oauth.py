@@ -38,15 +38,20 @@ class GmailOAuth:
         if client_config_json:
             try:
                 self.client_config = json.loads(client_config_json)
-            except json.JSONDecodeError:
-                print("⚠️ Invalid GOOGLE_OAUTH_CONFIG JSON")
+                print(f"✅ Loaded OAuth config from environment variable")
+            except json.JSONDecodeError as e:
+                print(f"⚠️ Invalid GOOGLE_OAUTH_CONFIG JSON: {e}")
+                print(f"⚠️ JSON string length: {len(client_config_json)}")
                 
         # Fallback to credentials.json file
         elif Path('credentials.json').exists():
             with open('credentials.json', 'r') as f:
                 self.client_config = json.load(f)
+                print("✅ Loaded OAuth config from credentials.json")
         else:
             print("⚠️ No Gmail OAuth configuration found")
+            print(f"⚠️ GOOGLE_OAUTH_CONFIG env var present: {bool(client_config_json)}")
+            print(f"⚠️ credentials.json exists: {Path('credentials.json').exists()}")
             self.client_config = None
             
     def get_user_token_path(self, user_id):
