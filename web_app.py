@@ -648,7 +648,12 @@ def gmail_connect():
         app.logger.info(f"Gmail OAuth: Redirect URI = {redirect_uri}")
         
         # Get authorization URL
-        auth_url, state = gmail_oauth.get_authorization_url(user_id, redirect_uri)
+        result = gmail_oauth.get_authorization_url(user_id, redirect_uri)
+        if not result or result == (None, None):
+            app.logger.error("Gmail OAuth: No authorization URL returned - configuration issue")
+            return jsonify({'error': 'Gmail OAuth not configured. Please set up credentials.'}), 500
+        
+        auth_url, state = result
         
         if not auth_url:
             app.logger.error("Gmail OAuth: No authorization URL returned - configuration issue")
