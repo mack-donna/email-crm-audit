@@ -1,0 +1,3 @@
+[submodule "vendor/claude-code-infra"]
+	path = vendor/claude-code-infra
+	url = https://github.com/diet103/claude-code-infrastructure-showcase.git
