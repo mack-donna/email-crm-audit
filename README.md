@@ -244,6 +244,32 @@ The repository includes automated CI/CD workflows that:
 - Run weekly security scans on dependencies
 - Generate test reports and code metrics
 
+#### 🛡️ Claude Code Security Review (NEW!)
+Automated security review powered by Claude Code runs on every pull request:
+- **OWASP Top 10 vulnerability detection** - SQL injection, XSS, authentication issues
+- **Python-specific security checks** - Command injection, path traversal, unsafe deserialization
+- **Hardcoded secrets detection** - API keys, passwords, tokens
+- **Dependency vulnerability scanning** - Automated checks with Bandit and Safety
+- **AI-powered code analysis** - Claude reviews code for subtle security issues
+- **PR comments** - Security findings posted directly to pull requests
+- **Configurable severity thresholds** - Optional build blocking on critical issues
+
+**Setup Requirements:**
+1. Add `ANTHROPIC_API_KEY` to GitHub repository secrets
+2. Configure security rules in `.github/security-review-config.yml`
+3. Security review runs automatically on all PRs affecting code files
+
+**Manual Trigger:**
+```bash
+# From GitHub Actions tab, run "Claude Code Security Review" workflow manually
+# Choose scope: changed_files (default) or all_files
+```
+
+**View Results:**
+- Security findings appear as PR comments
+- Detailed reports available in Actions artifacts
+- Critical vulnerabilities trigger build warnings (configurable)
+
 ### Design Principles
 - **Security-first**: Environment variables and proper credential management
 - **Modular**: Each component works independently for easy testing

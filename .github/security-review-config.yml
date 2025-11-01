@@ -1,0 +1,203 @@
+# Claude Code Security Review Configuration
+# This file defines the security review settings for the GitHub Actions workflow
+
+version: 1.0
+
+# Security review scope
+review:
+  # Files to include in security review
+  include:
+    - "**/*.py"
+    - "**/*.js"
+    - "**/*.ts"
+    - "**/*.tsx"
+    - "**/*.html"
+
+  # Files to exclude from security review
+  exclude:
+    - "**/node_modules/**"
+    - "**/venv/**"
+    - "**/.venv/**"
+    - "**/dist/**"
+    - "**/build/**"
+    - "**/__pycache__/**"
+    - "**/test_*.py"  # Optionally exclude test files
+    - "**/*.test.js"
+
+# Vulnerability categories to check
+vulnerabilities:
+  # OWASP Top 10
+  owasp:
+    - sql_injection
+    - xss
+    - broken_authentication
+    - sensitive_data_exposure
+    - xxe
+    - broken_access_control
+    - security_misconfiguration
+    - insecure_deserialization
+    - known_vulnerabilities
+    - insufficient_logging
+
+  # Language-specific checks
+  python:
+    - command_injection
+    - path_traversal
+    - pickle_deserialization
+    - insecure_random
+    - timing_attacks
+    - ssrf
+    - insecure_ssl
+    - redos
+
+  # API & Integration security
+  api:
+    - hardcoded_credentials
+    - insecure_authentication
+    - missing_rate_limiting
+    - insufficient_validation
+    - debug_endpoints
+    - cors_misconfiguration
+
+# Severity thresholds
+severity:
+  critical:
+    # Fail build on critical vulnerabilities
+    fail_build: false  # Set to true to block PRs with critical issues
+    notify: true
+
+  medium:
+    fail_build: false
+    notify: true
+
+  low:
+    fail_build: false
+    notify: false
+
+# Automated security tools
+tools:
+  bandit:
+    enabled: true
+    config: |
+      [bandit]
+      exclude_dirs = ['/venv/', '/node_modules/', '/.venv/']
+      skips = ['B101']  # Skip assert_used check in tests
+
+  safety:
+    enabled: true
+    ignore: []  # Add CVE IDs to ignore
+
+  custom_patterns:
+    enabled: true
+    patterns:
+      # Dangerous functions
+      dangerous_functions:
+        - pattern: "eval\\("
+          severity: critical
+          message: "Use of eval() can lead to code injection"
+
+        - pattern: "exec\\("
+          severity: critical
+          message: "Use of exec() can lead to code injection"
+
+        - pattern: "os\\.system\\("
+          severity: critical
+          message: "Use of os.system() can lead to command injection. Use subprocess instead."
+
+        - pattern: "pickle\\.loads\\("
+          severity: high
+          message: "Pickle deserialization can execute arbitrary code. Use JSON instead."
+
+      # Hardcoded secrets
+      secrets:
+        - pattern: "password\\s*=\\s*['\"][^'\"]+['\"]"
+          severity: critical
+          message: "Hardcoded password detected. Use environment variables."
+
+        - pattern: "api_key\\s*=\\s*['\"][^'\"]+['\"]"
+          severity: critical
+          message: "Hardcoded API key detected. Use environment variables."
+
+        - pattern: "(AWS_ACCESS_KEY|AWS_SECRET_KEY)\\s*=\\s*['\"][^'\"]+['\"]"
+          severity: critical
+          message: "Hardcoded AWS credentials detected."
+
+      # SQL injection risks
+      sql_injection:
+        - pattern: "execute\\(['\"].*%s.*['\"]"
+          severity: high
+          message: "Potential SQL injection. Use parameterized queries."
+
+        - pattern: "execute\\(.*\\+.*\\)"
+          severity: high
+          message: "String concatenation in SQL query. Use parameterized queries."
+
+      # File system vulnerabilities
+      path_traversal:
+        - pattern: "open\\(.*\\+.*\\)"
+          severity: medium
+          message: "Potential path traversal. Validate and sanitize file paths."
+
+# Reporting
+reporting:
+  # Post results as PR comment
+  pr_comment: true
+
+  # Create GitHub check run
+  check_run: true
+
+  # Upload artifacts
+  artifacts:
+    enabled: true
+    retention_days: 90
+
+  # Generate SARIF for GitHub Security tab
+  sarif:
+    enabled: true
+
+# Notifications
+notifications:
+  # Notify on critical vulnerabilities
+  critical:
+    - github_pr_comment
+    - github_annotation
+
+  # Notify on medium vulnerabilities
+  medium:
+    - github_pr_comment
+
+# False positive handling
+false_positives:
+  # Files or patterns to suppress warnings
+  suppress:
+    # Example: suppress specific warnings in test files
+    # - file: "tests/test_security.py"
+    #   rule: "B101"
+    #   reason: "Assert used intentionally in tests"
+
+# Custom rules for this project
+project_specific:
+  # Gmail API security
+  gmail:
+    - check: "Ensure OAuth tokens are not committed"
+      files: ["**/token.json", "**/credentials.json"]
+      action: "block_commit"
+
+  # Salesforce security
+  salesforce:
+    - check: "Ensure Salesforce credentials use environment variables"
+      pattern: "sf_username|sf_password"
+      action: "warn"
+
+  # Flask security
+  flask:
+    - check: "Ensure Flask secret key is not hardcoded"
+      pattern: "FLASK_SECRET_KEY\\s*=\\s*['\"][^'\"]+['\"]"
+      action: "block"
+
+# References and documentation
+references:
+  owasp: "https://owasp.org/www-project-top-ten/"
+  python_security: "https://docs.python.org/3/library/security.html"
+  bandit_docs: "https://bandit.readthedocs.io/"
+  safety_docs: "https://pyup.io/safety/"
