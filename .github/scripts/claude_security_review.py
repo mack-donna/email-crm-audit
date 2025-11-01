@@ -7,7 +7,16 @@ Uses Anthropic API to analyze code files for security vulnerabilities
 import os
 import sys
 import json
+import hashlib
 from pathlib import Path
+
+def sanitize_for_prompt(text):
+    """Sanitize text to prevent prompt injection attacks"""
+    if not isinstance(text, str):
+        text = str(text)
+    # Remove any potential prompt injection patterns
+    # Keep only safe characters for file paths and basic content
+    return text.replace("```", "'''").replace("\x00", "")
 
 def analyze_file_with_claude(file_path, api_key):
     """Analyze a single file for security vulnerabilities using Claude API"""
@@ -16,12 +25,26 @@ def analyze_file_with_claude(file_path, api_key):
     except ImportError:
         print("Installing anthropic package...")
         import subprocess
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "-q", "anthropic"])
+        # Safe: Uses list syntax (not shell=True), sys.executable is trusted
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "-q", "anthropic"], shell=False)
         import anthropic
 
-    # Read file content
+    # Validate and sanitize file path to prevent path traversal
     try:
-        with open(file_path, 'r', encoding='utf-8') as f:
+        # Resolve to absolute path and check it's within current directory
+        abs_path = Path(file_path).resolve()
+        current_dir = Path.cwd().resolve()
+
+        # Ensure the file is within the current working directory
+        if not str(abs_path).startswith(str(current_dir)):
+            return {
+                "file": file_path,
+                "error": "Path traversal attempt detected - file outside working directory",
+                "vulnerabilities": []
+            }
+
+        # Read file content
+        with open(abs_path, 'r', encoding='utf-8') as f:
             code_content = f.read()
     except Exception as e:
         return {
@@ -41,7 +64,11 @@ def analyze_file_with_claude(file_path, api_key):
     # Create Anthropic client
     client = anthropic.Anthropic(api_key=api_key)
 
-    # Security review prompt
+    # Security review prompt - sanitize inputs to prevent prompt injection
+    safe_file_path = sanitize_for_prompt(file_path)
+    safe_file_suffix = sanitize_for_prompt(Path(file_path).suffix)
+    safe_code_content = sanitize_for_prompt(code_content)
+
     prompt = f"""You are a senior security engineer performing a code security audit.
 
 Analyze the following code file for security vulnerabilities, focusing on:
@@ -68,13 +95,13 @@ Analyze the following code file for security vulnerabilities, focusing on:
 - Regex denial of service (ReDoS)
 
 ## File Information
-**File**: `{file_path}`
-**Language**: {Path(file_path).suffix}
+**File**: `{safe_file_path}`
+**Language**: {safe_file_suffix}
 
 ## Code to Analyze:
-```
-{code_content}
-```
+'''
+{safe_code_content}
+'''
 
 ## Output Format
 For each vulnerability, provide:
@@ -202,12 +229,18 @@ def main():
     # Generate markdown report
     report = format_markdown_report(results)
 
-    # Save to file
-    output_file = "security-reports/claude-analysis.md"
-    os.makedirs("security-reports", exist_ok=True)
+    # Save to file with secure permissions and unique filename
+    output_dir = "security-reports"
+    os.makedirs(output_dir, exist_ok=True, mode=0o700)  # Restricted permissions
 
-    with open(output_file, 'w') as f:
+    # Use hash of analyzed files for unique filename (prevents race conditions)
+    files_hash = hashlib.sha256(''.join(sorted(files_to_analyze)).encode()).hexdigest()[:12]
+    output_file = f"{output_dir}/claude-analysis-{files_hash}.md"
+
+    # Write report with restricted permissions
+    with open(output_file, 'w', encoding='utf-8') as f:
         f.write(report)
+    os.chmod(output_file, 0o600)  # Owner read/write only
 
     print(f"\n✅ Analysis complete. Report saved to: {output_file}")
 

@@ -88,9 +88,10 @@ jobs:
           # Run Claude API security analysis
           python .github/scripts/claude_security_review.py $FILES || echo "Claude analysis completed with warnings"
 
-          # Append Claude analysis to main report
-          if [ -f "security-reports/claude-analysis.md" ]; then
-            cat security-reports/claude-analysis.md >> security-reports/review.md
+          # Append Claude analysis to main report (find hash-based filename)
+          CLAUDE_REPORT=$(find security-reports -name "claude-analysis-*.md" -type f 2>/dev/null | head -1)
+          if [ -n "$CLAUDE_REPORT" ] && [ -f "$CLAUDE_REPORT" ]; then
+            cat "$CLAUDE_REPORT" >> security-reports/review.md
           fi
         fi
 
