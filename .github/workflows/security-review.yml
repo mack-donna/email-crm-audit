@@ -42,13 +42,10 @@ jobs:
       with:
         python-version: '3.11'
 
-    - name: Install Claude Code CLI
+    - name: Install Python dependencies
       run: |
-        # Install Claude Code CLI (using npm)
-        npm install -g @anthropic-ai/claude-code
-
-        # Verify installation
-        claude --version || echo "Claude Code CLI installed"
+        python -m pip install --upgrade pip
+        pip install anthropic
 
     - name: Get changed files
       id: changed-files
@@ -62,69 +59,8 @@ jobs:
           **.tsx
           **.html
 
-    - name: Create security review prompt
-      run: |
-        cat > .claude-security-review.md << 'EOF'
-        # Security Review Instructions
 
-        You are a senior security engineer performing a comprehensive security audit. Analyze the provided code for security vulnerabilities with a focus on:
-
-        ## OWASP Top 10 Vulnerabilities
-        1. **SQL Injection** - Check for unsanitized database queries
-        2. **Cross-Site Scripting (XSS)** - Check for unescaped user input in HTML/JS
-        3. **Broken Authentication** - Review auth flows and session management
-        4. **Sensitive Data Exposure** - Check for exposed API keys, passwords, tokens
-        5. **XML External Entities (XXE)** - Review XML parsing
-        6. **Broken Access Control** - Check authorization logic
-        7. **Security Misconfiguration** - Review security settings
-        8. **Insecure Deserialization** - Check pickle, yaml, json usage
-        9. **Using Components with Known Vulnerabilities** - Review dependencies
-        10. **Insufficient Logging & Monitoring** - Check security event logging
-
-        ## Python-Specific Security Issues
-        - Command injection via os.system(), subprocess, eval()
-        - Path traversal vulnerabilities in file operations
-        - Pickle deserialization attacks
-        - Insecure random number generation (random vs secrets)
-        - Timing attacks in authentication
-        - SSRF in HTTP requests
-        - Insecure SSL/TLS configuration
-        - Regex denial of service (ReDoS)
-
-        ## API & Integration Security
-        - Hardcoded API keys or credentials
-        - Insecure API authentication
-        - Missing rate limiting
-        - Insufficient input validation
-        - Exposed debug endpoints
-        - CORS misconfigurations
-
-        ## Output Format
-        For each vulnerability found, provide:
-
-        ### 🔴 CRITICAL | 🟡 MEDIUM | 🟢 LOW
-        **File**: `path/to/file.py:line_number`
-        **Issue**: Brief description
-        **Risk**: Explanation of potential impact
-        **Code**:
-        \`\`\`python
-        # Show the vulnerable code
-        \`\`\`
-        **Fix**:
-        \`\`\`python
-        # Show the secure alternative
-        \`\`\`
-
-        ## Summary
-        - Total Issues: X
-        - Critical: X
-        - Medium: X
-        - Low: X
-
-        If no issues found, respond with: "✅ No security vulnerabilities detected."
-        EOF
-
-    - name: Run security review with Claude Code
+    - name: Run Claude API security review
       id: security-scan
       env:
         ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
@@ -139,7 +75,7 @@ jobs:
         # Create results directory
         mkdir -p security-reports
 
-        # Run Claude Code security review
+        # Create main report header
         echo "# Claude Code Security Review Results" > security-reports/review.md
         echo "" >> security-reports/review.md
         echo "**Reviewed at**: $(date -u +"%Y-%m-%d %H:%M:%S UTC")" >> security-reports/review.md
@@ -149,32 +85,13 @@ jobs:
         if [ -z "$FILES" ]; then
           echo "No files to review" >> security-reports/review.md
         else
-          echo "## Files Reviewed" >> security-reports/review.md
-          echo '```' >> security-reports/review.md
-          echo "$FILES" >> security-reports/review.md
-          echo '```' >> security-reports/review.md
-          echo "" >> security-reports/review.md
+          # Run Claude API security analysis
+          python .github/scripts/claude_security_review.py $FILES || echo "Claude analysis completed with warnings"
 
-          # Run Claude Code analysis
-          # Note: Adjust this command based on actual Claude Code CLI syntax
-          echo "Running security analysis..."
-
-          for file in $FILES; do
-            if [ -f "$file" ]; then
-              echo "Analyzing: $file"
-
-              # Run Claude Code with security review prompt
-              claude code review \
-                --file "$file" \
-                --prompt-file .claude-security-review.md \
-                --output security-reports/$(basename $file).md \
-                2>&1 || echo "Analysis completed for $file"
-            fi
-          done
-
-          # Combine all reports
-          echo "## Security Analysis" >> security-reports/review.md
-          cat security-reports/*.md >> security-reports/review.md 2>/dev/null || echo "No detailed reports generated"
+          # Append Claude analysis to main report
+          if [ -f "security-reports/claude-analysis.md" ]; then
+            cat security-reports/claude-analysis.md >> security-reports/review.md
+          fi
         fi
 
         # Set output for next steps
