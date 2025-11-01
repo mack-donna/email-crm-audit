@@ -62,3 +62,4 @@ except Exception as e:
     traceback.print_exc()
 
 print("✅ Debug test completed!")
+# Test comment for security review
