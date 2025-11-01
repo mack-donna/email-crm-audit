@@ -91,7 +91,7 @@ Be concise and specific. Focus on real security issues, not style or best practi
     try:
         # Call Claude API
         message = client.messages.create(
-            model="claude-3-sonnet-20240229",  # Claude 3 Sonnet
+            model="claude-3-opus-20240229",  # Claude 3 Opus
             max_tokens=2000,
             temperature=0,
             messages=[
