@@ -324,3 +324,4 @@ Automated security review powered by Claude Code runs on every pull request:
 ## 🙏 Built With
 
 Developed with **Claude Code** (Anthropic) using collaborative human-AI development.
+<\!-- Testing security review workflow -->
