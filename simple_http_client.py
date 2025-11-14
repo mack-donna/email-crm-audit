@@ -61,8 +61,8 @@ def call_claude_api_via_curl(prompt):
         # Clean up temp file
         try:
             os.unlink(temp_file)
-        except:
-            pass
+        except (OSError, FileNotFoundError) as e:
+            print("Failed to cleanup temp file {}: {}".format(temp_file, str(e)))
 
 if __name__ == "__main__":
     # Test the function
