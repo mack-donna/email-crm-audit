@@ -21,8 +21,9 @@ except ImportError:
     print("Note: python-dotenv not installed. Using system environment variables only.")
     print("Install with: pip install python-dotenv")
 
-# Allow OAuth over HTTP for local development
-os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+# Allow OAuth over HTTP for local development only
+if os.environ.get('FLASK_ENV', 'development') != 'production':
+    os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 # Import existing modules
 from workflow_orchestrator import WorkflowOrchestrator
@@ -38,13 +39,19 @@ except ImportError:
     print("Warning: LinkedIn integration not available")
 
 app = Flask(__name__)
-app.secret_key = os.environ.get('FLASK_SECRET_KEY', 'dev-secret-key-change-in-production')
+_secret = os.environ.get('FLASK_SECRET_KEY')
+if not _secret:
+    if os.environ.get('FLASK_ENV') == 'production':
+        raise RuntimeError("FLASK_SECRET_KEY must be set in production")
+    _secret = 'dev-secret-key-change-in-production'
+app.secret_key = _secret
 
 # Configuration
 UPLOAD_FOLDER = 'uploads'
 CAMPAIGNS_FOLDER = 'outreach_campaigns'
 ALLOWED_EXTENSIONS = {'csv'}
 MAX_FILE_SIZE = 10 * 1024 * 1024  # 10MB
+app.config['MAX_CONTENT_LENGTH'] = MAX_FILE_SIZE
 
 # Ensure folders exist
 Path(UPLOAD_FOLDER).mkdir(exist_ok=True)
@@ -932,4 +939,4 @@ if __name__ == '__main__':
         print("✅ ANTHROPIC_API_KEY is configured")
     
     print("📧 Ensure credentials.json exists for Gmail integration")
-    app.run(debug=True, host='127.0.0.1', port=8080)
+    app.run(debug=os.environ.get('FLASK_DEBUG', 'False').lower() == 'true', host='127.0.0.1', port=8080)

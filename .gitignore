@@ -165,3 +165,10 @@ user_tokens/
 # Backup files
 *_backup.py
 *.bak
+
+# Sensitive campaign and contact data
+outreach_campaigns/
+learning_data/
+processed_contacts_*.json
+test_campaigns/
+uploads/
