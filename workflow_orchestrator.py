@@ -226,8 +226,8 @@ class WorkflowOrchestrator:
                         'timestamp': datetime.now().isoformat()
                     }, f)
                 summary['campaign_file'] = temp_file
-            except:
-                pass
+            except (IOError, OSError, TypeError) as e:
+                self.logger.warning("Failed to save campaign summary to {}: {}".format(temp_file, str(e)))
                 
         return summary
         

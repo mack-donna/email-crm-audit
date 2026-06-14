@@ -7,9 +7,8 @@ Compares Gmail contacts with Salesforce contacts and generates a report
 import os
 import csv
 import json
-from datetime import datetime, timedelta
+from datetime import datetime
 from collections import defaultdict
-import re
 
 # You'll need to install these packages (instructions below)
 # pip install google-auth google-auth-oauthlib google-auth-httplib2 google-api-python-client simple-salesforce
@@ -20,6 +19,9 @@ from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
 from simple_salesforce import Salesforce
 
+# Import shared email retrieval utility
+from gmail_email_retriever import GmailEmailRetriever
+
 class EmailCRMAudit:
     def __init__(self):
         self.gmail_service = None
@@ -27,16 +29,17 @@ class EmailCRMAudit:
         self.email_contacts = []
         self.sf_contacts = []
         self.missing_contacts = []
-        
+        self.email_retriever = None  # Will be initialized after Gmail setup
+
     def setup_gmail(self):
         """Setup Gmail API connection"""
         SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
         creds = None
-        
+
         # Token file stores the user's access and refresh tokens
         if os.path.exists('token.json'):
             creds = Credentials.from_authorized_user_file('token.json', SCOPES)
-        
+
         # If there are no (valid) credentials available, let the user log in
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
@@ -44,12 +47,17 @@ class EmailCRMAudit:
             else:
                 flow = InstalledAppFlow.from_client_secrets_file('credentials.json', SCOPES)
                 creds = flow.run_local_server(port=0)
-            
+
             # Save the credentials for the next run
             with open('token.json', 'w') as token:
                 token.write(creds.to_json())
-        
+
         self.gmail_service = build('gmail', 'v1', credentials=creds)
+        # Initialize shared email retriever utility
+        self.email_retriever = GmailEmailRetriever(
+            gmail_service=self.gmail_service,
+            user_email='stu@sentient-sf.com'
+        )
         print("✓ Gmail API connected successfully")
     
     def setup_salesforce(self):
@@ -67,158 +75,22 @@ class EmailCRMAudit:
             return False
         return True
     
-    def extract_email_address(self, email_string):
-        """Extract clean email address from various formats"""
-        if not email_string:
-            return None
-        
-        # Handle formats like "John Doe <john@example.com>"
-        email_match = re.search(r'<([^>]+)>', email_string)
-        if email_match:
-            return email_match.group(1).lower()
-        
-        # Handle direct email addresses
-        email_match = re.search(r'\b[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Z|a-z]{2,}\b', email_string)
-        if email_match:
-            return email_match.group(0).lower()
-        
-        return None
-    
-    def extract_name_from_email(self, email_string):
-        """Extract name from email string"""
-        if not email_string:
-            return None
-        
-        # Handle formats like "John Doe <john@example.com>"
-        name_match = re.search(r'^([^<]+)<', email_string)
-        if name_match:
-            return name_match.group(1).strip().strip('"')
-        
-        return None
-    
-    def is_business_email(self, email, subject=""):
-        """Simple filter to identify business emails"""
-        if not email:
-            return False
-        
-        # Filter out obvious non-business emails
-        exclude_patterns = [
-            'noreply', 'no-reply', 'automated', 'notification', 'support',
-            'newsletter', 'unsubscribe', 'marketing', 'promo'
-        ]
-        
-        email_lower = email.lower()
-        subject_lower = subject.lower()
-        
-        # Check if email contains exclude patterns
-        for pattern in exclude_patterns:
-            if pattern in email_lower or pattern in subject_lower:
-                return False
-        
-        # Filter out common non-business domains
-        exclude_domains = [
-            'anthropic.com', 'gusto.com', 'stripe.com', 'quickbooks',
-            'mercury.com', 'ziptie.dev'  # Add your service provider domains
-        ]
-        
-        for domain in exclude_domains:
-            if domain in email_lower:
-                return False
-        
-        return True
-    
     def get_recent_emails(self, days_back=30):
-        """Get emails from the last X days"""
-        try:
-            # Calculate date range
-            end_date = datetime.now()
-            start_date = end_date - timedelta(days=days_back)
-            
-            # Format for Gmail API
-            query = f'after:{start_date.strftime("%Y/%m/%d")}'
-            
-            print(f"🔍 Searching emails from {start_date.strftime('%Y-%m-%d')} to {end_date.strftime('%Y-%m-%d')}")
-            
-            # Get message list
-            results = self.gmail_service.users().messages().list(
-                userId='me', q=query, maxResults=500
-            ).execute()
-            
-            messages = results.get('messages', [])
-            print(f"📧 Found {len(messages)} emails to analyze")
-            
-            email_contacts = {}
-            
-            for i, message in enumerate(messages):
-                if i % 50 == 0:
-                    print(f"   Processing email {i+1}/{len(messages)}")
-                
-                try:
-                    # Get full message
-                    msg = self.gmail_service.users().messages().get(
-                        userId='me', id=message['id']
-                    ).execute()
-                    
-                    headers = msg['payload'].get('headers', [])
-                    
-                    # Extract relevant headers
-                    subject = ""
-                    from_email = ""
-                    to_emails = []
-                    cc_emails = []
-                    
-                    for header in headers:
-                        name = header['name'].lower()
-                        value = header['value']
-                        
-                        if name == 'subject':
-                            subject = value
-                        elif name == 'from':
-                            from_email = value
-                        elif name == 'to':
-                            to_emails = value.split(',')
-                        elif name == 'cc':
-                            cc_emails = value.split(',')
-                    
-                    # Process all email addresses found
-                    all_emails = [from_email] + to_emails + cc_emails
-                    
-                    for email_string in all_emails:
-                        email = self.extract_email_address(email_string)
-                        name = self.extract_name_from_email(email_string)
-                        
-                        if email and email != 'stu@sentient-sf.com' and self.is_business_email(email, subject):
-                            if email not in email_contacts:
-                                email_contacts[email] = {
-                                    'email': email,
-                                    'name': name or email.split('@')[0],
-                                    'domain': email.split('@')[1],
-                                    'first_seen': datetime.now(),
-                                    'last_seen': datetime.now(),
-                                    'email_count': 0,
-                                    'subjects': []
-                                }
-                            
-                            # Update contact info
-                            contact = email_contacts[email]
-                            contact['email_count'] += 1
-                            contact['last_seen'] = datetime.now()
-                            if subject and subject not in contact['subjects']:
-                                contact['subjects'].append(subject[:100])  # Limit length
-                            
-                            # Update name if we have a better one
-                            if name and len(name) > len(contact['name']):
-                                contact['name'] = name
-                
-                except Exception as e:
-                    print(f"   Error processing email {i+1}: {e}")
-                    continue
-            
-            self.email_contacts = list(email_contacts.values())
-            print(f"✓ Found {len(self.email_contacts)} unique business contacts")
-            
-        except Exception as e:
-            print(f"❌ Error fetching emails: {e}")
+        """
+        Get emails from the last X days using shared GmailEmailRetriever utility.
+
+        This method now delegates to the shared utility for email retrieval.
+        """
+        # Use shared email retriever utility
+        email_contacts = self.email_retriever.get_recent_emails(
+            days_back=days_back,
+            max_results=500,
+            progress_interval=50
+        )
+
+        # Convert to list and store
+        self.email_contacts = list(email_contacts.values())
+        print("✓ Found {} unique business contacts".format(len(self.email_contacts)))
     
     def get_salesforce_contacts(self):
         """Get all contacts from Salesforce"""

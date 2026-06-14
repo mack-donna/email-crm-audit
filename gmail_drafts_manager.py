@@ -58,7 +58,6 @@ class GmailDraftsManager:
                     )
                 except Exception as e:
                     self.logger.warning("Failed to load existing token, will create new one: {}".format(e))
-                    # Remove corrupted token file
                     os.remove(self.token_file)
                     creds = None
             
