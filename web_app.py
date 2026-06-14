@@ -6,6 +6,7 @@ Phase 1: Simple functional interface
 
 from flask import Flask, render_template, request, jsonify, session, redirect, url_for, send_file
 from werkzeug.utils import secure_filename
+from werkzeug.middleware.proxy_fix import ProxyFix
 import os
 import json
 import uuid
@@ -39,6 +40,7 @@ except ImportError:
     print("Warning: LinkedIn integration not available")
 
 app = Flask(__name__)
+app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1, x_host=1)
 _secret = os.environ.get('FLASK_SECRET_KEY')
 if not _secret:
     if os.environ.get('FLASK_ENV') == 'production':
