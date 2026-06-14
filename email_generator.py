@@ -22,6 +22,10 @@ except ImportError:
     from urllib2 import urlopen, Request, URLError, HTTPError
     import ssl
 
+# Import extracted classes
+from email_prompt_builder import EmailPromptBuilder
+from logging_config import setup_logger
+
 
 class EmailGenerator:
     """
@@ -36,8 +40,13 @@ class EmailGenerator:
     
     def __init__(self, api_key=None, log_level="INFO"):
         self.api_key = api_key or os.environ.get('ANTHROPIC_API_KEY')
-        self.setup_logging(log_level)
-        
+
+        # Use shared logging configuration (replaces duplicate setup_logging method)
+        self.logger = setup_logger(__name__, log_level)
+
+        # Initialize extracted components (Dependency Injection pattern)
+        self.prompt_builder = EmailPromptBuilder()
+
         # Generation statistics
         self.generation_stats = {
             'total_generated': 0,
@@ -46,25 +55,13 @@ class EmailGenerator:
             'coaching_sessions': 0,
             'improvements_made': 0
         }
-        
+
         # Learning data structure
         self.coaching_history = []
         self.successful_patterns = []
         self.feedback_log = []
-        
-    def setup_logging(self, level):
-        """Configure comprehensive logging."""
-        logging.basicConfig(
-            level=getattr(logging, level.upper()),
-            format='%(asctime)s - EmailGenerator - %(levelname)s - %(message)s',
-            handlers=[
-                logging.FileHandler('email_generation_{}.log'.format(
-                    datetime.now().strftime("%Y%m%d_%H%M%S")
-                )),
-                logging.StreamHandler()
-            ]
-        )
-        self.logger = logging.getLogger(__name__)
+
+    # NOTE: setup_logging() method removed - now using shared logging_config.setup_logger()
         
     def generate_email(self, contact_context, email_style="professional_friendly", campaign_settings=None):
         """
@@ -82,9 +79,9 @@ class EmailGenerator:
             contact_context.get('contact', {}).get('name')
         ))
         self.generation_stats['total_generated'] += 1
-        
-        # Build comprehensive prompt
-        prompt = self._build_generation_prompt(contact_context, email_style, campaign_settings)
+
+        # Build comprehensive prompt using extracted PromptBuilder
+        prompt = self.prompt_builder.build_generation_prompt(contact_context, email_style, campaign_settings)
         
         # Choose generation method based on API key availability
         generation_method = 'ai' if self.api_key else 'template'
@@ -119,154 +116,10 @@ class EmailGenerator:
         else:
             self.generation_stats['failed_generations'] += 1
             return None
-            
-    def _build_generation_prompt(self, contact_context, email_style, campaign_settings=None):
-        """
-        Build a comprehensive prompt for email generation.
-        
-        This demonstrates the AI coaching approach - asking the AI
-        what it needs for optimal generation.
-        """
-        contact = contact_context.get('contact', {})
-        email_history = contact_context.get('email_history', {})
-        research = contact_context.get('research', {})
-        linkedin_data = contact_context.get('linkedin_data', {})
-        linkedin_context = contact_context.get('linkedin_context', {})
-        
-        # Extract campaign settings
-        if campaign_settings:
-            campaign_goal = campaign_settings.get('goal', 'first_meeting')
-            campaign_tone = campaign_settings.get('tone', 'professional')
-            campaign_length = campaign_settings.get('length', 'medium')
-            campaign_message = campaign_settings.get('message', '')
-        else:
-            campaign_goal = 'first_meeting'
-            campaign_tone = 'professional'
-            campaign_length = 'medium'
-            campaign_message = ''
-        
-        # Map campaign goals to specific purposes and CTAs
-        goal_mapping = {
-            'first_meeting': {
-                'purpose': 'Schedule an initial conversation or discovery call',
-                'cta': 'Would you be available for a brief 15-20 minute call next week to explore this further?'
-            },
-            'demo': {
-                'purpose': 'Request a demo or presentation of your product/service',
-                'cta': 'I\'d love to show you a brief demo of how this could benefit {company}. Would you have 20 minutes for a quick presentation?'
-            },
-            'reengagement': {
-                'purpose': 'Reconnect with previous contacts or dormant leads',
-                'cta': 'I wanted to reconnect and see if there might be an opportunity to collaborate now.'
-            },
-            'partnership': {
-                'purpose': 'Explore collaboration or partnership opportunities',
-                'cta': 'I\'d be interested in exploring potential partnership opportunities between our companies.'
-            },
-            'followup': {
-                'purpose': 'Continue previous conversation or interaction',
-                'cta': 'I wanted to follow up on our previous conversation and see how I can help.'
-            }
-        }
-        
-        goal_info = goal_mapping.get(campaign_goal, goal_mapping['first_meeting'])
-        
-        # Map length preferences
-        length_mapping = {
-            'concise': '2-3 short paragraphs (100-150 words)',
-            'medium': '3-4 paragraphs (150-200 words)',
-            'detailed': '4-5 paragraphs with more detail (200-300 words)'
-        }
-        length_guide = length_mapping.get(campaign_length, length_mapping['medium'])
-        
-        prompt = """
-Generate a personalized outreach email with the following context:
 
-RECIPIENT INFORMATION:
-- Name: {name}
-- Company: {company}
-- Title: {title}
-- Email: {email}
+    # NOTE: _build_generation_prompt() has been extracted to EmailPromptBuilder class
+    # to follow Single Responsibility Principle
 
-CAMPAIGN OBJECTIVE:
-- Primary Goal: {campaign_goal}
-- Purpose: {purpose}
-- Suggested CTA: {cta}
-- User Message/Context: {user_message}
-
-INTERACTION HISTORY:
-- Relationship: {relationship}
-- Previous interactions: {interaction_count}
-- Last interaction: {last_interaction}
-
-RESEARCH FINDINGS:
-- Company info: {company_info}
-- Recent news: {recent_news}
-- Industry context: {industry_context}
-
-LINKEDIN INSIGHTS:
-- Professional background: {linkedin_headline}
-- Current location: {linkedin_location}
-- Profile URL: {linkedin_profile}
-- Conversation starters: {linkedin_conversation_starters}
-
-EMAIL REQUIREMENTS:
-- Style: {style}
-- Tone: {tone}
-- Length: {length}
-- Personalization: Reference specific research findings and LinkedIn insights naturally
-- LinkedIn Integration: Use professional background, location, or mutual connections when available
-- Call-to-Action: Focus on the campaign goal
-
-WHAT TO AVOID:
-- Generic templates
-- Overly salesy language
-- Clichés like "I hope this email finds you well"
-- Making assumptions about their needs
-- Being too formal or too casual
-- ANY placeholders like [specific value] or [insert here]
-- ANY meta-notes or explanatory text (e.g., "Note:", "P.S. about this email:")
-- ANY instructions or comments about the email itself
-
-CRITICAL FACTUAL ACCURACY REQUIREMENTS:
-- NEVER fabricate or invent previous conversations, meetings, or interactions that didn't happen
-- NEVER reference specific dates, calls, or discussions unless they are documented in the interaction history
-- NEVER claim "we previously discussed" or "our last conversation" unless there is actual evidence
-- NEVER invent mutual connections, shared experiences, or past communications
-- If there are 0 previous interactions or "None" last interaction, treat this as a completely cold outreach
-- Only reference factual information provided in the research findings and LinkedIn insights
-- When in doubt about a fact, do NOT include it - err on the side of honesty
-
-CRITICAL: Generate ONLY the email content that would be sent to the recipient. 
-Do not include any notes, placeholders, or explanations. The email should be complete and ready to send.
-
-Generate an email that feels genuinely personalized, aligns with the campaign goal, and provides clear value.
-""".format(
-            name=contact.get('name', 'there'),
-            company=contact.get('company', 'your company'),
-            title=contact.get('title', 'your role'),
-            email=contact.get('email', ''),
-            campaign_goal=campaign_goal.replace('_', ' ').title(),
-            purpose=goal_info['purpose'],
-            cta=goal_info['cta'].format(company=contact.get('company', 'your company')),
-            user_message=campaign_message,
-            relationship=email_history.get('relationship_warmth', 'No prior relationship - this is cold outreach'),
-            interaction_count=email_history.get('total_interactions', 0),
-            last_interaction=email_history.get('last_interaction', 'None - no previous interactions recorded'),
-            company_info=json.dumps(research.get('company_research', {})),
-            recent_news=json.dumps(research.get('recent_news', [])),
-            industry_context=json.dumps(research.get('industry_insights', {})),
-            linkedin_headline=linkedin_context.get('headline', 'N/A'),
-            linkedin_location=linkedin_context.get('location', 'N/A'),
-            linkedin_profile=linkedin_context.get('profile_url', 'N/A'),
-            linkedin_conversation_starters=json.dumps(linkedin_context.get('conversation_starters', [])),
-            style=email_style,
-            tone=campaign_tone.title(),
-            length=length_guide
-        )
-        
-        return prompt
-        
     def _generate_template_email(self, contact_context, email_style):
         """
         Generate email using templates (fallback when no API key).
@@ -416,8 +269,8 @@ Cheers,
                     # Clean up temp file
                     try:
                         os.unlink(temp_file)
-                    except:
-                        pass
+                    except (OSError, FileNotFoundError) as e:
+                        self.logger.debug("Failed to cleanup temp file {}: {}".format(temp_file, str(e)))
                 
         except Exception as e:
             self.logger.error("Error calling Claude API: {}".format(str(e)))

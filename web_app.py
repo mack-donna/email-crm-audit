@@ -201,7 +201,8 @@ def count_csv_contacts(csv_path):
             reader = csv.reader(f)
             next(reader)  # Skip header
             return sum(1 for _ in reader)
-    except:
+    except (IOError, OSError, csv.Error, StopIteration, UnicodeDecodeError) as e:
+        print("Error counting CSV contacts in {}: {}".format(csv_path, str(e)))
         return 0
 
 def validate_csv_file(filepath):
@@ -305,27 +306,56 @@ def generate_emails():
         tone = data.get('tone', 'professional')
         message = data.get('message', '')
         
-        # Create LinkedIn enrichment function
+        # Create LinkedIn enrichment function with proper error handling
         def linkedin_enrichment_func(contact_info):
-            """Enriches contact with LinkedIn data using user's session token"""
-            if not linkedin_client or not linkedin_client.is_configured():
+            """
+            Enriches contact with LinkedIn data using user's session token.
+
+            Now includes proper error handling, fallback behavior, and logging.
+            """
+            try:
+                if not linkedin_client or not linkedin_client.is_configured():
+                    app.logger.debug("LinkedIn client not configured, skipping enrichment")
+                    return None
+
+                user_id = session.get('user_id')
+                if not user_id:
+                    app.logger.debug("No user_id in session, skipping LinkedIn enrichment")
+                    return None
+
+                # Get user's LinkedIn token from session
+                token_key = 'linkedin_token_{}'.format(user_id)
+                if token_key not in session:
+                    app.logger.debug("No LinkedIn token found for user {}".format(user_id))
+                    return None
+
+                token_info = session[token_key]
+                linkedin_client.access_token = token_info.get('access_token')
+
+                # Enhance contact with LinkedIn data with timeout protection
+                # (Actual timeout would require more complex implementation)
+                enhanced_contact = linkedin_client.enhance_contact_with_linkedin(contact_info)
+
+                if enhanced_contact:
+                    app.logger.info("Successfully enriched contact: {}".format(
+                        contact_info.get('email', 'unknown')
+                    ))
+
+                return enhanced_contact
+
+            except KeyError as e:
+                app.logger.warning(
+                    "Missing required field in LinkedIn enrichment: {}".format(str(e))
+                )
                 return None
-                
-            user_id = session.get('user_id')
-            if not user_id:
+            except Exception as e:
+                app.logger.error(
+                    "LinkedIn enrichment failed for {}: {}".format(
+                        contact_info.get('email', 'unknown'), str(e)
+                    )
+                )
+                # Return None to allow workflow to continue without LinkedIn data
                 return None
-                
-            # Get user's LinkedIn token from session
-            token_key = f'linkedin_token_{user_id}'
-            if token_key not in session:
-                return None
-                
-            token_info = session[token_key]
-            linkedin_client.access_token = token_info.get('access_token')
-            
-            # Enhance contact with LinkedIn data
-            enhanced_contact = linkedin_client.enhance_contact_with_linkedin(contact_info)
-            return enhanced_contact
         
         # Initialize orchestrator with LinkedIn enrichment
         orchestrator = WorkflowOrchestrator(linkedin_enrichment_func=linkedin_enrichment_func)
@@ -583,7 +613,8 @@ def list_campaigns():
                         date_part = timestamp[:8]  # YYYYMMDD
                         time_part = timestamp[9:15] if len(timestamp) > 8 else "000000"  # HHMMSS
                         formatted_date = f"{date_part[:4]}-{date_part[4:6]}-{date_part[6:8]} {time_part[:2]}:{time_part[2:4]}"
-                    except:
+                    except (ValueError, IndexError, TypeError) as e:
+                        print("Warning: Failed to parse timestamp '{}': {}".format(timestamp, str(e)))
                         formatted_date = timestamp
                 else:
                     formatted_date = file.stat().st_mtime  # Fallback to file modification time

@@ -241,8 +241,10 @@ class EmailHistoryAnalyzer:
                     try:
                         # Simple date extraction (Gmail provides RFC 2822 format)
                         email_data['date'] = value
-                    except:
+                    except (ValueError, TypeError) as e:
+                        # Fallback to raw value if parsing fails
                         email_data['date'] = value
+                        self.logger.debug("Date parsing warning for '{}': {}".format(value, str(e)))
                         
                 elif name == 'Subject':
                     email_data['subject'] = value
