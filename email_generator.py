@@ -10,8 +10,6 @@ import logging
 import os
 from datetime import datetime
 import time
-import subprocess
-import tempfile
 try:
     # Python 3
     from urllib.request import urlopen, Request
@@ -223,54 +221,8 @@ Cheers,
                     return None
                     
             except ImportError:
-                # Fall back to curl if anthropic library is not available
-                self.logger.info("Anthropic library not available, using curl fallback")
-                
-                # Prepare the request data
-                data = {
-                    'model': 'claude-3-5-sonnet-20241022',
-                    'max_tokens': 1000,
-                    'messages': [{
-                        'role': 'user',
-                        'content': prompt
-                    }]
-                }
-                
-                # Write data to temp file
-                with tempfile.NamedTemporaryFile(mode='w', suffix='.json', delete=False) as f:
-                    json.dump(data, f)
-                    temp_file = f.name
-                
-                try:
-                    # Use curl to make the API call
-                    cmd = [
-                        'curl', '-X', 'POST',
-                        'https://api.anthropic.com/v1/messages',
-                        '-H', 'x-api-key: {}'.format(self.api_key),
-                        '-H', 'anthropic-version: 2023-06-01', 
-                        '-H', 'content-type: application/json',
-                        '-d', '@{}'.format(temp_file),
-                        '--silent'
-                    ]
-                    
-                    result = subprocess.check_output(cmd)
-                    response = json.loads(result.decode('utf-8'))
-                    
-                    if 'content' in response and len(response['content']) > 0:
-                        return response['content'][0]['text']
-                    else:
-                        self.logger.error("API Error: {}".format(response))
-                        return None
-                        
-                except subprocess.CalledProcessError as e:
-                    self.logger.error("Curl error: {}".format(e))
-                    return None
-                finally:
-                    # Clean up temp file
-                    try:
-                        os.unlink(temp_file)
-                    except (OSError, FileNotFoundError) as e:
-                        self.logger.debug("Failed to cleanup temp file {}: {}".format(temp_file, str(e)))
+                self.logger.error("anthropic library not installed. Run: pip install anthropic")
+                return None
                 
         except Exception as e:
             self.logger.error("Error calling Claude API: {}".format(str(e)))

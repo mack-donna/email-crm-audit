@@ -13,8 +13,9 @@ from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import Flow
 from googleapiclient.discovery import build
 
-# Allow insecure transport for local development
-os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+# Allow insecure transport for local development only
+if os.environ.get('FLASK_ENV', 'development') != 'production':
+    os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
 
 # OAuth2 scopes for Gmail
 SCOPES = [
@@ -162,11 +163,20 @@ class GmailOAuth:
         
         if token_path.exists():
             try:
-                # TODO: Call Google's revoke endpoint
+                import requests as _requests
+                token_data = json.loads(token_path.read_text())
+                _requests.post(
+                    'https://oauth2.googleapis.com/revoke',
+                    params={'token': token_data.get('token')},
+                    timeout=5
+                )
+            except Exception as e:
+                print(f"⚠️ Could not revoke token with Google: {e}")
+            try:
                 token_path.unlink()
                 return True
             except Exception as e:
-                print(f"❌ Error revoking credentials: {e}")
+                print(f"❌ Error deleting token file: {e}")
                 return False
         return True
         

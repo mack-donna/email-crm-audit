@@ -9,7 +9,6 @@ import json
 import logging
 import os
 import base64
-import pickle
 from datetime import datetime
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -47,11 +46,18 @@ class GmailDraftsManager:
             # Load existing token if available
             if os.path.exists(self.token_file):
                 try:
-                    with open(self.token_file, 'rb') as token:
-                        creds = pickle.load(token)
+                    with open(self.token_file, 'r') as token:
+                        token_data = json.load(token)
+                    creds = Credentials(
+                        token=token_data['token'],
+                        refresh_token=token_data.get('refresh_token'),
+                        token_uri=token_data.get('token_uri'),
+                        client_id=token_data.get('client_id'),
+                        client_secret=token_data.get('client_secret'),
+                        scopes=token_data.get('scopes')
+                    )
                 except Exception as e:
                     self.logger.warning("Failed to load existing token, will create new one: {}".format(e))
-                    # Remove corrupted token file
                     os.remove(self.token_file)
                     creds = None
             
@@ -69,8 +75,16 @@ class GmailDraftsManager:
                     creds = flow.run_local_server(port=0)
                 
                 # Save credentials for next run
-                with open(self.token_file, 'wb') as token:
-                    pickle.dump(creds, token)
+                token_data = {
+                    'token': creds.token,
+                    'refresh_token': creds.refresh_token,
+                    'token_uri': creds.token_uri,
+                    'client_id': creds.client_id,
+                    'client_secret': creds.client_secret,
+                    'scopes': list(creds.scopes) if creds.scopes else []
+                }
+                with open(self.token_file, 'w') as token:
+                    json.dump(token_data, token)
             
             self.service = build('gmail', 'v1', credentials=creds)
             self.logger.info("Gmail authentication successful")

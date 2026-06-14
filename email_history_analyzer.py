@@ -7,7 +7,6 @@ Connects to Gmail API to search and analyze interaction history with contacts.
 
 import os
 import json
-import pickle
 import logging
 from datetime import datetime, timedelta
 import base64
@@ -29,7 +28,7 @@ class EmailHistoryAnalyzer:
     # If modifying these scopes, delete the token.pickle file
     SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
     
-    def __init__(self, credentials_file='credentials.json', token_file='token.pickle', log_level="INFO"):
+    def __init__(self, credentials_file='credentials.json', token_file='token.json', log_level="INFO"):
         self.credentials_file = credentials_file
         self.token_file = token_file
         self.service = None
@@ -65,9 +64,18 @@ class EmailHistoryAnalyzer:
         
         # Token file stores the user's access and refresh tokens
         if os.path.exists(self.token_file):
-            with open(self.token_file, 'rb') as token:
-                creds = pickle.load(token)
-                self.logger.info("Loaded existing authentication token")
+            with open(self.token_file, 'r') as token:
+                token_data = json.load(token)
+            from google.oauth2.credentials import Credentials as _Creds
+            creds = _Creds(
+                token=token_data['token'],
+                refresh_token=token_data.get('refresh_token'),
+                token_uri=token_data.get('token_uri'),
+                client_id=token_data.get('client_id'),
+                client_secret=token_data.get('client_secret'),
+                scopes=token_data.get('scopes')
+            )
+            self.logger.info("Loaded existing authentication token")
         
         # If there are no (valid) credentials available, let the user log in
         if not creds or not creds.valid:
@@ -94,8 +102,16 @@ class EmailHistoryAnalyzer:
                 self.logger.info("Completed new authentication flow")
                 
             # Save the credentials for the next run
-            with open(self.token_file, 'wb') as token:
-                pickle.dump(creds, token)
+            token_data = {
+                'token': creds.token,
+                'refresh_token': creds.refresh_token,
+                'token_uri': creds.token_uri,
+                'client_id': creds.client_id,
+                'client_secret': creds.client_secret,
+                'scopes': list(creds.scopes) if creds.scopes else []
+            }
+            with open(self.token_file, 'w') as token:
+                json.dump(token_data, token)
                 self.logger.info("Saved authentication token for future use")
         
         self.service = build('gmail', 'v1', credentials=creds)
