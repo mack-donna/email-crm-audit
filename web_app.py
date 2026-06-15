@@ -763,8 +763,8 @@ def gmail_callback():
                 # Redirect back to review with a flag to auto-submit
                 return redirect(url_for('resume_draft_creation'))
             else:
-                # Redirect back to the main app with success message
-                return redirect(url_for('gmail_status', status='success'))
+                # Redirect to dashboard with success notification
+                return redirect(url_for('index', connected='gmail'))
         else:
             app.logger.error("Gmail OAuth callback: Authentication failed")
             return redirect(url_for('gmail_status', status='error'))
@@ -906,8 +906,8 @@ def linkedin_callback():
             'connected_at': datetime.now().isoformat()
         }
         
-        app.logger.info(f"LinkedIn OAuth successful: redirecting to status page for user {user_id}")
-        return redirect(url_for('linkedin_status', status='connected'))
+        app.logger.info(f"LinkedIn OAuth successful: redirecting to dashboard for user {user_id}")
+        return redirect(url_for('index', connected='linkedin'))
         
     except Exception as e:
         return f"Failed to complete LinkedIn authorization: {str(e)}", 500

@@ -2,6 +2,31 @@
 
 {% block content %}
 <div class="px-4">
+
+    <!-- Connection success toast -->
+    <div id="connection-toast" class="hidden fixed top-4 right-4 z-50 flex items-center gap-3 bg-green-600 text-white px-5 py-3 rounded-lg shadow-lg text-sm font-medium transition-opacity duration-500">
+        <svg class="w-5 h-5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+        </svg>
+        <span id="connection-toast-msg"></span>
+    </div>
+    <script>
+        (function() {
+            const params = new URLSearchParams(window.location.search);
+            const connected = params.get('connected');
+            if (connected) {
+                const messages = { gmail: 'Gmail connected successfully!', linkedin: 'LinkedIn connected successfully!' };
+                const msg = messages[connected] || (connected + ' connected successfully!');
+                const toast = document.getElementById('connection-toast');
+                document.getElementById('connection-toast-msg').textContent = msg;
+                toast.classList.remove('hidden');
+                setTimeout(() => { toast.style.opacity = '0'; setTimeout(() => toast.classList.add('hidden'), 500); }, 4000);
+                // Clean the query param from the URL without a reload
+                history.replaceState(null, '', window.location.pathname);
+            }
+        })();
+    </script>
+
     <!-- Hero Section -->
     <div class="text-center">
         <h1 class="text-4xl font-bold text-gray-900 sm:text-5xl md:text-6xl">
