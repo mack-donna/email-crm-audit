@@ -693,15 +693,17 @@ def gmail_connect():
             app.logger.error("Gmail OAuth: No authorization URL returned - configuration issue")
             return jsonify({'error': 'Gmail OAuth not configured. Please set up credentials.'}), 500
         
-        auth_url, state = result
-        
+        auth_url, state, code_verifier = result
+
         if not auth_url:
             app.logger.error("Gmail OAuth: No authorization URL returned - configuration issue")
             return jsonify({'error': 'Gmail OAuth not configured. Please set up credentials.'}), 500
-        
-        # Store state in session for verification
+
+        # Store state (and code_verifier if PKCE was used) in session
         session['oauth_state'] = state
-        app.logger.info(f"Gmail OAuth: Generated auth URL successfully")
+        if code_verifier:
+            session['oauth_code_verifier'] = code_verifier
+        app.logger.info(f"Gmail OAuth: Generated auth URL successfully (PKCE={'yes' if code_verifier else 'no'})")
         
         return redirect(auth_url)
         
@@ -739,12 +741,16 @@ def gmail_callback():
             authorization_response = 'https://' + authorization_response[7:]
         app.logger.info(f"Gmail OAuth callback: authorization_response scheme={authorization_response.split('://')[0]}")
 
+        # Retrieve code_verifier from session if PKCE was used
+        code_verifier = session.pop('oauth_code_verifier', None)
+
         # Handle the callback
         success = gmail_oauth.handle_callback(
             user_id,
             authorization_response,
             state,
-            redirect_uri
+            redirect_uri,
+            code_verifier=code_verifier
         )
         
         app.logger.info(f"Gmail OAuth callback: success={success}")

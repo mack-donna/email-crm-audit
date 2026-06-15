@@ -64,28 +64,30 @@ class GmailOAuth:
     def get_authorization_url(self, user_id, redirect_uri):
         """Generate OAuth2 authorization URL"""
         if not self.client_config:
-            return None, None
-            
+            return None, None, None
+
         flow = Flow.from_client_config(
             self.client_config,
             scopes=SCOPES,
             redirect_uri=redirect_uri
         )
-        
-        # Store state in session for verification
+
         authorization_url, state = flow.authorization_url(
             access_type='offline',
             include_granted_scopes='true',
             prompt='consent'
         )
-        
-        return authorization_url, state
-        
-    def handle_callback(self, user_id, authorization_response, state, redirect_uri):
+
+        # Capture code_verifier if PKCE was used (google-auth-oauthlib >= 1.0)
+        code_verifier = getattr(flow, 'code_verifier', None)
+
+        return authorization_url, state, code_verifier
+
+    def handle_callback(self, user_id, authorization_response, state, redirect_uri, code_verifier=None):
         """Handle OAuth2 callback and store credentials"""
         if not self.client_config:
             return False
-            
+
         try:
             flow = Flow.from_client_config(
                 self.client_config,
@@ -93,9 +95,12 @@ class GmailOAuth:
                 redirect_uri=redirect_uri,
                 state=state
             )
-            
-            # Exchange authorization code for tokens
-            flow.fetch_token(authorization_response=authorization_response)
+
+            # Pass code_verifier if PKCE was used during authorization
+            fetch_kwargs = {'authorization_response': authorization_response}
+            if code_verifier:
+                fetch_kwargs['code_verifier'] = code_verifier
+            flow.fetch_token(**fetch_kwargs)
             
             # Store credentials for this user
             creds = flow.credentials
