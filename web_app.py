@@ -730,11 +730,19 @@ def gmail_callback():
         # Get the redirect URI
         redirect_uri = url_for('gmail_callback', _external=True, _scheme='https' if os.environ.get('FLASK_ENV') == 'production' else 'http')
         app.logger.info(f"Gmail OAuth callback: redirect_uri={redirect_uri}")
-        
+
+        # Force https in authorization_response for production — ProxyFix should handle
+        # this but we also fix it here as a fallback since oauthlib rejects http:// URLs
+        # when OAUTHLIB_INSECURE_TRANSPORT is not set.
+        authorization_response = request.url
+        if os.environ.get('FLASK_ENV') == 'production' and authorization_response.startswith('http://'):
+            authorization_response = 'https://' + authorization_response[7:]
+        app.logger.info(f"Gmail OAuth callback: authorization_response scheme={authorization_response.split('://')[0]}")
+
         # Handle the callback
         success = gmail_oauth.handle_callback(
             user_id,
-            request.url,
+            authorization_response,
             state,
             redirect_uri
         )

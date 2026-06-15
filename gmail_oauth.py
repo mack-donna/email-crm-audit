@@ -117,10 +117,11 @@ class GmailOAuth:
             return True
             
         except Exception as e:
-            print(f"❌ OAuth callback error: {e}")
-            print(f"❌ OAuth callback error type: {type(e)}")
             import traceback
-            print(f"❌ OAuth callback traceback: {traceback.format_exc()}")
+            import logging as _logging
+            _log = _logging.getLogger(__name__)
+            _log.error(f"OAuth callback error: {type(e).__name__}: {e}")
+            _log.error(f"OAuth callback traceback: {traceback.format_exc()}")
             return False
             
     def get_user_credentials(self, user_id):
