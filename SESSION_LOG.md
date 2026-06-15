@@ -1083,3 +1083,35 @@ Full security audit, production deployment fixes, branch consolidation, and Rend
 - Medium priority refactors from CODE_AUDIT_WEEK1.md (0 of 3 started)
 - Old refactoring branch can be deleted from GitHub if not already done
 
+
+---
+
+## Session 7 — Gmail OAuth Fix & UX Improvement (2026-06-15)
+
+### Summary
+Diagnosed and fixed Gmail OAuth failure on Render, improved post-connection UX.
+
+### Completed
+
+**Gmail OAuth fixed (3-part root cause):**
+1. `request.url` arriving as `http://` in production → added explicit `https://` forced rewrite as fallback
+2. `print()` errors in `handle_callback` not reaching Render logs → switched to `logging`
+3. **Root cause:** `google-auth-oauthlib >= 1.0` auto-generates PKCE `code_verifier` during auth URL creation, but a fresh `Flow` object in the callback had no verifier → `InvalidGrantError: Missing code verifier`. Fixed by capturing `flow.code_verifier`, storing in session, passing to `fetch_token`.
+
+**UX improvement:**
+- Gmail and LinkedIn OAuth success now redirects straight to dashboard (`/?connected=gmail` or `/?connected=linkedin`) instead of intermediate status page
+- Dashboard shows auto-dismiss green toast for 4 seconds, then URL param cleaned up via `history.replaceState`
+
+### Current State
+- Gmail OAuth fully working on Render
+- LinkedIn OAuth working (was already working)
+- All security fixes from Session 6 in place
+- App deployed and functional at https://email-outreach-automation.onrender.com
+
+### Next Session Starting Points
+- Medium priority refactors from CODE_AUDIT_WEEK1.md (0 of 3 started):
+  1. Fix remaining bare exception handlers
+  2. Consolidate duplicate email extraction logic
+  3. External service error handling utilities
+- Or pivot to new features — user to decide
+
