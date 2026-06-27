@@ -73,7 +73,7 @@ class KlaviyoIntegration:
         }
         
         try:
-            response = requests.get(endpoint, headers=self.headers, params=params)
+            response = requests.get(endpoint, headers=self.headers, params=params, timeout=30)
             response.raise_for_status()
             return response.json().get('data', [])
         except requests.exceptions.RequestException as e:
@@ -90,7 +90,7 @@ class KlaviyoIntegration:
         }
         
         try:
-            response = requests.get(endpoint, headers=self.headers, params=params)
+            response = requests.get(endpoint, headers=self.headers, params=params, timeout=30)
             response.raise_for_status()
             return response.json().get('data', {})
         except requests.exceptions.RequestException as e:
