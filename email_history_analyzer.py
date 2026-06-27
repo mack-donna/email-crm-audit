@@ -25,7 +25,7 @@ class EmailHistoryAnalyzer:
     - Relationship warmth scoring
     """
     
-    # If modifying these scopes, delete the token.pickle file
+    # If modifying these scopes, delete the token.json file
     SCOPES = ['https://www.googleapis.com/auth/gmail.readonly']
     
     def __init__(self, credentials_file='credentials.json', token_file='token.json', log_level="INFO"):
@@ -409,7 +409,7 @@ def main():
     print("\n" + analyzer.generate_search_report())
     
     print("\n✅ Module 2 Test Complete!")
-    print("🔑 Authentication token saved as: token.pickle")
+    print("🔑 Authentication token saved as: token.json")
     print("📊 Next: Integration with contact processor")
 
 

@@ -5,7 +5,6 @@ Allows each user to authenticate their own Gmail account
 
 import os
 import json
-import pickle
 from pathlib import Path
 from flask import url_for, redirect, session
 from google.auth.transport.requests import Request

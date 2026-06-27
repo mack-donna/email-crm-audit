@@ -74,7 +74,7 @@ class WorkflowOrchestrator:
         """Load default configuration."""
         return {
             'gmail_credentials': 'credentials.json',
-            'gmail_token': 'token.pickle',
+            'gmail_token': 'token.json',
             'anthropic_api_key': os.environ.get('ANTHROPIC_API_KEY'),
             'batch_size': 10,
             'rate_limit_delay': 1.0,
@@ -560,7 +560,7 @@ def main():
     # Initialize orchestrator with test config
     config = {
         'gmail_credentials': 'credentials.json',
-        'gmail_token': 'token.pickle',
+        'gmail_token': 'token.json',
         'anthropic_api_key': os.environ.get('ANTHROPIC_API_KEY'),
         'batch_size': 2,
         'rate_limit_delay': 0.5,
