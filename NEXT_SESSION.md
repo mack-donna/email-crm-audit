@@ -1,411 +1,97 @@
 # Next Session - Start Here
 
-**Last Session:** 2025-10-31
-**Status:** Phase 1 - 87% Complete + Security Review System Added ✅
+**Last Updated:** 2026-06-27
+**Status:** Security hardening complete, PR #2 open and passing CI ✅
 
 ---
 
-## 🎉 Latest Completion: Claude Code Security Review (2025-10-31)
+## 🎉 Recent Completions (Sessions ~June 2026)
 
-### ✅ Just Completed This Session
-**Implemented comprehensive security review system**:
-- GitHub Actions workflow with AI-powered analysis
-- OWASP Top 10 vulnerability detection
-- Complete documentation suite (4 guides, 1,000+ lines)
-- Local testing infrastructure
-- Multi-layer security scanning (Claude Code + Bandit + Safety)
+### ✅ Security Fixes (all on branch `fix/linkedin-nav-api-leaks`, PR #2)
+- **LinkedIn nav bug** — Alpine.js showed "💼 LinkedIn Unavailable" for unauthenticated users. Fixed by adding `available` and `configured` fields to the no-session branch of `/api/linkedin/status`.
+- **API info leaks** — removed `user_id` (session ID) from `/api/gmail/status` and `/api/linkedin/status` responses.
+- **Favicon 404** — added `/favicon.ico` route that returns 204 if no file exists.
+- **Bandit B605** — replaced `os.system('clear')` with `subprocess.run(['clear'], check=False)` in `review_interface.py`.
+- **Bandit B113** — added `timeout=30` to all `requests.get/post` calls in `klaviyo_integration.py` and `linkedin_client.py`.
+- **Dead pickle import** — removed `import pickle` from `gmail_oauth.py` (was unused; token storage was already 100% JSON). Updated stale `token.pickle` string references in `outreach_automation.py`, `workflow_orchestrator.py`, and `email_history_analyzer.py`.
+- **Claude security review model** — updated `.github/scripts/claude_security_review.py` from retired `claude-3-opus-20240229` to `claude-sonnet-4-6`.
 
-**New Files Created:**
-```
-.github/
-├── workflows/security-review.yml
-├── security-review-config.yml
-├── SECURITY_REVIEW_QUICKSTART.md
-└── SETUP_GITHUB_SECRET.md
-
-scripts/test_security_review.sh
-SECURITY_REVIEW_SETUP.md
-SESSION_LOG.md (updated - Session 4 added)
-README.md (updated with security section)
-```
+### ✅ GitHub Actions Security CI
+- Bandit + Safety scans run on every PR
+- Claude API security analysis runs on PRs (changed files) and workflow_dispatch (all files)
+- All High severity findings resolved; remaining findings are confirmed Low-severity false positives
 
 ---
 
-## 🚨 FIRST PRIORITY: Activate Security Review
+## 🚨 FIRST PRIORITY: Merge PR #2
 
-### Step 1: Setup GitHub Secret (5 minutes) **REQUIRED**
-The security review workflow is ready but needs your API key:
-
-1. Go to: https://github.com/YOUR_USERNAME/email-crm-audit/settings/secrets/actions
-2. Click "New repository secret"
-3. Name: `ANTHROPIC_API_KEY`
-4. Value: Your Anthropic API key (starts with `sk-ant-`)
-5. Click "Add secret"
-
-**Alternative via GitHub CLI:**
-```bash
-gh secret set ANTHROPIC_API_KEY
-```
-
-### Step 2: Test Security Review (10 minutes)
-After setting up the secret:
-1. Create a test branch with a small code change
-2. Open a pull request
-3. Verify security review workflow runs
-4. Check PR comments for security findings
-5. Review workflow artifacts
-
-### Step 3: Push Security Review Changes
-```bash
-# Stage all security review files
-git add .github/ scripts/ SECURITY_REVIEW_SETUP.md SESSION_LOG.md README.md NEXT_SESSION.md
-
-# Commit the security review implementation
-git commit -m "$(cat <<'EOF'
-Add Claude Code security review workflow
-
-Implemented comprehensive security scanning system with:
-- GitHub Actions workflow for automated PR security reviews
-- AI-powered vulnerability detection with Claude Code
-- OWASP Top 10 and Python-specific security checks
-- Multi-layer scanning (Claude + Bandit + Safety)
-- Complete documentation and local testing tools
-
-New files:
-- .github/workflows/security-review.yml
-- .github/security-review-config.yml
-- .github/SECURITY_REVIEW_QUICKSTART.md
-- .github/SETUP_GITHUB_SECRET.md
-- SECURITY_REVIEW_SETUP.md
-- scripts/test_security_review.sh
-
-Updated:
-- README.md (security review section)
-- SESSION_LOG.md (Session 4)
-
-🤖 Generated with Claude Code
-https://claude.com/claude-code
-
-Co-Authored-By: Claude <noreply@anthropic.com>
-EOF
-)"
-
-# Push to GitHub
-git push origin main
-```
-
----
-
-## 🚨 SECOND PRIORITY: Push Phase 1 Work
-
-Your Phase 1 backend restructure is **safely committed locally** (commit `ed40e0b`) but needs to be pushed to GitHub.
-
-### Quick Push Instructions
+PR #2 (`fix/linkedin-nav-api-leaks`) is open with all checks passing. Merge it so Render auto-deploys the fixes.
 
 ```bash
-# Option 1: Simple force push (recommended)
-git push origin main --force-with-lease
-
-# Option 2: If Option 1 fails
-git pull origin main --no-rebase
-# Resolve conflicts if any
-git push origin main
-
-# Verify push succeeded
-git log --oneline -5
-```
-
-### What's in Commit ed40e0b
-
-- ✅ Complete backend/ directory structure (18 files)
-- ✅ 5 comprehensive planning documents
-- ✅ 20+ Pydantic validation models
-- ✅ Complete API documentation
-- ✅ 14 files reorganized
-- ✅ 13+ duplicate files deleted
-
-**Commit Message:** "Phase 1 (87% complete): Backend restructure and migration planning"
-
----
-
-## ✅ What Was Completed Last Session
-
-### Security Review System (Session 4 - 2025-10-31)
-1. **GitHub Actions Security Workflow**
-   - Automated PR security reviews
-   - AI-powered code analysis with Claude Code
-   - OWASP Top 10 vulnerability detection
-   - Python-specific security checks
-   - Hardcoded secrets detection
-
-2. **Comprehensive Documentation**
-   - `SECURITY_REVIEW_SETUP.md` - 450+ line setup guide
-   - `.github/SECURITY_REVIEW_QUICKSTART.md` - Quick reference
-   - `.github/SETUP_GITHUB_SECRET.md` - API key setup
-   - Common vulnerabilities with fix examples
-
-3. **Local Testing Tools**
-   - `scripts/test_security_review.sh` - Automated validation
-   - 10-step security check process
-   - Color-coded terminal output
-
-### Backend Restructure (Previous Sessions)
-1. **MIGRATION_ACTION_PLAN.md** - Complete 5-phase roadmap (87 tasks)
-2. **TODO.md** - Quick task checklist
-3. **ARCHITECTURE.md** - System design and diagrams
-4. **PHASE1_PROGRESS.md** - Detailed progress report
-5. **PROJECT_STATUS.md** - Comprehensive handoff summary
-
-### Backend Structure Built
-```
-backend/
-├── requirements.txt       (Python dependencies)
-├── .env.example          (Environment template)
-├── config.py             (Dev/Test/Prod configs)
-├── API.md                (Complete API docs)
-├── api/
-│   ├── routes/           (Ready for blueprints)
-│   └── middleware/       (Ready for auth/CORS)
-├── services/             (11 organized service files)
-├── models/
-│   └── schemas.py        (20+ Pydantic models)
-├── utils/                (2 utility files)
-└── tests/                (1 test file)
+gh pr merge 2 --squash --repo mack-donna/email-crm-audit
 ```
 
 ---
 
-## 🎯 Next Steps
+## 📋 Remaining Work (from CODE_AUDIT_WEEK1.md)
 
-### Priority 1: Security Review Setup (15 min) **URGENT**
-- [ ] Add ANTHROPIC_API_KEY to GitHub Secrets
-- [ ] Push security review changes to GitHub
-- [ ] Create test PR to verify workflow runs
-- [ ] Review and address any security findings
+### Medium Priority Refactors
+1. **Bare exception handlers** — 6 instances across `email_generator.py`, `email_history_analyzer.py`, `simple_http_client.py`, `web_app.py`, `workflow_orchestrator.py`. Replace with specific exception types.
+2. **Duplicate email extraction logic** — ~500 lines of near-identical Gmail retrieval code spread across 5+ files. Consolidate into a single shared utility.
+3. **External service error handling** — create shared utilities for consistent error handling across API integrations.
 
-### Priority 2: Complete Phase 1 (4-6 hours)
-**Remaining Task:** Refactor `web_app.py` into Flask blueprints
+### Pending Security Plan Items (from plan `lets-plan-to-make-glimmering-bonbon.md`)
+Items 4, 5, 6 from the plan are NOT YET DONE:
+- Item 4: Replace pickle with JSON in `gmail_drafts_manager.py` (still uses `pickle.load/dump`)
+- Item 5: `email_history_analyzer.py` already done ✅
+- Item 6: Remove curl/subprocess fallback in `email_generator.py` (dead code, `anthropic` is in requirements.txt)
 
-**Estimated Time:** 4-6 hours
-
-#### Approach (Incremental - Safer)
-
-**Step 1: Create Application Factory (30 min)**
-```bash
-# Create backend/app.py with Flask factory pattern
-```
-
-**Step 2: Create Auth Blueprint First (1 hour)**
-```bash
-# Create backend/api/routes/auth.py
-# Move OAuth routes from web_app.py
-# Test OAuth flow works
-```
-
-**Step 3: Create Remaining Blueprints (2-3 hours)**
-- `backend/api/routes/audits.py` (audit CRUD)
-- `backend/api/routes/campaigns.py` (campaign management)
-- `backend/api/routes/contacts.py` (contact operations)
-
-**Step 4: Create Middleware (1 hour)**
-- `backend/api/middleware/cors.py` (CORS config)
-- `backend/api/middleware/auth.py` (token verification)
-
-**Step 5: Update Imports (1 hour)**
-- Update service files to use new paths
-- Test everything works
-
-**Step 6: Remove Templates (30 min)**
-- Delete `templates/` directory
-- Convert `render_template()` to `jsonify()`
-
-#### Success Criteria
-
-- [ ] Flask starts with `python backend/app.py`
-- [ ] All routes respond with JSON (not HTML)
-- [ ] OAuth flow works
-- [ ] No import errors
-- [ ] Can move to Phase 2
-
-### Priority 3: Gmail OAuth Flow Fix **BLOCKED**
-**Issue**: OAuth callback not returning to application after Google auth
-**Impact**: Cannot test Gmail integration
-
-**Required Actions**:
-1. Debug OAuth redirect URI configuration
-2. Test local server callback handling
-3. Verify token storage and refresh mechanism
-4. Document working OAuth flow
-
-**Files to Review**:
-- `backend/services/email_history_analyzer.py:712`
-- Google Cloud Console redirect URI settings
+### Node.js Deprecation
+- `node@20` — deprecated 2026-10-28; migrate to `node` (LTS) or `node@22`
+- `icu4c@77` — deprecated 2026-10-30
 
 ---
 
-## 📚 Reference Documents
+## 🔧 Key Files
 
-### Security Review
-- **SECURITY_REVIEW_SETUP.md** - Complete setup and usage guide
-- **.github/SECURITY_REVIEW_QUICKSTART.md** - Quick reference
-- **.github/SETUP_GITHUB_SECRET.md** - API key setup instructions
-- **SESSION_LOG.md** - Session 4 details
-
-### Backend Migration
-- **MIGRATION_ACTION_PLAN.md** - Phase 1 Task 8 for Flask refactoring
-- **backend/API.md** - API endpoint reference
-- **backend/config.py** - Configuration examples
-- **PROJECT_STATUS.md** - Complete handoff summary
-- **ARCHITECTURE.md** - Target system architecture
+| File | Purpose |
+|------|---------|
+| `web_app.py` | Flask app — main entry point for Render deployment |
+| `gmail_oauth.py` | Multi-user Gmail OAuth2 flow |
+| `gmail_drafts_manager.py` | Gmail draft creation (still uses pickle — needs fix) |
+| `email_generator.py` | Claude API email generation |
+| `workflow_orchestrator.py` | End-to-end campaign orchestration |
+| `.github/workflows/security-review.yml` | CI: Bandit + Claude security scan |
+| `.github/scripts/claude_security_review.py` | Claude analysis script (model: claude-sonnet-4-6) |
 
 ---
 
-## 🔧 If You Get Stuck
+## 📍 Where Things Live
 
-### Security Review Issues
-
-**Problem:** "ANTHROPIC_API_KEY not found"
-**Solution:** Verify secret is added to GitHub repository settings
-
-**Problem:** Workflow not running
-**Solution:** Check `.github/workflows/security-review.yml` exists and is pushed
-
-**Problem:** Too many false positives
-**Solution:** Add suppressions to `.github/security-review-config.yml`
-
-### Import Errors After Moving Files
-
-**Problem:** `ModuleNotFoundError: No module named 'email_generator'`
-
-**Solution:**
-```python
-# Old import
-from email_generator import EmailGenerator
-
-# New import
-from backend.services.email_generator import EmailGenerator
-```
-
-### Web App Won't Start
-
-**Problem:** Flask app doesn't start
-
-**Solution:**
-```bash
-# Check if web_app.py still exists (it should)
-ls -l web_app.py
-
-# Try running old app first to verify it still works
-python web_app.py
-
-# Then work on backend/app.py separately
-```
+- **Repo:** https://github.com/mack-donna/email-crm-audit
+- **Live app:** https://email-outreach-automation.onrender.com
+- **Open PR:** https://github.com/mack-donna/email-crm-audit/pull/2
+- **Working branch:** `fix/linkedin-nav-api-leaks`
+- **Anthropic API key:** stored in Render environment variables (not local)
 
 ---
 
 ## ⚡ Quick Commands
 
 ```bash
-# Security Review
-./scripts/test_security_review.sh
-gh secret set ANTHROPIC_API_KEY
+# Check PR status
+gh pr status --repo mack-donna/email-crm-audit
 
-# Git Operations
-git log --oneline -5
-git show ed40e0b --stat
-git push origin main
+# Merge PR #2
+gh pr merge 2 --squash --repo mack-donna/email-crm-audit
 
-# Backend Development
-ls -la backend/
-python web_app.py
-npm run dev
+# Clone/update local copy
+cd /tmp/email-crm-audit && git pull
 
-# Security Scanning (local)
-source venv/bin/activate
-pip install bandit safety
-bandit -r . -f screen
-safety check
+# Run Bandit locally
+cd /tmp/email-crm-audit && bandit -r . -ll -f screen
 ```
 
 ---
 
-## 📊 Progress Tracker
-
-**Security Review:** ✅ 100% Complete
-- [x] GitHub Actions workflow
-- [x] Configuration file
-- [x] Documentation (4 guides)
-- [x] Local testing script
-- [x] README updates
-- [x] SESSION_LOG update
-- [ ] **GitHub Secret setup** ← YOU ARE HERE
-- [ ] **Test PR creation**
-
-**Phase 1:** 87% Complete (7/8 tasks)
-- [x] Backend directory structure
-- [x] Requirements.txt
-- [x] Config.py
-- [x] Service files organized
-- [x] Duplicate files deleted
-- [x] Pydantic schemas
-- [x] API documentation
-- [ ] **web_app.py refactoring** ← NEXT TASK
-
-**Overall Migration:** ~15% Complete (includes security infrastructure)
-
----
-
-## 💡 Tips for Success
-
-### Security Review
-1. **Set up the API key first** - Workflow won't run without it
-2. **Review findings carefully** - Not all are critical
-3. **Document suppressions** - For intentional code patterns
-4. **Test with small PR first** - Verify workflow before big changes
-
-### Backend Migration
-1. **Keep web_app.py working** - Don't delete until backend/app.py works
-2. **Test each blueprint** - Test after creating each one
-3. **Commit frequently** - Commit after each working blueprint
-4. **Use the documentation** - Reference backend/API.md
-5. **Don't rush** - Incremental approach is safer
-
----
-
-## ✅ Session Checklist
-
-**Before You Start:**
-- [ ] **Setup ANTHROPIC_API_KEY in GitHub Secrets (URGENT)**
-- [ ] Push security review changes to GitHub
-- [ ] Test security review with a PR
-- [ ] Push Phase 1 backend changes (commit ed40e0b)
-- [ ] Read MIGRATION_ACTION_PLAN.md Phase 1 Task 8
-- [ ] Review backend/API.md for endpoint structure
-
-**After Security Review Setup:**
-- [ ] GitHub Secret added
-- [ ] Security review workflow runs on PR
-- [ ] Security findings reviewed
-- [ ] Critical issues addressed or documented
-
-**After Completing Phase 1 Refactoring:**
-- [ ] Flask starts with `python backend/app.py`
-- [ ] Test OAuth flow
-- [ ] Test API endpoints
-- [ ] Commit changes
-- [ ] Push to GitHub
-- [ ] Mark Phase 1 as 100% complete
-- [ ] Move to Phase 2 (or take a break!)
-
----
-
-**Good luck! The security review system is ready to go - just needs the API key. Then you can continue with Phase 1 completion.** 🚀
-
----
-
-**Note:** All your work is safe in git:
-- Security review: In working directory, ready to commit
-- Backend restructure: In commit `ed40e0b`, ready to push
-
-*Last updated: 2025-10-31*
-*Session 4: Claude Code Security Review - Complete ✅*
+*Last updated: 2026-06-27 — Session: Security hardening + pickle cleanup complete*

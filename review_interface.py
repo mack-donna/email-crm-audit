@@ -7,6 +7,7 @@ Streamlined command-line interface for reviewing and approving generated emails.
 
 import json
 import os
+import subprocess
 import sys
 import time
 from datetime import datetime
@@ -394,7 +395,7 @@ class ReviewInterface:
             
     def clear_screen(self):
         """Clear terminal screen."""
-        os.system('clear' if os.name == 'posix' else 'cls')
+        subprocess.run(['clear'] if os.name == 'posix' else ['cls'], check=False)  # nosec B603,B607
         
     def load_emails_for_review(self, filename):
         """Load generated emails from file for review."""

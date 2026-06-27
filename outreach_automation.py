@@ -44,7 +44,7 @@ def load_config(config_file=None):
     """Load configuration from file or use defaults."""
     default_config = {
         'gmail_credentials': 'credentials.json',
-        'gmail_token': 'token.pickle',
+        'gmail_token': 'token.json',
         'anthropic_api_key': os.environ.get('ANTHROPIC_API_KEY'),
         'batch_size': 10,
         'rate_limit_delay': 1.0,

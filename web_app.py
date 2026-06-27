@@ -4,10 +4,11 @@ Flask Web Application for Email Outreach Automation
 Phase 1: Simple functional interface
 """
 
-from flask import Flask, render_template, request, jsonify, session, redirect, url_for, send_file
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for, send_file, send_from_directory
 from werkzeug.utils import secure_filename
 from werkzeug.middleware.proxy_fix import ProxyFix
 import os
+import re
 import json
 import uuid
 from datetime import datetime
@@ -61,6 +62,25 @@ Path(CAMPAIGNS_FOLDER).mkdir(exist_ok=True)
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+def safe_session_path(raw_path, *allowed_bases):
+    """Resolve a session-stored path and verify it stays within an allowed directory."""
+    if not raw_path:
+        return None
+    resolved = Path(raw_path).resolve()
+    for base in allowed_bases:
+        if str(resolved).startswith(str(Path(base).resolve())):
+            return resolved
+    app.logger.warning("Path boundary violation: %s", raw_path)
+    return None
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(
+        os.path.join(app.root_path, 'static'),
+        'favicon.ico',
+        mimetype='image/vnd.microsoft.icon'
+    ) if os.path.exists(os.path.join(app.root_path, 'static', 'favicon.ico')) else ('', 204)
 
 @app.route('/')
 def index():
@@ -299,7 +319,10 @@ def validate_csv_file(filepath):
 def generate_emails():
     """Generate emails for uploaded contacts"""
     # Use cleaned CSV if available, otherwise fall back to original
-    csv_file = session.get('cleaned_csv_file', session.get('csv_file'))
+    csv_file = safe_session_path(
+        session.get('cleaned_csv_file', session.get('csv_file')),
+        UPLOAD_FOLDER
+    )
     if not csv_file:
         return jsonify({'error': 'No CSV file uploaded'}), 400
     
@@ -436,9 +459,8 @@ def generate_emails():
             return jsonify({'error': error_msg}), 500
             
     except Exception as e:
-        print(f"Error generating emails: {e}")
-        traceback.print_exc()
-        return jsonify({'error': str(e)}), 500
+        app.logger.exception("Error generating emails")
+        return jsonify({'error': 'Email generation failed. Please try again.'}), 500
 
 @app.route('/review')
 def review_emails():
@@ -447,13 +469,13 @@ def review_emails():
         return redirect(url_for('upload_csv'))
     
     # Load campaign results
-    campaign_file = session.get('campaign_results')
-    if not campaign_file or not os.path.exists(campaign_file):
+    campaign_file = safe_session_path(session.get('campaign_results'), CAMPAIGNS_FOLDER)
+    if not campaign_file or not campaign_file.exists():
         return redirect(url_for('upload_csv'))
-    
+
     with open(campaign_file, 'r') as f:
         campaign_data = json.load(f)
-    
+
     return render_template('review.html', campaign=campaign_data)
 
 @app.route('/approve', methods=['POST'])
@@ -468,7 +490,9 @@ def approve_emails():
             return jsonify({'error': 'No emails selected'}), 400
         
         # Load campaign data
-        campaign_file = session.get('campaign_results')
+        campaign_file = safe_session_path(session.get('campaign_results'), CAMPAIGNS_FOLDER)
+        if not campaign_file or not campaign_file.exists():
+            return jsonify({'error': 'Campaign not found'}), 404
         with open(campaign_file, 'r') as f:
             campaign_data = json.load(f)
         
@@ -496,7 +520,7 @@ def approve_emails():
         campaign_data['approval_timestamp'] = datetime.now().isoformat()
         
         # Save updated campaign
-        with open(campaign_file, 'w') as f:
+        with open(str(campaign_file), 'w') as f:
             json.dump(campaign_data, f, indent=2)
         
         # Create Gmail drafts if requested
@@ -566,16 +590,16 @@ def approve_emails():
         return jsonify(response_data)
         
     except Exception as e:
-        print(f"Error approving emails: {e}")
-        return jsonify({'error': str(e)}), 500
+        app.logger.exception("Error approving emails")
+        return jsonify({'error': 'Failed to approve emails. Please try again.'}), 500
 
 @app.route('/complete')
 def campaign_complete():
     """Campaign completion page"""
-    campaign_file = session.get('campaign_results')
-    if not campaign_file or not os.path.exists(campaign_file):
+    campaign_file = safe_session_path(session.get('campaign_results'), CAMPAIGNS_FOLDER)
+    if not campaign_file or not campaign_file.exists():
         return redirect(url_for('index'))
-    
+
     with open(campaign_file, 'r') as f:
         campaign_data = json.load(f)
     
@@ -646,7 +670,8 @@ def list_campaigns():
 @app.route('/campaign/<campaign_id>')
 def view_campaign(campaign_id):
     """View campaign details"""
-    # Look for the campaign file
+    if not re.fullmatch(r'[a-zA-Z0-9_\-]{1,128}', campaign_id):
+        return "Invalid campaign ID", 400
     json_file = None
     for file in Path(CAMPAIGNS_FOLDER).glob('*.json'):
         if file.stem == campaign_id:
@@ -708,8 +733,8 @@ def gmail_connect():
         return redirect(auth_url)
         
     except Exception as e:
-        app.logger.error(f"Gmail OAuth connect error: {str(e)}")
-        return jsonify({'error': f'Gmail OAuth initialization failed: {str(e)}'}), 500
+        app.logger.exception("Gmail OAuth connect error")
+        return jsonify({'error': 'Gmail OAuth initialization failed. Please try again.'}), 500
 
 @app.route('/gmail/callback')
 def gmail_callback():
@@ -770,8 +795,8 @@ def gmail_callback():
             return redirect(url_for('gmail_status', status='error'))
             
     except Exception as e:
-        app.logger.error(f"Gmail OAuth callback error: {str(e)}")
-        return jsonify({'error': f'Gmail OAuth callback failed: {str(e)}'}), 500
+        app.logger.exception("Gmail OAuth callback error")
+        return jsonify({'error': 'Gmail OAuth callback failed. Please try again.'}), 500
 
 @app.route('/gmail/status')
 def gmail_status():
@@ -827,7 +852,6 @@ def api_gmail_status():
     
     return jsonify({
         'connected': connected,
-        'user_id': user_id
     })
 
 # LinkedIn OAuth Routes
@@ -861,7 +885,8 @@ def linkedin_connect():
         auth_url = linkedin_client.get_authorization_url(redirect_uri, state=user_id)
         return redirect(auth_url)
     except Exception as e:
-        return jsonify({'error': f'Failed to create LinkedIn authorization URL: {str(e)}'}), 500
+        app.logger.exception("LinkedIn connect error")
+        return jsonify({'error': 'Failed to create LinkedIn authorization URL. Please try again.'}), 500
 
 @app.route('/linkedin/callback')
 def linkedin_callback():
@@ -910,7 +935,8 @@ def linkedin_callback():
         return redirect(url_for('index', connected='linkedin'))
         
     except Exception as e:
-        return f"Failed to complete LinkedIn authorization: {str(e)}", 500
+        app.logger.exception("LinkedIn callback error")
+        return "Failed to complete LinkedIn authorization. Please try again.", 500
 
 @app.route('/linkedin/status')
 def linkedin_status():
@@ -950,29 +976,21 @@ def api_linkedin_status():
     user_id = session.get('user_id')
     
     if not user_id:
-        return jsonify({'connected': False, 'message': 'No user session'})
-    
+        return jsonify({
+            'connected': False,
+            'available': LINKEDIN_AVAILABLE,
+            'configured': linkedin_client.is_configured() if linkedin_client else False,
+        })
+
     token_key = f'linkedin_token_{user_id}'
     token_info = session.get(token_key)
     connected = bool(token_info and token_info.get('access_token'))
     
-    # Debug info for troubleshooting
-    debug_info = {
+    return jsonify({
         'connected': connected,
         'available': LINKEDIN_AVAILABLE,
         'configured': linkedin_client.is_configured() if linkedin_client else False,
-        'user_id': user_id,
-        'debug': {
-            'import_success': LINKEDIN_AVAILABLE,
-            'client_exists': linkedin_client is not None,
-            'env_vars_set': {
-                'LINKEDIN_CLIENT_ID': bool(os.getenv('LINKEDIN_CLIENT_ID')),
-                'LINKEDIN_CLIENT_SECRET': bool(os.getenv('LINKEDIN_CLIENT_SECRET'))
-            }
-        }
-    }
-    
-    return jsonify(debug_info)
+    })
 
 if __name__ == '__main__':
     print("🚀 Email Outreach Web App")

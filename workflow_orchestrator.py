@@ -7,6 +7,7 @@ Coordinates all modules for end-to-end email outreach automation.
 
 import json
 import os
+import re
 import logging
 import time
 from datetime import datetime
@@ -74,7 +75,7 @@ class WorkflowOrchestrator:
         """Load default configuration."""
         return {
             'gmail_credentials': 'credentials.json',
-            'gmail_token': 'token.pickle',
+            'gmail_token': 'token.json',
             'anthropic_api_key': os.environ.get('ANTHROPIC_API_KEY'),
             'batch_size': 10,
             'rate_limit_delay': 1.0,
@@ -404,7 +405,7 @@ class WorkflowOrchestrator:
         
         # For automated testing, approve all
         # In production, this would launch the review interface
-        if os.environ.get('AUTO_APPROVE_EMAILS'):
+        if os.environ.get('AUTO_APPROVE_EMAILS', '').strip().lower() == 'true':
             print("🤖 Auto-approving all emails (test mode)")
             for email in generated_emails:
                 email['review_status'] = 'approved'
@@ -418,16 +419,22 @@ class WorkflowOrchestrator:
             self.workflow_stats['emails_approved'] = len(approved)
             return approved
             
+    @staticmethod
+    def _sanitize_campaign_name(name):
+        sanitized = re.sub(r'[^\w\-]', '_', name)[:128]
+        return sanitized or 'campaign'
+
     def _export_campaign_results(self, campaign_name, approved_emails):
         """Export campaign results."""
-        # Create output directory
         output_dir = self.config['output_dir']
-        if not os.path.exists(output_dir):
-            os.makedirs(output_dir)
-            
-        # Export file
+        os.makedirs(output_dir, exist_ok=True)
+
+        safe_name = self._sanitize_campaign_name(campaign_name)
         timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
-        filename = os.path.join(output_dir, "{}_{}.json".format(campaign_name, timestamp))
+        filename = os.path.join(output_dir, "{}_{}.json".format(safe_name, timestamp))
+        resolved = os.path.realpath(filename)
+        if not resolved.startswith(os.path.realpath(output_dir)):
+            raise ValueError("Path traversal detected in campaign name")
         
         # Convert datetime objects to strings for JSON serialization
         workflow_stats_serializable = dict(self.workflow_stats)
@@ -560,7 +567,7 @@ def main():
     # Initialize orchestrator with test config
     config = {
         'gmail_credentials': 'credentials.json',
-        'gmail_token': 'token.pickle',
+        'gmail_token': 'token.json',
         'anthropic_api_key': os.environ.get('ANTHROPIC_API_KEY'),
         'batch_size': 2,
         'rate_limit_delay': 0.5,
