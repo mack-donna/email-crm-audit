@@ -4,7 +4,7 @@ Flask Web Application for Email Outreach Automation
 Phase 1: Simple functional interface
 """
 
-from flask import Flask, render_template, request, jsonify, session, redirect, url_for, send_file
+from flask import Flask, render_template, request, jsonify, session, redirect, url_for, send_file, send_from_directory
 from werkzeug.utils import secure_filename
 from werkzeug.middleware.proxy_fix import ProxyFix
 import os
@@ -61,6 +61,14 @@ Path(CAMPAIGNS_FOLDER).mkdir(exist_ok=True)
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
+@app.route('/favicon.ico')
+def favicon():
+    return send_from_directory(
+        os.path.join(app.root_path, 'static'),
+        'favicon.ico',
+        mimetype='image/vnd.microsoft.icon'
+    ) if os.path.exists(os.path.join(app.root_path, 'static', 'favicon.ico')) else ('', 204)
 
 @app.route('/')
 def index():
@@ -827,7 +835,6 @@ def api_gmail_status():
     
     return jsonify({
         'connected': connected,
-        'user_id': user_id
     })
 
 # LinkedIn OAuth Routes
@@ -950,29 +957,21 @@ def api_linkedin_status():
     user_id = session.get('user_id')
     
     if not user_id:
-        return jsonify({'connected': False, 'message': 'No user session'})
-    
+        return jsonify({
+            'connected': False,
+            'available': LINKEDIN_AVAILABLE,
+            'configured': linkedin_client.is_configured() if linkedin_client else False,
+        })
+
     token_key = f'linkedin_token_{user_id}'
     token_info = session.get(token_key)
     connected = bool(token_info and token_info.get('access_token'))
     
-    # Debug info for troubleshooting
-    debug_info = {
+    return jsonify({
         'connected': connected,
         'available': LINKEDIN_AVAILABLE,
         'configured': linkedin_client.is_configured() if linkedin_client else False,
-        'user_id': user_id,
-        'debug': {
-            'import_success': LINKEDIN_AVAILABLE,
-            'client_exists': linkedin_client is not None,
-            'env_vars_set': {
-                'LINKEDIN_CLIENT_ID': bool(os.getenv('LINKEDIN_CLIENT_ID')),
-                'LINKEDIN_CLIENT_SECRET': bool(os.getenv('LINKEDIN_CLIENT_SECRET'))
-            }
-        }
-    }
-    
-    return jsonify(debug_info)
+    })
 
 if __name__ == '__main__':
     print("🚀 Email Outreach Web App")
