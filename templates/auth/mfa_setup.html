@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+{% block title %}Set Up Two-Factor Auth — Outreach AI{% endblock %}
+
+{% block content %}
+<div class="min-h-[80vh] flex items-center justify-center py-12 px-4">
+  <div class="max-w-md w-full space-y-8">
+
+    <div class="text-center">
+      <div class="text-4xl mb-3">🔐</div>
+      <h2 class="text-2xl font-bold text-gray-900">Set up two-factor authentication</h2>
+      <p class="mt-2 text-sm text-gray-600">
+        Scan the QR code with your authenticator app (Google Authenticator, Authy, 1Password, etc.),
+        then enter the 6-digit code to confirm.
+      </p>
+    </div>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+      {% for category, message in messages %}
+        <div class="rounded-md p-4 bg-red-50 border border-red-200 text-red-800 text-sm">
+          {{ message }}
+        </div>
+      {% endfor %}
+    {% endwith %}
+
+    <!-- QR code -->
+    <div class="flex justify-center">
+      <img src="data:image/png;base64,{{ qr_b64 }}"
+           alt="Authenticator QR code" class="w-48 h-48 rounded-lg border border-gray-200 p-1"/>
+    </div>
+
+    <!-- Manual entry fallback -->
+    <details class="text-sm">
+      <summary class="cursor-pointer text-indigo-600 hover:text-indigo-500 text-center">
+        Can't scan? Enter the key manually
+      </summary>
+      <div class="mt-3 bg-gray-50 rounded-lg p-3 text-center">
+        <p class="text-xs text-gray-500 mb-1">Secret key</p>
+        <code class="text-sm font-mono tracking-widest text-gray-900 select-all">{{ secret }}</code>
+      </div>
+    </details>
+
+    <form method="POST" class="space-y-5">
+      <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+      <input type="hidden" name="secret" value="{{ secret }}"/>
+      <div>
+        <label for="code" class="block text-sm font-medium text-gray-700">
+          Confirm with a 6-digit code from your app
+        </label>
+        <input id="code" name="code" type="text" inputmode="numeric" pattern="[0-9 ]*"
+               autocomplete="one-time-code" maxlength="7" required autofocus
+               placeholder="000 000"
+               class="mt-1 block w-full text-center text-2xl tracking-widest rounded-lg border
+                      border-gray-300 px-3 py-3 shadow-sm
+                      focus:border-indigo-500 focus:ring-1 focus:ring-indigo-500"/>
+      </div>
+      <button type="submit"
+              class="w-full flex justify-center py-2.5 px-4 rounded-lg bg-indigo-600 text-white
+                     text-sm font-semibold hover:bg-indigo-700 transition">
+        Activate 2FA
+      </button>
+    </form>
+
+    <p class="text-center text-sm text-gray-500">
+      <a href="{{ url_for('auth.account') }}" class="text-indigo-600 hover:text-indigo-500">
+        ← Cancel
+      </a>
+    </p>
+
+  </div>
+</div>
+{% endblock %}
