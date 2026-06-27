@@ -8,6 +8,7 @@ Integrates with LinkedIn API to gather professional context for email personaliz
 import os
 import json
 import time
+import secrets
 import logging
 import requests
 from datetime import datetime, timedelta
@@ -83,7 +84,7 @@ class LinkedInClient:
             'response_type': 'code',
             'client_id': self.client_id,
             'redirect_uri': redirect_uri,
-            'state': state or 'linkedin_oauth_state',
+            'state': state or secrets.token_urlsafe(32),
             'scope': ' '.join(scopes)
         }
         

@@ -8,6 +8,7 @@ from flask import Flask, render_template, request, jsonify, session, redirect, u
 from werkzeug.utils import secure_filename
 from werkzeug.middleware.proxy_fix import ProxyFix
 import os
+import re
 import json
 import uuid
 from datetime import datetime
@@ -654,7 +655,8 @@ def list_campaigns():
 @app.route('/campaign/<campaign_id>')
 def view_campaign(campaign_id):
     """View campaign details"""
-    # Look for the campaign file
+    if not re.fullmatch(r'[a-zA-Z0-9_\-]{1,128}', campaign_id):
+        return "Invalid campaign ID", 400
     json_file = None
     for file in Path(CAMPAIGNS_FOLDER).glob('*.json'):
         if file.stem == campaign_id:

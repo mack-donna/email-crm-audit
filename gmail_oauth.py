@@ -4,7 +4,9 @@ Allows each user to authenticate their own Gmail account
 """
 
 import os
+import re
 import json
+import stat
 from pathlib import Path
 from flask import url_for, redirect, session
 from google.auth.transport.requests import Request
@@ -56,9 +58,14 @@ class GmailOAuth:
             
     def get_user_token_path(self, user_id):
         """Get token storage path for a specific user"""
-        tokens_dir = Path('user_tokens')
+        if not re.fullmatch(r'[a-zA-Z0-9_-]{1,64}', str(user_id)):
+            raise ValueError(f"Invalid user_id format: {user_id!r}")
+        tokens_dir = Path('user_tokens').resolve()
         tokens_dir.mkdir(exist_ok=True)
-        return tokens_dir / f"token_{user_id}.json"
+        token_path = (tokens_dir / f"token_{user_id}.json").resolve()
+        if not str(token_path).startswith(str(tokens_dir)):
+            raise ValueError("Path traversal detected in user_id")
+        return token_path
         
     def get_authorization_url(self, user_id, redirect_uri):
         """Generate OAuth2 authorization URL"""
@@ -115,9 +122,10 @@ class GmailOAuth:
                 'scopes': creds.scopes
             }
             
-            with open(token_path, 'w') as token_file:
+            fd = os.open(str(token_path), os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+            with os.fdopen(fd, 'w') as token_file:
                 json.dump(token_data, token_file)
-                
+
             return True
             
         except Exception as e:
@@ -153,9 +161,10 @@ class GmailOAuth:
                 creds.refresh(Request())
                 # Save refreshed token
                 token_data['token'] = creds.token
-                with open(token_path, 'w') as token_file:
+                fd = os.open(str(token_path), os.O_WRONLY | os.O_CREAT | os.O_TRUNC, 0o600)
+                with os.fdopen(fd, 'w') as token_file:
                     json.dump(token_data, token_file)
-                    
+
             return creds
             
         except Exception as e:
