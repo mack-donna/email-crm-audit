@@ -171,4 +171,5 @@ outreach_campaigns/
 learning_data/
 processed_contacts_*.json
 test_campaigns/
-uploads/
+uploads/.venv/
+dev.db

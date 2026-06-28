@@ -34,48 +34,78 @@
                     </div>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <span class="text-sm text-gray-500" x-data="{ status: {}, gmail: {} }" x-init="
-                        fetch('/api/status')
-                            .then(r => r.json())
-                            .then(data => status = data);
-                        fetch('/api/gmail/status')
-                            .then(r => r.json())
-                            .then(data => gmail = data)
-                    ">
-                        <template x-if="status.anthropic_api_key">
-                            <span class="text-green-600">✓ AI Ready</span>
-                        </template>
-                        <template x-if="!status.anthropic_api_key">
-                            <span class="text-yellow-600">⚠ No API Key</span>
-                        </template>
-                    </span>
-                    <span class="text-sm text-gray-500" x-data="{ gmail: {}, linkedin: {} }" x-init="
-                        fetch('/api/gmail/status')
-                            .then(r => r.json())
-                            .then(data => gmail = data);
-                        fetch('/api/linkedin/status')
-                            .then(r => r.json())
-                            .then(data => linkedin = data)
-                    ">
+                    {% if current_user.is_authenticated %}
+                    <!-- Integration status (only shown when logged in) -->
+                    <span class="text-sm text-gray-500 hidden sm:flex items-center gap-3"
+                          x-data="{ gmail: {}, linkedin: {} }" x-init="
+                        fetch('/api/gmail/status').then(r=>r.json()).then(d=>gmail=d);
+                        fetch('/api/linkedin/status').then(r=>r.json()).then(d=>linkedin=d)">
                         <template x-if="gmail.connected">
-                            <a href="/gmail/status" class="text-green-600 hover:text-green-700">📧 Gmail Connected</a>
+                            <a href="/gmail/status" class="text-green-600 hover:text-green-700">📧 Gmail</a>
                         </template>
                         <template x-if="!gmail.connected">
-                            <a href="/gmail/connect" class="text-gray-500 hover:text-indigo-600">📧 Connect Gmail</a>
+                            <a href="/gmail/connect" class="text-gray-400 hover:text-indigo-600">📧 Connect Gmail</a>
                         </template>
-                        
-                        <span class="mx-2 text-gray-300">|</span>
-                        
                         <template x-if="linkedin.connected">
-                            <a href="/linkedin/status" class="text-blue-600 hover:text-blue-700">💼 LinkedIn Connected</a>
+                            <a href="/linkedin/status" class="text-blue-600 hover:text-blue-700">💼 LinkedIn</a>
                         </template>
                         <template x-if="linkedin.available && !linkedin.connected">
-                            <a href="/linkedin/connect" class="text-gray-500 hover:text-blue-600">💼 Connect LinkedIn</a>
-                        </template>
-                        <template x-if="!linkedin.available">
-                            <span class="text-gray-400">💼 LinkedIn Unavailable</span>
+                            <a href="/linkedin/connect" class="text-gray-400 hover:text-blue-600">💼 Connect LinkedIn</a>
                         </template>
                     </span>
+
+                    <!-- Trial badge -->
+                    {% if current_user.is_on_trial %}
+                    <span class="hidden sm:inline-flex items-center px-2 py-0.5 rounded text-xs
+                                 font-medium bg-amber-100 text-amber-800">
+                      Trial · {{ current_user.trial_days_remaining }}d left
+                    </span>
+                    {% endif %}
+
+                    <!-- User menu -->
+                    <div class="relative" x-data="{ open: false }">
+                      <button @click="open = !open" @keydown.escape="open = false"
+                              class="flex items-center gap-2 text-sm text-gray-700 hover:text-gray-900
+                                     focus:outline-none focus:ring-2 focus:ring-indigo-500 rounded-lg px-2 py-1">
+                        <span class="w-7 h-7 rounded-full bg-indigo-100 text-indigo-600 font-bold
+                                     flex items-center justify-center text-xs">
+                          {{ (current_user.display_name or current_user.email)[0].upper() }}
+                        </span>
+                        <span class="hidden sm:block max-w-[120px] truncate">
+                          {{ current_user.display_name or current_user.email }}
+                        </span>
+                        <svg class="w-4 h-4 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
+                        </svg>
+                      </button>
+                      <div x-show="open" x-cloak @click.away="open = false"
+                           class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg
+                                  border border-gray-200 py-1 z-50">
+                        <a href="{{ url_for('auth.account') }}"
+                           class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                          Account settings
+                        </a>
+                        <div class="border-t border-gray-100 my-1"></div>
+                        <form method="POST" action="{{ url_for('auth.logout') }}">
+                          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+                          <button type="submit"
+                                  class="w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-red-50">
+                            Sign out
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+
+                    {% else %}
+                    <!-- Unauthenticated nav -->
+                    <a href="{{ url_for('auth.login') }}"
+                       class="text-sm text-gray-600 hover:text-gray-900 font-medium">Sign in</a>
+                    <a href="{{ url_for('auth.register') }}"
+                       class="text-sm bg-indigo-600 text-white px-4 py-1.5 rounded-lg
+                              hover:bg-indigo-700 font-medium transition">
+                      Start free trial
+                    </a>
+                    {% endif %}
                 </div>
             </div>
         </div>
