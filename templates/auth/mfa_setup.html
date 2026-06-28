@@ -39,9 +39,8 @@
       </div>
     </details>
 
-    <form method="POST" class="space-y-5">
+    <form method="POST" action="{{ url_for('auth.mfa_setup') }}" class="space-y-5">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
-      <input type="hidden" name="secret" value="{{ secret }}"/>
       <div>
         <label for="code" class="block text-sm font-medium text-gray-700">
           Confirm with a 6-digit code from your app

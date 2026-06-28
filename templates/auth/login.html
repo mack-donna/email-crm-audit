@@ -63,7 +63,7 @@
     </div>
 
     <!-- Email / password form -->
-    <form method="POST" class="space-y-5">
+    <form method="POST" action="{{ url_for('auth.login') }}" class="space-y-5">
       <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
       <div>
         <label for="email" class="block text-sm font-medium text-gray-700">Email</label>

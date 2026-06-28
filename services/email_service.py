@@ -10,8 +10,24 @@ instead of sent so the app never crashes without credentials.
 """
 import logging
 import os
+import re
+from html import escape
+from urllib.parse import urlparse
 
 logger = logging.getLogger(__name__)
+
+
+def _safe_url(url: str) -> str:
+    """Validate URL has an http/https scheme before embedding in email HTML."""
+    parsed = urlparse(url)
+    if parsed.scheme not in ("http", "https"):
+        raise ValueError(f"Unsafe URL scheme rejected: {parsed.scheme!r}")
+    return url
+
+
+def _sanitize_log(value: str) -> str:
+    """Strip newlines/control chars to prevent log injection."""
+    return re.sub(r"[\r\n\t]", " ", value)
 
 
 class EmailService:
@@ -27,7 +43,8 @@ class EmailService:
         if not api_key:
             logger.warning(
                 "[email] RESEND_API_KEY not set — printing instead of sending\n"
-                "  To: %s\n  Subject: %s", to_email, subject
+                "  To: %s\n  Subject: %s",
+                _sanitize_log(to_email), _sanitize_log(subject),
             )
             return False
         try:
@@ -39,26 +56,28 @@ class EmailService:
                 "subject": subject,
                 "html": html_body,
             })
-            logger.info("[email] Sent '%s' to %s", subject, to_email)
+            logger.info("[email] Sent '%s' to %s", _sanitize_log(subject), _sanitize_log(to_email))
             return True
         except Exception:
-            logger.exception("[email] Failed to send to %s", to_email)
+            logger.exception("[email] Failed to send to %s", _sanitize_log(to_email))
             return False
 
     # ── Template methods ──────────────────────────────────────────────────────
 
     @classmethod
     def send_verification(cls, email: str, name: str, verify_url: str):
+        safe_name = escape(name)
+        safe_url = escape(_safe_url(verify_url))
         cls._send(
             email,
             "Verify your email — Outreach AI",
             f"""
             <div style="font-family:sans-serif;max-width:480px;margin:0 auto">
               <h2 style="color:#4f46e5">Welcome to Outreach AI</h2>
-              <p>Hi {name},</p>
+              <p>Hi {safe_name},</p>
               <p>Click below to verify your email address. This link expires in <strong>24 hours</strong>.</p>
               <p style="margin:24px 0">
-                <a href="{verify_url}"
+                <a href="{safe_url}"
                    style="background:#4f46e5;color:#fff;padding:12px 24px;
                           border-radius:6px;text-decoration:none;font-weight:600">
                   Verify Email
@@ -73,16 +92,18 @@ class EmailService:
 
     @classmethod
     def send_password_reset(cls, email: str, name: str, reset_url: str):
+        safe_name = escape(name)
+        safe_url = escape(_safe_url(reset_url))
         cls._send(
             email,
             "Reset your password — Outreach AI",
             f"""
             <div style="font-family:sans-serif;max-width:480px;margin:0 auto">
               <h2 style="color:#4f46e5">Password reset</h2>
-              <p>Hi {name},</p>
+              <p>Hi {safe_name},</p>
               <p>Click below to reset your password. This link expires in <strong>1 hour</strong>.</p>
               <p style="margin:24px 0">
-                <a href="{reset_url}"
+                <a href="{safe_url}"
                    style="background:#4f46e5;color:#fff;padding:12px 24px;
                           border-radius:6px;text-decoration:none;font-weight:600">
                   Reset Password
@@ -97,17 +118,22 @@ class EmailService:
 
     @classmethod
     def send_trial_expiry_warning(cls, email: str, name: str, days_left: int, upgrade_url: str):
+        if not isinstance(days_left, int) or not (0 <= days_left <= 30):
+            raise ValueError(f"Invalid days_left value: {days_left}")
+        safe_name = escape(name)
+        safe_url = escape(_safe_url(upgrade_url))
+        suffix = "s" if days_left != 1 else ""
         cls._send(
             email,
-            f"Your trial ends in {days_left} day{'s' if days_left != 1 else ''} — Outreach AI",
+            f"Your trial ends in {days_left} day{suffix} — Outreach AI",
             f"""
             <div style="font-family:sans-serif;max-width:480px;margin:0 auto">
               <h2 style="color:#4f46e5">Trial ending soon</h2>
-              <p>Hi {name},</p>
-              <p>Your 14-day trial expires in <strong>{days_left} day{'s' if days_left != 1 else ''}</strong>.
+              <p>Hi {safe_name},</p>
+              <p>Your 14-day trial expires in <strong>{days_left} day{suffix}</strong>.
                  After that your account switches to read-only mode.</p>
               <p style="margin:24px 0">
-                <a href="{upgrade_url}"
+                <a href="{safe_url}"
                    style="background:#4f46e5;color:#fff;padding:12px 24px;
                           border-radius:6px;text-decoration:none;font-weight:600">
                   Choose a Plan

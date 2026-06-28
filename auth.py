@@ -10,6 +10,7 @@ import hashlib
 import os
 import secrets
 from datetime import datetime, timezone, timedelta
+from urllib.parse import urlparse, urljoin
 
 from flask import (
     Blueprint,
@@ -43,6 +44,17 @@ SESSION_TTL_HOURS_TRANSIENT = 24
 def _hash(token: str) -> str:
     """SHA-256 hex digest — used for tokens stored in DB."""
     return hashlib.sha256(token.encode()).hexdigest()
+
+
+def _safe_redirect(target: str) -> str:
+    """Return target only if it is a same-origin relative URL, else /."""
+    if not target:
+        return url_for("index")
+    ref = urlparse(request.host_url)
+    test = urlparse(urljoin(request.host_url, target))
+    if test.scheme in ("http", "https") and ref.netloc == test.netloc:
+        return target
+    return url_for("index")
 
 
 def _audit(action: str, *, resource_type=None, resource_id=None, details=None, user_id=None):
@@ -114,8 +126,8 @@ def register():
             flash("Please enter a valid email address.", "error")
             return render_template("auth/register.html")
 
-        if len(password) < 12:
-            flash("Password must be at least 12 characters.", "error")
+        if len(password) < 12 or len(password) > 128:
+            flash("Password must be between 12 and 128 characters.", "error")
             return render_template("auth/register.html")
 
         # Constant-time: don't reveal whether email is taken
@@ -228,8 +240,7 @@ def login():
             return redirect(url_for("auth.mfa_verify"))
 
         _complete_login(user, remember)
-        next_url = request.args.get("next") or url_for("index")
-        return redirect(next_url)
+        return redirect(_safe_redirect(request.args.get("next", "")))
 
     return render_template("auth/login.html")
 
@@ -274,7 +285,10 @@ def mfa_setup():
     import base64
 
     if request.method == "POST":
-        secret = request.form.get("secret", "")
+        secret = session.pop("mfa_pending_secret", None)
+        if not secret:
+            flash("Session expired. Please restart MFA setup.", "error")
+            return redirect(url_for("auth.mfa_setup"))
         code = request.form.get("code", "").strip()
         totp = pyotp.TOTP(secret)
         if not totp.verify(code, valid_window=1):
@@ -288,6 +302,7 @@ def mfa_setup():
         return redirect(url_for("auth.account"))
 
     secret = pyotp.random_base32()
+    session["mfa_pending_secret"] = secret  # never round-trip through client
     totp = pyotp.TOTP(secret)
     uri = totp.provisioning_uri(name=current_user.email, issuer_name="Outreach AI")
     img = qrcode.make(uri)
@@ -301,6 +316,12 @@ def mfa_setup():
 @auth_bp.route("/mfa/disable", methods=["POST"])
 @login_required
 def mfa_disable():
+    import pyotp
+    code = request.form.get("code", "").strip()
+    totp = pyotp.TOTP(current_user.mfa_secret)
+    if not totp.verify(code, valid_window=1):
+        flash("Invalid TOTP code. 2FA was not disabled.", "error")
+        return redirect(url_for("auth.account"))
     current_user.mfa_secret = None
     current_user.mfa_enabled = False
     _audit("user.mfa_disabled", resource_type="user", resource_id=current_user.id)
@@ -535,5 +556,4 @@ def _handle_oauth_callback(
     _audit("user.login_oauth", resource_type="user", resource_id=user.id,
            details={"provider": provider}, user_id=user.id)
     _complete_login(user, remember=True)
-    next_url = request.args.get("next") or url_for("index")
-    return redirect(next_url)
+    return redirect(_safe_redirect(request.args.get("next", "")))

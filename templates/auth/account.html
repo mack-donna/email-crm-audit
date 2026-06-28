@@ -127,9 +127,19 @@
       Add an extra layer of security using an authenticator app (Google Authenticator, Authy, 1Password).
     </p>
     {% if current_user.mfa_enabled %}
-      <form method="POST" action="{{ url_for('auth.mfa_disable') }}"
-            onsubmit="return confirm('Disable two-factor authentication?')">
+      <form method="POST" action="{{ url_for('auth.mfa_disable') }}" class="space-y-3">
         <input type="hidden" name="csrf_token" value="{{ csrf_token() }}"/>
+        <div>
+          <label for="mfa_disable_code" class="block text-sm font-medium text-gray-700">
+            Enter your current 6-digit code to confirm
+          </label>
+          <input id="mfa_disable_code" name="code" type="text" inputmode="numeric"
+                 pattern="[0-9 ]*" maxlength="7" required
+                 placeholder="000 000"
+                 class="mt-1 block w-48 text-center rounded-lg border border-gray-300
+                        px-3 py-2 text-sm shadow-sm
+                        focus:border-red-400 focus:ring-1 focus:ring-red-400"/>
+        </div>
         <button type="submit"
                 class="text-sm text-red-600 hover:text-red-500 font-medium">
           Disable 2FA

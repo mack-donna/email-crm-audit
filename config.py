@@ -11,7 +11,7 @@ def _fix_db_url(url: str) -> str:
 
 class Config:
     # ── Core ──────────────────────────────────────────────────────────────────
-    SECRET_KEY = os.environ.get("FLASK_SECRET_KEY", "dev-secret-change-me")
+    SECRET_KEY = os.environ.get("FLASK_SECRET_KEY") or "dev-secret-change-me"
     FLASK_ENV = os.environ.get("FLASK_ENV", "development")
 
     # ── Database ──────────────────────────────────────────────────────────────
@@ -76,4 +76,10 @@ _config_map = {
 
 def get_config():
     env = os.environ.get("FLASK_ENV", "development")
-    return _config_map.get(env, DevelopmentConfig)
+    cfg = _config_map.get(env, DevelopmentConfig)
+    if env == "production" and cfg.SECRET_KEY == "dev-secret-change-me":
+        raise RuntimeError(
+            "FLASK_SECRET_KEY environment variable must be set in production. "
+            "Generate one with: python -c \"import secrets; print(secrets.token_hex(32))\""
+        )
+    return cfg

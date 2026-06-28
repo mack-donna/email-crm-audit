@@ -124,7 +124,15 @@ class User(UserMixin, db.Model):
         delta = self.trial_expires_at - datetime.now(timezone.utc)
         return max(0, delta.days)
 
+    _ALLOWED_FEATURES = frozenset({
+        "max_contacts_per_campaign", "max_campaigns_per_month",
+        "gmail_accounts_limit", "linkedin_enabled", "research_depth",
+        "history_days", "team_seats", "api_access", "custom_prompts",
+    })
+
     def get_feature(self, feature_name):
+        if feature_name not in self._ALLOWED_FEATURES:
+            raise ValueError(f"Unknown feature: {feature_name!r}")
         if not self.plan:
             return None
         return getattr(self.plan, feature_name, None)
