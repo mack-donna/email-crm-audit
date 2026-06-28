@@ -8,7 +8,7 @@ from typing import Optional
 from flask import abort, jsonify, redirect, request, url_for
 from flask_login import current_user
 
-_USER_DATA_ROOT = Path(os.environ.get("USER_DATA_DIR", "user_data"))
+_USER_DATA_ROOT = Path(os.environ.get("USER_DATA_DIR", "user_data")).resolve()
 
 
 # ── Filesystem isolation ──────────────────────────────────────────────────────
@@ -20,7 +20,7 @@ def user_data_path(user_id: str, *subpath: str) -> Path:
     Always use this instead of building paths manually.
     """
     if not re.fullmatch(r"[a-zA-Z0-9_-]{1,64}", str(user_id)):
-        raise ValueError(f"Invalid user_id: {user_id!r}")
+        raise ValueError("Invalid user_id format")
 
     user_dir = (_USER_DATA_ROOT / user_id).resolve()
     user_dir.mkdir(parents=True, exist_ok=True)

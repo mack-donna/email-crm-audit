@@ -1,5 +1,6 @@
 """Centralised application configuration."""
 import os
+import pathlib
 
 
 def _fix_db_url(url: str) -> str:
@@ -25,7 +26,7 @@ class Config:
     }
 
     # ── Session cookie ────────────────────────────────────────────────────────
-    SESSION_COOKIE_SECURE = os.environ.get("FLASK_ENV") == "production"
+    SESSION_COOKIE_SECURE = True  # overridden to False in DevelopmentConfig
     SESSION_COOKIE_HTTPONLY = True
     SESSION_COOKIE_SAMESITE = "Lax"
     PERMANENT_SESSION_LIFETIME = 86400 * 30  # 30 days
@@ -55,7 +56,7 @@ class Config:
     STRIPE_PUBLISHABLE_KEY = os.environ.get("STRIPE_PUBLISHABLE_KEY", "")
 
     # ── User data storage ─────────────────────────────────────────────────────
-    USER_DATA_DIR = os.environ.get("USER_DATA_DIR", "user_data")
+    USER_DATA_DIR = str(pathlib.Path(os.environ.get("USER_DATA_DIR", "user_data")).resolve())
 
 
 class DevelopmentConfig(Config):
@@ -76,7 +77,11 @@ _config_map = {
 
 def get_config():
     env = os.environ.get("FLASK_ENV", "development")
-    cfg = _config_map.get(env, DevelopmentConfig)
+    cfg = _config_map.get(env)
+    if cfg is None:
+        raise RuntimeError(
+            f"Unknown FLASK_ENV value: {env!r}. Must be one of: {list(_config_map)}"
+        )
     if env == "production" and cfg.SECRET_KEY == "dev-secret-change-me":
         raise RuntimeError(
             "FLASK_SECRET_KEY environment variable must be set in production. "
