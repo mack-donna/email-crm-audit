@@ -215,7 +215,7 @@ def login():
         user = User.query.filter_by(email=email).first()
 
         # Timing-safe: always run check_password even on miss (dummy hash)
-        dummy = b"$2b$12$000000000000000000000000000000000000000000000000000000"
+        dummy = b"$2b$12$abcdefghijklmnopqrstuuABCDEFGHIJKLMNOPQRSTUVWXYZ01234"
         valid = user.check_password(password) if user else (
             __import__("bcrypt").checkpw(b"x", dummy) and False
         )
