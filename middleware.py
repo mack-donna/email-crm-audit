@@ -3,6 +3,7 @@ import os
 import re
 from functools import wraps
 from pathlib import Path
+from typing import Optional
 
 from flask import abort, jsonify, redirect, request, url_for
 from flask_login import current_user
@@ -67,7 +68,7 @@ def require_verified(f):
     return decorated
 
 
-def require_plan(feature: str, error_message: str | None = None):
+def require_plan(feature: str, error_message: Optional[str] = None):
     """Decorator factory: gate a route on a plan feature flag.
 
     Usage::
