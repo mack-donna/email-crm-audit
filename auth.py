@@ -346,7 +346,9 @@ def logout():
     db.session.commit()
     logout_user()
     session.clear()
-    return redirect(url_for("auth.login"))
+    response = redirect(url_for("auth.login"))
+    response.delete_cookie("remember_token")
+    return response
 
 
 # ── Forgot / reset password ───────────────────────────────────────────────────
