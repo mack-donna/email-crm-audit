@@ -1,7 +1,7 @@
 # Next Session - Start Here
 
-**Last Updated:** 2026-06-27
-**Status:** Security hardening complete, PR #2 open and passing CI ✅
+**Last Updated:** 2026-06-29
+**Status:** Security hardening complete + auth/cookie fixes merged to main ✅
 
 ---
 
@@ -23,32 +23,21 @@
 
 ---
 
-## 🚨 FIRST PRIORITY: Merge PR #2
+## ✅ Recent Completions (Sessions ~June 28-29, 2026)
 
-PR #2 (`fix/linkedin-nav-api-leaks`) is open with all checks passing. Merge it so Render auto-deploys the fixes.
-
-```bash
-gh pr merge 2 --squash --repo mack-donna/email-crm-audit
-```
+- **Auth/cookie fixes** — 5 commits to `main`: explicit `remember_token` cookie deletion on logout, Alpine.js `click.away` fix for logout form, Dashlane `data-form-type` hints, correct dummy bcrypt hash length, `autocomplete=username` on email fields.
+- **Security plan item 4** — `gmail_drafts_manager.py` no longer uses pickle; fully on JSON (`token.json`). ✅
+- **Security plan item 6** — `email_generator.py` curl/subprocess fallback removed. ✅
+- **CI action versions** — upgraded all workflows from deprecated Node.js 16 actions (`checkout@v3`, `setup-python@v4`) to current Node.js 20 (`checkout@v4`, `setup-python@v5`); Docker actions updated to `v3`/`v5`. ✅
 
 ---
 
 ## 📋 Remaining Work (from CODE_AUDIT_WEEK1.md)
 
 ### Medium Priority Refactors
-1. **Bare exception handlers** — 6 instances across `email_generator.py`, `email_history_analyzer.py`, `simple_http_client.py`, `web_app.py`, `workflow_orchestrator.py`. Replace with specific exception types.
-2. **Duplicate email extraction logic** — ~500 lines of near-identical Gmail retrieval code spread across 5+ files. Consolidate into a single shared utility.
+1. **Duplicate email extraction logic** — ~500 lines of near-identical Gmail retrieval code spread across 5+ files (`email_crm_audit.py`, `enhanced_email_extractor.py`, `full_email_extraction.py`, `refined_email_extraction.py`, `simplified_email_audit.py`). Consolidate into a single shared utility.
+2. **Broad exception handlers** — `except Exception as e:` in `workflow_orchestrator.py` and elsewhere; replace with narrower exception types where the failure modes are known.
 3. **External service error handling** — create shared utilities for consistent error handling across API integrations.
-
-### Pending Security Plan Items (from plan `lets-plan-to-make-glimmering-bonbon.md`)
-Items 4, 5, 6 from the plan are NOT YET DONE:
-- Item 4: Replace pickle with JSON in `gmail_drafts_manager.py` (still uses `pickle.load/dump`)
-- Item 5: `email_history_analyzer.py` already done ✅
-- Item 6: Remove curl/subprocess fallback in `email_generator.py` (dead code, `anthropic` is in requirements.txt)
-
-### Node.js Deprecation
-- `node@20` — deprecated 2026-10-28; migrate to `node` (LTS) or `node@22`
-- `icu4c@77` — deprecated 2026-10-30
 
 ---
 
@@ -70,8 +59,7 @@ Items 4, 5, 6 from the plan are NOT YET DONE:
 
 - **Repo:** https://github.com/mack-donna/email-crm-audit
 - **Live app:** https://email-outreach-automation.onrender.com
-- **Open PR:** https://github.com/mack-donna/email-crm-audit/pull/2
-- **Working branch:** `fix/linkedin-nav-api-leaks`
+- **Working branch:** `claude/loop-command-kitusb` (currently at same point as `main`)
 - **Anthropic API key:** stored in Render environment variables (not local)
 
 ---
@@ -82,16 +70,13 @@ Items 4, 5, 6 from the plan are NOT YET DONE:
 # Check PR status
 gh pr status --repo mack-donna/email-crm-audit
 
-# Merge PR #2
-gh pr merge 2 --squash --repo mack-donna/email-crm-audit
-
-# Clone/update local copy
-cd /tmp/email-crm-audit && git pull
-
 # Run Bandit locally
-cd /tmp/email-crm-audit && bandit -r . -ll -f screen
+bandit -r . -ll -f screen
+
+# Run safety check
+safety check -r requirements.txt
 ```
 
 ---
 
-*Last updated: 2026-06-27 — Session: Security hardening + pickle cleanup complete*
+*Last updated: 2026-06-29 — Autonomous loop: CI action upgrades + NEXT_SESSION.md sync*
