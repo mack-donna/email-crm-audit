@@ -1115,3 +1115,37 @@ Diagnosed and fixed Gmail OAuth failure on Render, improved post-connection UX.
   3. External service error handling utilities
 - Or pivot to new features — user to decide
 
+
+---
+
+## Session 8 — Production Recovery: DB Expiry & Gmail Scope Fix (2026-09-08)
+
+Triggered by a Google "inactive OAuth client" deletion-warning email for the
+`sentient-email-crm-audit` Cloud project. Investigating turned up two unrelated
+production outages, both now resolved. All fixes were infrastructure/config —
+no application code changed this session.
+
+### Root causes & fixes
+
+**1. Login returned 500 — expired Postgres.**
+- `psycopg2.OperationalError: could not translate host name "dpg-d9051ee8bjmc738te970-a"` at `auth.py:512` in `_handle_oauth_callback`. Google SSO itself worked (valid `code` returned); the crash was the user lookup hitting a dead DB.
+- The original **free** Postgres had reached its 2026-07-27 expiry (already flagged in `render.yaml`'s own comment) and been auto-deleted — zero Postgres instances remained in the workspace.
+- Fix: provisioned a new **paid `basic_256mb`** Postgres (`dpg-dagcclqjnfac739k2q60-a`, PG16, Oregon), relinked `DATABASE_URL` via the dashboard. Redeploy ran `flask db upgrade` (schema `a9b7ea3f01f4`) + `flask seed-plans` (3 plans) cleanly and went live. Note: old DB data (users, prior runs) was lost with the expired instance.
+
+**2. Connect Gmail failed — oauthlib scope mismatch.**
+- `ERROR:gmail_oauth:OAuth callback error: Warning: Scope has changed from "...gmail.readonly ...gmail.compose" to "openid ...gmail.compose ...userinfo.email ...userinfo.profile ...gmail.readonly"` at `gmail_oauth.py:109`.
+- Because the user is already signed in via Google SSO, the Gmail consent returns the **union** of granted scopes; `requests-oauthlib` treats returned≠requested as an error and raises. (Distinct from the Session 7 PKCE fix.)
+- Fix: set `OAUTHLIB_RELAX_TOKEN_SCOPE=1` on the service (redeploy). User confirmed Gmail connect works.
+
+### render.yaml drift noted (not changed this session — for a human to decide)
+The live service has diverged from the blueprint: `PYTHON_VERSION` is 3.13.4 (yaml says 3.9.18) and the build command carries `FLASK_APP=web_app` prefixes (yaml omits them). Left as-is since the running config works; flagged here so a future blueprint re-sync doesn't silently revert it.
+
+### Current State
+- Login + Gmail connect both working at https://email-outreach-automation.onrender.com
+- DB on paid tier — no longer expires from inactivity
+- Google "inactive OAuth client" email is moot: the client was exercised repeatedly, resetting the 30-day deletion clock
+- `render.yaml` updated to match reality (paid DB plan, `OAUTHLIB_RELAX_TOKEN_SCOPE`)
+
+### Next Session Starting Points
+- Consider a production WSGI server — app still runs Flask's dev server (`run.py`); Render logs warn against it for production
+- Medium priority refactors from CODE_AUDIT_WEEK1.md still open (0 of 3 started)
