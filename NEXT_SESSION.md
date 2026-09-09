@@ -1,7 +1,7 @@
 # Next Session - Start Here
 
-**Last Updated:** 2026-06-27
-**Status:** Security hardening complete, PR #2 open and passing CI ✅
+**Last Updated:** 2026-09-08
+**Status:** Production recovered — login + Gmail connect working after DB expiry & OAuth scope fixes (Session 8) ✅
 
 ---
 
@@ -23,13 +23,18 @@
 
 ---
 
-## 🚨 FIRST PRIORITY: Merge PR #2
+## ✅ Session 8 (2026-09-08) — Production recovery
 
-PR #2 (`fix/linkedin-nav-api-leaks`) is open with all checks passing. Merge it so Render auto-deploys the fixes.
+Two production outages found via a Google "inactive OAuth client" email and fixed (infra/config only, no code):
+- **Login 500** — free Postgres expired (2026-07-27) and was auto-deleted → provisioned paid `basic_256mb` DB (`dpg-dagcclqjnfac739k2q60-a`), relinked `DATABASE_URL`.
+- **Gmail connect error** — oauthlib "Scope has changed" (Google returns scope superset for signed-in users) → set `OAUTHLIB_RELAX_TOKEN_SCOPE=1`.
 
-```bash
-gh pr merge 2 --squash --repo mack-donna/email-crm-audit
-```
+`render.yaml` updated to match (paid DB plan + the new env var). Old DB data was lost with the expired instance. (PR #2 was merged back in June.)
+
+## ⚠️ Watch-outs
+- **Don't downgrade the DB to free** — that's exactly what broke login this session.
+- **Dev server in prod** — `run.py` uses Flask's dev server; Render logs warn against it. Consider gunicorn.
+- **render.yaml drift** — live `PYTHON_VERSION` (3.13.4) and build command (`FLASK_APP=` prefixes) differ from the blueprint; a full blueprint re-sync could revert them.
 
 ---
 

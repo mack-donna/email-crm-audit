@@ -42,6 +42,14 @@ services:
       - key: GOOGLE_CLIENT_SECRET
         sync: false
 
+      # Relax oauthlib's scope-equality check. When a user is already signed in
+      # via Google SSO, the Gmail-connect consent returns a SUPERSET of the
+      # requested scopes (adds openid/userinfo.email/userinfo.profile), which
+      # otherwise raises "Scope has changed" in gmail_oauth.handle_callback and
+      # breaks Connect Gmail. See Session 8 (2026-09-08).
+      - key: OAUTHLIB_RELAX_TOKEN_SCOPE
+        value: "1"
+
       # ── Microsoft OAuth SSO — portal.azure.com ────────────────────────────
       - key: MICROSOFT_CLIENT_ID
         sync: false
@@ -73,8 +81,12 @@ services:
       mountPath: /opt/render/project/src/user_data
       sizeGB: 5
 
-# PostgreSQL — provisioned via Render MCP (id: dpg-d9051ee8bjmc738te970-a)
-# Free plan expires 2026-07-27. Upgrade to basic_256mb ($7/mo) before then.
+# PostgreSQL — provisioned via Render MCP (id: dpg-dagcclqjnfac739k2q60-a, PG16)
+# PAID basic_256mb plan, created 2026-09-09. The original FREE instance
+# (dpg-d9051ee8bjmc738te970-a) hit its 2026-07-27 expiry and was auto-deleted,
+# which broke OAuth login with "could not translate host name" 500s at the
+# callback until this paid DB was provisioned and DATABASE_URL relinked.
+# Do NOT downgrade to free — free instances expire and take login down with them.
 databases:
   - name: email-crm-audit-db
-    plan: free
+    plan: basic_256mb
