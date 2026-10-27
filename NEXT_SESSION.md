@@ -1,7 +1,7 @@
 # Next Session - Start Here
 
-**Last Updated:** 2026-09-08
-**Status:** Production recovered — login + Gmail connect working after DB expiry & OAuth scope fixes (Session 8) ✅
+**Last Updated:** 2026-10-27
+**Status:** Live — redeployed for Render's security advisory (eMudhra CA) with SQLAlchemy pinned to 2.0.x (Session 9) ✅
 
 ---
 
@@ -31,8 +31,16 @@ Two production outages found via a Google "inactive OAuth client" email and fixe
 
 `render.yaml` updated to match (paid DB plan + the new env var). Old DB data was lost with the expired instance. (PR #2 was merged back in June.)
 
+## ✅ Session 9 (2026-10-27) — Security advisory redeploy
+
+Render asked customers to redeploy after the eMudhra CA key compromise (Oct 19) plus Node.js/PHP patches (Oct 21). Only the redeploy step applied (app is Python; no Node or PHP).
+- **Build failed** on a cache-cleared redeploy — unpinned deps pulled SQLAlchemy 2.1.6, which uses the psycopg v3 driver for `postgresql://`; we ship psycopg2 → `No module named 'psycopg'`.
+- **Fix (PR #5):** `SQLAlchemy>=2.0,<2.1`. Live 17:10 UTC with `certifi-2026.10.23`.
+- Login and Gmail connect **not** re-tested after this deploy — do a quick sign-in check.
+
 ## ⚠️ Watch-outs
-- **Don't downgrade the DB to free** — that's exactly what broke login this session.
+- **Dependency drift** — the service builds with no cache and most of `requirements.txt` is `>=`, so any deploy installs the newest major versions. If a build breaks on an import/driver error, check for a new major release first (Session 9). Consider upper bounds or a lock file.
+- **Don't downgrade the DB to free** — that's exactly what broke login in Session 8.
 - **Dev server in prod** — `run.py` uses Flask's dev server; Render logs warn against it. Consider gunicorn.
 - **render.yaml drift** — live `PYTHON_VERSION` (3.13.4) and build command (`FLASK_APP=` prefixes) differ from the blueprint; a full blueprint re-sync could revert them.
 

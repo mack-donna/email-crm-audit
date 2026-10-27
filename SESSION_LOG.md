@@ -1149,3 +1149,29 @@ The live service has diverged from the blueprint: `PYTHON_VERSION` is 3.13.4 (ya
 ### Next Session Starting Points
 - Consider a production WSGI server — app still runs Flask's dev server (`run.py`); Render logs warn against it for production
 - Medium priority refactors from CODE_AUDIT_WEEK1.md still open (0 of 3 started)
+
+## Session 9 — Security Advisory Redeploy & SQLAlchemy Pin (2026-10-27)
+
+Triggered by a Render security advisory covering three issues from the prior
+week: the eMudhra CA signing-key compromise (Oct 19), and Node.js and PHP
+security patches (Oct 21). Render's platform was not breached; customers were
+asked to redeploy their services.
+
+### Exposure check
+- Render workspace has one service (`email-outreach-automation`, Python) and one database (`email-crm-audit-db`, paid, available).
+- **PHP / Node.js steps:** not applicable — the app is Python with no `package.json` and no PHP.
+- **eMudhra step:** applicable — the last deploy was Sep 9, before the CA compromise, so the build's CA bundle predated the distrust.
+
+### Root cause & fix
+**Cache-cleared redeploy failed at `flask db upgrade`.**
+- `ModuleNotFoundError: No module named 'psycopg'` → `Error: No such command 'db'` → build failed. The Sep 9 deploy stayed live throughout.
+- SQLAlchemy is not pinned directly (only via `Flask-SQLAlchemy>=3.1.0`), so the fresh install pulled **SQLAlchemy 2.1.6**, which maps `postgresql://` to the psycopg v3 driver. We ship `psycopg2-binary`.
+- Fix (PR #5): `SQLAlchemy>=2.0,<2.1` in `requirements.txt`. Verified locally with a fresh install (2.0.55, `psycopg2` dialect, `flask db --help` loads). CI passed; merged; Render auto-deploy went live 17:10 UTC with `certifi-2026.10.23`.
+
+### Current State
+- Live at https://email-outreach-automation.onrender.com (302 → `/auth/login`)
+- Login and Gmail connect **not** re-tested after this deploy
+
+### Next Session Starting Points
+- Dependency drift: the service builds with no cache and most requirements are `>=`, so any deploy can pull a new major version. Consider upper bounds or a lock file.
+- Production WSGI server (gunicorn) still open from Session 8
