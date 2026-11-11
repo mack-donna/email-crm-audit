@@ -173,3 +173,6 @@ processed_contacts_*.json
 test_campaigns/
 uploads/.venv/
 dev.db
+
+# Per-task contract for the Claude Code Stop hook (see ~/.claude/HARNESS.md)
+PROGRESS.md
