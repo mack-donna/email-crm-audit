@@ -77,7 +77,7 @@ def main():
     
     # For production on Render, bind to all interfaces
     if os.environ.get('FLASK_ENV') == 'production':
-        host = '0.0.0.0'
+        host = '0.0.0.0'  # nosec B104
     
     print(f"📍 Server running at http://{host}:{port}")
     print("📊 Debug mode:", "ON" if debug else "OFF")
