@@ -26,7 +26,7 @@ def analyze_file_with_claude(file_path, api_key):
         print("Installing anthropic package...")
         import subprocess
         # Safe: Uses list syntax (not shell=True), sys.executable is trusted
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "-q", "anthropic"], shell=False)
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "-q", "anthropic>=0.34,<3"], shell=False)
         import anthropic
 
     # Validate and sanitize file path to prevent path traversal
@@ -120,13 +120,13 @@ Be concise and specific. Focus on real security issues, not style or best practi
         message = client.messages.create(
             model="claude-sonnet-4-6",
             max_tokens=2000,
-            temperature=0,
+            # No temperature: anthropic SDK 2.x (API version 2026-10-21) rejects sampling params.
             messages=[
                 {"role": "user", "content": prompt}
             ]
         )
 
-        analysis = message.content[0].text
+        analysis = next((b.text for b in message.content if b.type == "text"), "")
 
         # Check if no vulnerabilities found
         if "NO_VULNERABILITIES_FOUND" in analysis:
