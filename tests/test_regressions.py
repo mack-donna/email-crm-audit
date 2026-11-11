@@ -4,6 +4,7 @@ Each test names the past incident it guards against. Keep them fast and offline.
 """
 import os
 import pathlib
+import secrets
 import sys
 
 import pytest
@@ -14,7 +15,8 @@ sys.path.insert(0, str(ROOT))
 # Must be set before web_app is imported: it builds the app at import time.
 os.environ["FLASK_ENV"] = "development"
 os.environ["DATABASE_URL"] = "sqlite://"  # in-memory
-os.environ.setdefault("FLASK_SECRET_KEY", "test-secret")
+# Fresh random key per run; never a fixed guessable value, and never overrides a real one.
+os.environ.setdefault("FLASK_SECRET_KEY", secrets.token_hex(32))
 
 
 @pytest.fixture(scope="module")
