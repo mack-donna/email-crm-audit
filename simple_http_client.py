@@ -8,6 +8,8 @@ import os
 import subprocess
 import tempfile
 
+import config
+
 def call_claude_api_via_curl(prompt):
     """Call Claude API using curl to bypass SSL issues"""
     
@@ -17,8 +19,10 @@ def call_claude_api_via_curl(prompt):
         
     # Prepare the request data
     data = {
-        'model': 'claude-3-5-sonnet-20241022',
-        'max_tokens': 1000,
+        'model': config.CLAUDE_MODEL,
+        'max_tokens': config.CLAUDE_MAX_TOKENS,
+        'output_config': {'effort': config.CLAUDE_EFFORT},
+        'fallbacks': 'default',
         'messages': [{
             'role': 'user',
             'content': prompt
@@ -36,7 +40,8 @@ def call_claude_api_via_curl(prompt):
             'curl', '-X', 'POST',
             'https://api.anthropic.com/v1/messages',
             '-H', 'x-api-key: {}'.format(api_key),
-            '-H', 'anthropic-version: 2023-06-01', 
+            '-H', 'anthropic-version: 2023-06-01',
+            '-H', 'anthropic-beta: {}'.format(config.CLAUDE_FALLBACK_BETA),
             '-H', 'content-type: application/json',
             '-d', '@{}'.format(temp_file),
             '--silent'
@@ -45,11 +50,18 @@ def call_claude_api_via_curl(prompt):
         result = subprocess.check_output(cmd)
         response = json.loads(result.decode('utf-8'))
         
-        if 'content' in response and len(response['content']) > 0:
-            return response['content'][0]['text']
-        else:
-            print("API Error: {}".format(response))
+        if response.get('stop_reason') == 'refusal':
+            print("Claude declined the request")
             return None
+        if response.get('stop_reason') == 'max_tokens':
+            print("Claude hit max_tokens; response would be cut off")
+            return None
+        # Read by block type: a thinking block can come before the text.
+        text = next((b.get('text') for b in response.get('content', []) if b.get('type') == 'text'), None)
+        if text:
+            return text
+        print("API Error: {}".format(response.get('error', response.get('stop_reason'))))
+        return None
             
     except subprocess.CalledProcessError as e:
         print("Curl error: {}".format(e))

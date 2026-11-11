@@ -2,6 +2,15 @@
 import os
 import pathlib
 
+# ── Claude API ────────────────────────────────────────────────────────────────
+# The one place the model ID lives (tests/test_claude_models.py enforces this).
+# Override with the CLAUDE_MODEL env var; never hardcode an ID elsewhere.
+CLAUDE_MODEL = os.environ.get("CLAUDE_MODEL", "claude-sonnet-5-5")
+CLAUDE_MAX_TOKENS = 4000  # covers thinking + a short email; thinking counts toward this
+CLAUDE_EFFORT = "low"  # short emails; Sonnet 5.5 skips thinking on most simple requests at low
+# Server-side refusal fallback (routes declines to another model in the same call).
+CLAUDE_FALLBACK_BETA = "server-side-fallback-2026-07-01"
+
 
 def _fix_db_url(url: str) -> str:
     """Render injects postgres:// but SQLAlchemy 2.x requires postgresql://."""

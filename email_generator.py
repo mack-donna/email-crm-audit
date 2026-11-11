@@ -11,6 +11,8 @@ import os
 from datetime import datetime
 import time
 
+import config
+
 # Import extracted classes
 from email_prompt_builder import EmailPromptBuilder
 from logging_config import setup_logger
@@ -196,20 +198,32 @@ Cheers,
                 
                 client = anthropic.Anthropic(api_key=self.api_key)
                 
-                response = client.messages.create(
-                    model="claude-3-5-sonnet-20241022",
-                    max_tokens=1000,
+                response = client.beta.messages.create(
+                    model=config.CLAUDE_MODEL,
+                    max_tokens=config.CLAUDE_MAX_TOKENS,
+                    output_config={"effort": config.CLAUDE_EFFORT},
+                    betas=[config.CLAUDE_FALLBACK_BETA],
+                    fallbacks="default",
                     messages=[{
                         "role": "user",
                         "content": prompt
                     }]
                 )
-                
-                if response.content and len(response.content) > 0:
-                    return response.content[0].text
-                else:
-                    self.logger.error("Empty response from API")
+
+                if response.stop_reason == "refusal":
+                    self.logger.warning("Claude declined the request; using template generation.")
                     return None
+                if response.stop_reason == "max_tokens":
+                    # Don't hand back a cut-off email as if it were complete.
+                    self.logger.error("Claude hit max_tokens; using template generation.")
+                    return None
+
+                # Read by block type: a thinking block can come before the text.
+                text = next((b.text for b in response.content if b.type == "text"), None)
+                if text:
+                    return text
+                self.logger.error("No text in API response (stop_reason=%s)", response.stop_reason)
+                return None
                     
             except ImportError:
                 self.logger.error("anthropic library not installed. Run: pip install anthropic")
