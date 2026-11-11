@@ -98,14 +98,12 @@ def test_logout_deletes_remember_token(app, client):
 
 # ── CSRF is disabled in the fixture for convenience; prove the real app still enforces it ──
 
-def test_csrf_rejects_post_without_token(app, client):
-    app.config["WTF_CSRF_ENABLED"] = True  # Flask-WTF reads this per request
-    try:
-        resp = client.post(
-            "/auth/login",
-            data={"email": "nobody@example.com", "password": "wrong"},
-        )
-    finally:
-        app.config["WTF_CSRF_ENABLED"] = False
+def test_csrf_rejects_post_without_token(app, client, monkeypatch):
+    # Flask-WTF reads this per request; monkeypatch restores it after the test, even on error.
+    monkeypatch.setitem(app.config, "WTF_CSRF_ENABLED", True)
+    resp = client.post(
+        "/auth/login",
+        data={"email": "nobody@example.com", "password": "wrong"},
+    )
     assert resp.status_code == 400, resp.status_code
     assert b"CSRF" in resp.data
