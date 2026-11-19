@@ -9,7 +9,7 @@ Werkzeug>=3.0.0,<4
 python-dotenv>=1.0.0,<2
 
 # AI Integration - CRITICAL
-anthropic>=0.34.0,<3
+anthropic>=0.125.0,<3  # 0.125.0: first floor known to accept `fallbacks` on beta.messages (newest that supports Python 3.9)
 
 # Core Google API libraries
 google-api-python-client>=2.170.0,<3
