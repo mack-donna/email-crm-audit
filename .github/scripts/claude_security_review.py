@@ -10,6 +10,9 @@ import json
 import hashlib
 from pathlib import Path
 
+MAX_FILE_BYTES = 200_000  # ~50K tokens; larger files are skipped, not truncated
+
+
 def sanitize_for_prompt(text):
     """Sanitize text to prevent prompt injection attacks"""
     if not isinstance(text, str):
@@ -26,7 +29,7 @@ def analyze_file_with_claude(file_path, api_key):
         print("Installing anthropic package...")
         import subprocess
         # Safe: Uses list syntax (not shell=True), sys.executable is trusted
-        subprocess.check_call([sys.executable, "-m", "pip", "install", "-q", "anthropic"], shell=False)
+        subprocess.check_call([sys.executable, "-m", "pip", "install", "-q", "anthropic>=0.34,<3"], shell=False)
         import anthropic
 
     # Validate and sanitize file path to prevent path traversal
@@ -35,11 +38,20 @@ def analyze_file_with_claude(file_path, api_key):
         abs_path = Path(file_path).resolve()
         current_dir = Path.cwd().resolve()
 
-        # Ensure the file is within the current working directory
-        if not str(abs_path).startswith(str(current_dir)):
+        # Ensure the file is within the current working directory.
+        # Path-aware check: a string prefix test would accept /repo-secret for /repo.
+        if not abs_path.is_relative_to(current_dir):
             return {
                 "file": file_path,
                 "error": "Path traversal attempt detected - file outside working directory",
+                "vulnerabilities": []
+            }
+
+        # Cap input size so one huge file can't exhaust memory or API tokens.
+        if abs_path.stat().st_size > MAX_FILE_BYTES:
+            return {
+                "file": file_path,
+                "message": f"File larger than {MAX_FILE_BYTES} bytes; skipped",
                 "vulnerabilities": []
             }
 
@@ -120,13 +132,13 @@ Be concise and specific. Focus on real security issues, not style or best practi
         message = client.messages.create(
             model="claude-sonnet-4-6",
             max_tokens=2000,
-            temperature=0,
+            # No temperature: anthropic SDK 2.x (API version 2026-10-21) rejects sampling params.
             messages=[
                 {"role": "user", "content": prompt}
             ]
         )
 
-        analysis = message.content[0].text
+        analysis = next((b.text for b in message.content if b.type == "text"), "")
 
         # Check if no vulnerabilities found
         if "NO_VULNERABILITIES_FOUND" in analysis:

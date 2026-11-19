@@ -40,7 +40,10 @@ def _version_tuple(v):
 
 def test_no_retired_model_ids_in_source():
     hits = []
+    this_file = pathlib.Path(__file__).resolve()
     for path in _tracked_py_files():
+        if path.resolve() == this_file:
+            continue  # this file names the retired ID on purpose (incident note, regexes)
         for n, line in enumerate(path.read_text(errors="replace").splitlines(), 1):
             if RETIRED.search(line):
                 hits.append(f"{path.relative_to(ROOT)}:{n}: {line.strip()}")
